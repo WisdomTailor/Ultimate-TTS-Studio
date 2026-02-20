@@ -1,0 +1,43 @@
+# Runtime and local state
+app_state/
+logs/
+cache/
+
+# Environment and secrets
+.env
+.env.*
+*.env
+*.local
+*.secret
+*.secrets
+*.token
+*.key
+*.pem
+*.p12
+*.pfx
+*.jks
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual envs
+env/
+venv/
+ENV/
+VENV/
+
+# IDE / OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Temporary and patches
+*.tmp
+*.temp
+*.log
+*.diff
