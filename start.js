@@ -17,7 +17,7 @@ module.exports = {
           // The regular expression pattern to monitor.
           // When this pattern occurs in the shell terminal, the shell will return,
           // and the script will go onto the next step.
-          "event": "/http:\/\/\\S+/",   
+          "event": "/(http:\/\/(?:127\\.0\\.0\\.1|localhost):[0-9]+)/",   
 
           // "done": true will move to the next step while keeping the shell alive.
           // "kill": true will move to the next step after killing the shell.
@@ -34,7 +34,7 @@ module.exports = {
       method: "local.set",
       params: {
         // the input.event is the regular expression match object from the previous step
-        url: "{{input.event[0]}}"
+        url: "{{input.event[1]}}"
       }
     }
   ]
