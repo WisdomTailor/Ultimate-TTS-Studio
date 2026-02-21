@@ -21,6 +21,7 @@ Autosave writes:
 - audio file (`audio/`)
 - source script text (`scripts/`)
 - metadata JSON (`meta/`) including engine, seed, preset, and text hash
+- model controls in metadata are engine-specific (only fields exposed by the selected engine are included)
 
 Reference design and checklists are in `app/docs/`.
 
