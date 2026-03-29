@@ -1,0 +1,6 @@
+app/tts_env/**
+app/checkpoints/**
+app/cache/**
+cache/**
+logs/**
+node_modules/**
