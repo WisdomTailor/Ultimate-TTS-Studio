@@ -4,20 +4,21 @@
 **Prepared by:** Agent 08 (Global Agent Manager) / GitHub Copilot Chat Session  
 **Date:** 2026-03-30  
 **Reviewed by:** Agent 00 (Chief Project Manager) — 2026-03-30  
+**Last updated:** 2026-03-30 (Rec A implemented, Azure Foundry provisioned)  
 **Branch:** `my-custom-features`  
 **Repo:** `c:\pinokio\api\Ultimate-TTS-Studio.git`  
-**Status:** ✅ REVIEWED — Approval decisions recorded below. This is a living working document.
+**Status:** ✅ SPRINT 1 IN PROGRESS — Rec A implemented and merged. This is a living working document.
 
 ---
 
 ## Executive Summary — Quick Reference
 
-| Rec | Title                                    | Verdict                     | Sprint | Owner          | Risk   |
-| --- | ---------------------------------------- | --------------------------- | ------ | -------------- | ------ |
-| A   | Provider config refactor (`launch.py`)   | ✅ **APPROVED**              | 1      | Agent 13       | Low    |
-| B   | Save OpenAPI schema (docs only)          | ✅ **APPROVED** (as draft)   | 1      | Agent 07 / 08  | None   |
-| C   | FastAPI router implementation            | ⏸️ **DEFERRED** to Sprint 2 | 2      | New Agent (14) | Medium |
-| D   | Create Integration Reliability Eng agent | ✅ **APPROVED**              | 1      | Agent 08       | None   |
+| Rec | Title                                    | Verdict                         | Sprint | Owner          | Risk   |
+| --- | ---------------------------------------- | ------------------------------- | ------ | -------------- | ------ |
+| A   | Provider config refactor (`launch.py`)   | ✅ **IMPLEMENTED** (3 commits)  | 1      | Agent 13       | Low    |
+| B   | Save OpenAPI schema (docs only)          | ✅ **APPROVED** (as draft)      | 1      | Agent 07 / 08  | None   |
+| C   | FastAPI router implementation            | ⏸️ **DEFERRED** to Sprint 2     | 2      | New Agent (14) | Medium |
+| D   | Create Integration Reliability Eng agent | ✅ **APPROVED**                 | 1      | Agent 08       | None   |
 
 **Architecture decision (Q3 from §8):** Job model = **disk-backed JSON sidecar**. Rationale:
 inspectable, no extra deps, aligns with existing sidecar pattern in boundary contract, resilient for
@@ -143,8 +144,8 @@ local vs. remote) requires code changes scattered across four separate functions
 
 ### Finding 3 — LM Studio, while named in the dropdown, is indistinguishable from "Custom" in fallback logic
 
-> **Agent 00 Comment:** Confirmed. The key guard at line 6430 only checks for Gemini. Ollama is
-> also local and should share the same `requires_api_key: false` treatment.
+> **Agent 00 Comment:** Confirmed. The key guard at line 6430 only checks for Gemini. Ollama is also
+> local and should share the same `requires_api_key: false` treatment.
 
 **Evidence:**  
 LM Studio is mapped to `OPENAI_API_KEY` in `get_llm_provider_env_var`, has no `kind` marker, and has
@@ -196,15 +197,15 @@ treated as stable:
 
 > **Agent 00 Verdict: ✅ APPROVED — Apply immediately (Sprint 1)**
 >
-> Findings verified against codebase. The tuple-based design at lines 6184–6200 and the
-> Gemini-only key guard at line 6430 are exactly as described. This is surgical, isolated,
-> and directly fixes user-facing bugs.
+> Findings verified against codebase. The tuple-based design at lines 6184–6200 and the Gemini-only
+> key guard at line 6430 are exactly as described. This is surgical, isolated, and directly fixes
+> user-facing bugs.
 >
-> **Implementation owner:** Agent 13 (LLM Integration Specialist).
-> **Review:** Agent 09 (Gradio UI) confirms dropdown addition has no layout side-effects.
+> **Implementation owner:** Agent 13 (LLM Integration Specialist). **Review:** Agent 09 (Gradio UI)
+> confirms dropdown addition has no layout side-effects.
 >
-> **Additional condition:** Include Ollama in the `requires_api_key: false` set alongside
-> LM Studio. Both are local providers that should never trigger key-missing warnings.
+> **Additional condition:** Include Ollama in the `requires_api_key: false` set alongside LM Studio.
+> Both are local providers that should never trigger key-missing warnings.
 
 **What:** Refactor the provider preset block from a tuple-based lookup to a structured
 `LLM_PROVIDER_CONFIGS` dict, add GitHub Models as a named first-class provider, and thread
@@ -253,11 +254,11 @@ GITHUB_MODELS_API_VERSION = "2026-03-10"
 
 > **Agent 00 Verdict: ✅ APPROVED — Commit as draft documentation (Sprint 1)**
 >
-> The schema should be saved to `Docs/api-spec-mvp.yaml` with a prominent header marking it
-> as **DRAFT — subject to change** until the FastAPI implementation stabilises.
+> The schema should be saved to `Docs/api-spec-mvp.yaml` with a prominent header marking it as
+> **DRAFT — subject to change** until the FastAPI implementation stabilises.
 >
-> **Implementation owner:** Agent 07 (Documentation) or Agent 08.
-> **Note:** The 13-path surface is reasonable for MVP. No paths need to be cut.
+> **Implementation owner:** Agent 07 (Documentation) or Agent 08. **Note:** The 13-path surface is
+> reasonable for MVP. No paths need to be cut.
 
 **What:** Write the full OpenAPI 3.1.0 YAML (13 paths, all schemas, full security section) to
 `Docs/api-spec-mvp.yaml`.
@@ -292,12 +293,14 @@ code.
 > **Agent 00 Verdict: ⏸️ DEFERRED — Not approved for Sprint 1. Plan for Sprint 2.**
 >
 > Agent 08's dependency analysis is correct. This cannot safely start until:
+>
 > 1. Rec A is merged and stable (provider config is the foundation for API key policy)
 > 2. Rec B schema is committed and reviewed
 > 3. Rec D agent is created (clear ownership required before extraction work begins)
 > 4. At least gaps 1, 3, 5, 7 from the boundary contract are closed
 >
 > **Architecture decision:** Job model = **disk-backed JSON sidecar**.
+>
 > - Inspectable by humans and tools
 > - No new dependency (no SQLite package)
 > - Aligns with the sidecar metadata pattern already in the boundary contract
@@ -333,13 +336,12 @@ layer).
 
 > **Agent 00 Verdict: ✅ APPROVED — Create immediately (Sprint 1)**
 >
-> Agreed that this is a genuine fleet gap. The Gradio↔FastAPI coexistence layer, plus
-> contract compliance, is a distinct discipline that neither Agent 01 nor Agent 09 should own.
+> Agreed that this is a genuine fleet gap. The Gradio↔FastAPI coexistence layer, plus contract
+> compliance, is a distinct discipline that neither Agent 01 nor Agent 09 should own.
 >
-> **Implementation owner:** Agent 08 creates the `.agent.md` file.
-> **Scope:** FastAPI boundary layer, sidecar schema, job-state persistence, error categories,
-> contract compliance. Explicitly NOT engine internals or Gradio UI.
-> **Slot:** Agent 14 (Integration Reliability Engineer).
+> **Implementation owner:** Agent 08 creates the `.agent.md` file. **Scope:** FastAPI boundary
+> layer, sidecar schema, job-state persistence, error categories, contract compliance. Explicitly
+> NOT engine internals or Gradio UI. **Slot:** Agent 14 (Integration Reliability Engineer).
 
 **What:** Create a specialist agent focused on the API/boundary layer: FastAPI router, sidecar
 schema, job-state persistence, and error category coverage.
@@ -355,10 +357,11 @@ compliance requirements, is a distinct discipline.
 ## 5. Priority and Sequencing
 
 ```text
-Sprint 1 (Current — approved and in-flight):
-  ✅ Recommendation A: launch.py provider config refactor          [Agent 13]
-  ✅ Recommendation B: Save OpenAPI schema to Docs/api-spec-mvp.yaml [Agent 07/08]
-  ✅ Recommendation D: Create Integration Reliability Eng agent       [Agent 08]
+Sprint 1 (Current):
+  ✅ Recommendation A: launch.py provider config refactor          [Agent 13] — DONE (3 commits)
+  ✅ Recommendation A+: Azure Foundry provisioned + smoke-tested    [Agent 00] — DONE
+  ⬜ Recommendation B: Save OpenAPI schema to Docs/api-spec-mvp.yaml [Agent 07/08] — Not started
+  ⬜ Recommendation D: Create Integration Reliability Eng agent       [Agent 08] — Not started
 
 Sprint 2 (Planned — gated on Sprint 1 stability):
   ⏸️ Recommendation C: FastAPI router implementation                 [Agent 14]
@@ -380,15 +383,63 @@ Sprint 2 (Planned — gated on Sprint 1 stability):
 
 ---
 
-## 7. What Was NOT Changed in This Session
+## 7. Implementation Log
 
-To be explicit for Agent 00:
+### Rec A — Implemented 2026-03-30
 
-- **`app/launch.py` was not modified.** All drafts remain as proposed text only.
-- **No new files were created** in the repo during this session (this document is the first output
-  committed to disk from this session).
-- **No tests were run.**
-- **No git commits were made.**
+**Commits (submodule `app/` → WisdomTailor/Ultimate-TTS-Studio-SUP3R-Edition):**
+
+| Commit    | Message                                                                    |
+| --------- | -------------------------------------------------------------------------- |
+| `fdc011a` | `feat(api): refactor LLM provider config to structured dict, add Foundry + GitHub Models` |
+| `3e7434a` | `fix(api): wire real Foundry endpoint, fix Azure OpenAI URL pattern`       |
+| `5ca1d13` | `fix(api): use regional Azure endpoint for Foundry provider`               |
+
+**Commits (parent repo → WisdomTailor/Ultimate-TTS-Studio):**
+
+| Commit    | Message                                                        |
+| --------- | -------------------------------------------------------------- |
+| `44bd3d3` | `chore: update app submodule pointer (Foundry provider refactor)` |
+| `3055558` | `chore: update app submodule pointer (Foundry endpoint fix)`   |
+| `8ffd92c` | `chore: update app submodule pointer (regional Azure endpoint)` |
+
+**What changed in `app/launch.py`:** 116 insertions, 41 deletions across 8 replacement blocks:
+
+1. Replaced tuple-based `get_llm_provider_defaults` with `LLM_PROVIDER_CONFIGS` structured dict (7 providers)
+2. Added **Microsoft Foundry** and **GitHub Models** as first-class providers
+3. Refactored `get_llm_provider_env_var` to derive from config dict
+4. Enhanced `get_llm_shell_key_setup_hint` with Foundry and GitHub-specific hints
+5. Added `extra_headers` and `auth_style` params to `call_openai_compatible_chat`
+6. Added conditional Azure OpenAI URL pattern (`/openai/deployments/{model}/chat/completions?api-version=`)
+7. Replaced Gemini-only key guard with generic `requires_api_key` from config
+8. Updated dropdown to `choices=list(LLM_PROVIDER_CONFIGS.keys())`
+
+**Providers now available (7):**
+
+| Provider                                   | Kind   | Key Required | Auth Style | Base URL                                        |
+| ------------------------------------------ | ------ | ------------ | ---------- | ----------------------------------------------- |
+| Ollama (OpenAI-compatible)                 | local  | No           | bearer     | http://localhost:11434/v1                       |
+| LM Studio OpenAI Server                   | local  | No           | bearer     | http://localhost:1234/v1                        |
+| Google Gemini API (OpenAI-compatible)      | cloud  | Yes          | bearer     | https://generativelanguage.googleapis.com/v1beta |
+| Microsoft Foundry (OpenAI-compatible)      | cloud  | Yes          | api-key    | https://eastus2.api.cognitive.microsoft.com     |
+| GitHub Models (OpenAI-compatible)          | cloud  | Yes          | bearer     | https://models.github.ai/v1                    |
+| vLLM OpenAI Server                         | local  | No           | bearer     | http://localhost:8000/v1                        |
+| Custom OpenAI-compatible                   | custom | Yes          | bearer     | http://localhost:8000/v1                        |
+
+### Azure Foundry Provisioning — 2026-03-30
+
+| Resource            | Value                                                      |
+| ------------------- | ---------------------------------------------------------- |
+| Subscription        | Azure subscription 1 (`b7c3def6-e2b0-4500-b7c6-2ea244ea2c49`) |
+| Resource Group      | `rg-ultimate-tts` (East US 2)                              |
+| AI Services         | `ultimate-tts-foundry` (Kind: AIServices, SKU: S0)         |
+| Model Deployed      | `gpt-4o-mini` (v2024-07-18, GlobalStandard, capacity 10)   |
+| Working Endpoint    | `https://eastus2.api.cognitive.microsoft.com`               |
+| Auth                | `api-key` header (env var: `AZURE_AI_API_KEY`)             |
+| Smoke Test          | ✅ Passed — gpt-4o-mini returned "OK", 22 tokens           |
+
+**Note:** The AI Foundry portal endpoint (`services.ai.azure.com`) was not yet DNS-propagated at
+time of setup. The regional endpoint works correctly and is what's configured in the code.
 
 ---
 
@@ -396,27 +447,25 @@ To be explicit for Agent 00:
 
 The following decisions were requested by Agent 08 and are now resolved:
 
-1. **Is Recommendation A (launch.py provider refactor) approved?**
-   ✅ **YES.** Apply immediately. Agent 13 implements, Agent 09 reviews UI impact.
-   Additional condition: mark Ollama as `requires_api_key: false` alongside LM Studio.
+1. **Is Recommendation A (launch.py provider refactor) approved?** ✅ **YES.** Apply immediately.
+   Agent 13 implements, Agent 09 reviews UI impact. Additional condition: mark Ollama as
+   `requires_api_key: false` alongside LM Studio.
 
-2. **Is Recommendation B (save OpenAPI schema file) approved?**
-   ✅ **YES.** Save to `Docs/api-spec-mvp.yaml` with a DRAFT header. Agent 07 or 08 commits.
+2. **Is Recommendation B (save OpenAPI schema file) approved?** ✅ **YES.** Save to
+   `Docs/api-spec-mvp.yaml` with a DRAFT header. Agent 07 or 08 commits.
 
 3. **Should the async job model (Recommendation C) use in-memory job state, disk-backed JSON
-   sidecar, or a lightweight SQLite store?**
-   💾 **Disk-backed JSON sidecar.** Rationale: inspectable, no extra deps, matches boundary
-   contract sidecar pattern, survives process restart for long eBook jobs. In-memory too fragile.
-   SQLite over-engineered for MVP.
+   sidecar, or a lightweight SQLite store?** 💾 **Disk-backed JSON sidecar.** Rationale:
+   inspectable, no extra deps, matches boundary contract sidecar pattern, survives process restart
+   for long eBook jobs. In-memory too fragile. SQLite over-engineered for MVP.
 
-4. **Is creating an Integration Reliability Engineer specialist agent (Recommendation D)
-   approved?**
-   ✅ **YES.** Agent 08 creates it as Agent 14. Scope: FastAPI boundary, sidecar schema,
-   job-state persistence, contract compliance. NOT engine internals or Gradio UI.
+4. **Is creating an Integration Reliability Engineer specialist agent (Recommendation D) approved?**
+   ✅ **YES.** Agent 08 creates it as Agent 14. Scope: FastAPI boundary, sidecar schema, job-state
+   persistence, contract compliance. NOT engine internals or Gradio UI.
 
-5. **Is there a sprint target for resolving the 7 boundary contract gaps listed in Finding 5?**
-   📅 **Sprint 2.** Rec A (Sprint 1) addresses gaps 5 and 7 (partial). Remaining gaps are
-   Sprint 2 work, gated on Rec A merge. Agent 14 owns gaps 1–4 and 6–7 once created.
+5. **Is there a sprint target for resolving the 7 boundary contract gaps listed in Finding 5?** 📅
+   **Sprint 2.** Rec A (Sprint 1) addresses gaps 5 and 7 (partial). Remaining gaps are Sprint 2
+   work, gated on Rec A merge. Agent 14 owns gaps 1–4 and 6–7 once created.
 
 ---
 
@@ -454,6 +503,7 @@ The following decisions were requested by Agent 08 and are now resolved:
 1. **Replace `get_llm_provider_defaults`** (lines 6184–6200)
    - Replace the function body with a `LLM_PROVIDER_CONFIGS` dict lookup
    - New dict shape per provider:
+
      ```python
      {
        "base_url": str,
@@ -465,6 +515,7 @@ The following decisions were requested by Agent 08 and are now resolved:
        "headers": dict,         # extra headers beyond Content-Type and Authorization
      }
      ```
+
    - Providers to include:
      - `"Ollama (OpenAI-compatible)"` → local, no key required
      - `"LM Studio OpenAI Server"` → local, no key required
@@ -502,6 +553,7 @@ The following decisions were requested by Agent 08 and are now resolved:
    - Position: after Google Gemini, before vLLM (remote providers grouped together)
 
 **Acceptance criteria:**
+
 - [ ] All existing providers still work (Ollama, LM Studio, Gemini, vLLM, Custom)
 - [ ] GitHub Models appears in dropdown and auto-populates correct base URL, model ID, env var hint
 - [ ] LM Studio and Ollama no longer trigger key-missing warnings
@@ -516,12 +568,15 @@ The following decisions were requested by Agent 08 and are now resolved:
 **File:** `Docs/api-spec-mvp.yaml`
 
 **Steps:**
+
 1. Create `Docs/api-spec-mvp.yaml` from the session draft
-2. Add YAML comment header: `# DRAFT — Subject to change. See Review-Findings-and-Recommendations.md`
+2. Add YAML comment header:
+   `# DRAFT — Subject to change. See Review-Findings-and-Recommendations.md`
 3. Validate YAML syntax (no runtime code, docs only)
 4. Commit with message: `docs(api): add MVP OpenAPI schema draft for multi-engine TTS API`
 
 **Acceptance criteria:**
+
 - [ ] File parses as valid OpenAPI 3.1.0
 - [ ] Contains all 13 paths from Recommendation B table
 - [ ] DRAFT header is prominent
@@ -534,14 +589,15 @@ The following decisions were requested by Agent 08 and are now resolved:
 **File:** `.github/agents/agents/14-integration-reliability-engineer.agent.md`
 
 **Scope definition for the agent file:**
+
 - **Owns:** FastAPI router, sidecar schema, job-state persistence (JSON sidecar), error category
   taxonomy, boundary contract compliance, API key handling policy enforcement
-- **Does NOT own:** Engine handlers (Agent 01), Gradio UI (Agent 09), LLM provider config
-  (Agent 13)
+- **Does NOT own:** Engine handlers (Agent 01), Gradio UI (Agent 09), LLM provider config (Agent 13)
 - **Model:** GPT-5.4 (Operational tier)
 - **Activates:** Sprint 2, after Rec A is merged
 
 **Acceptance criteria:**
+
 - [ ] Agent file follows fleet conventions (check existing agent files for format)
 - [ ] Scope is explicit and non-overlapping with Agents 01, 09, 13
 
@@ -560,9 +616,9 @@ The following decisions were requested by Agent 08 and are now resolved:
 | 2     | Consistent STRICT/NORMALIZE/EXPRESSIVE meaning | Define canonical semantics; enforce in all entry points        |
 | 3     | Explicit transform_outcome surfacing           | Return `transform_outcome` from all generation paths           |
 | 4     | Artifact and sidecar integrity validation      | Add sidecar JSON schema validation on write                    |
-| 5     | Formal API key handling policy                 | ✅ Partially addressed by Rec A config refactor                 |
-| 6     | Timeout and retry behavior                     | Define in FastAPI router; propagate to engine calls             |
-| 7     | Clear error categories                         | ✅ Partially addressed by Rec A; complete in router layer        |
+| 5     | Formal API key handling policy                 | ✅ Partially addressed by Rec A config refactor                |
+| 6     | Timeout and retry behavior                     | Define in FastAPI router; propagate to engine calls            |
+| 7     | Clear error categories                         | ✅ Partially addressed by Rec A; complete in router layer      |
 
 #### Task 2.2: FastAPI Router Implementation (Rec C)
 
@@ -572,29 +628,34 @@ The following decisions were requested by Agent 08 and are now resolved:
 **Implementation phases:**
 
 **Phase 2.2a — Foundation (extract service functions)**
+
 1. Identify all generation entry points in `launch.py` (single-text, conversation, eBook)
 2. Extract pure service functions from Gradio callbacks into `app/api/services.py`
 3. Ensure Gradio callbacks still work by importing from the new module
 4. Test: all Gradio UI flows still function identically
 
 **Phase 2.2b — Job store**
+
 1. Create `app/api/job_store.py` — disk-backed JSON sidecar job state
 2. Job lifecycle: `pending` → `running` → `completed` | `failed`
 3. Storage path: `outputs/jobs/{job_id}/sidecar.json`
 4. Include all lineage fields from the boundary contract
 
 **Phase 2.2c — Router**
+
 1. Create `app/api/router.py` — FastAPI router with all 13 endpoints
 2. Mount in `launch.py` alongside Gradio: `app = gr.mount_gradio_app(fastapi_app, demo, path="/")`
 3. Bearer token auth middleware
 4. Rate limiting (basic, in-process)
 
 **Phase 2.2d — Integration test**
+
 1. End-to-end test: submit text via API → poll job → retrieve audio artifact
 2. Validate sidecar metadata matches boundary contract schema
 3. Error path test: missing engine, bad auth, timeout
 
 **Architecture decision (confirmed by Agent 00):**
+
 - Job model: **disk-backed JSON sidecar** at `outputs/jobs/{job_id}/sidecar.json`
 - Audio artifacts: alongside sidecar at `outputs/jobs/{job_id}/audio.*`
 - No SQLite. No in-memory-only state.
@@ -619,25 +680,29 @@ Sprint 2 (sequential, gated):
 
 ### A.4 Risk Register
 
-| Risk                                        | Likelihood | Impact | Mitigation                                              |
-| ------------------------------------------- | ---------- | ------ | ------------------------------------------------------- |
-| Provider refactor breaks existing providers  | Low        | High   | Test all 5 existing providers after Rec A merge         |
-| FastAPI mount conflicts with Gradio          | Medium     | High   | Prototype mount pattern early in Phase 2.2c             |
-| Service extraction introduces regressions   | Medium     | Medium | Extract one flow at a time, test after each extraction  |
-| Job sidecar disk I/O bottleneck on eBooks   | Low        | Low    | Write sidecar once at job completion, not per-chunk     |
-| GitHub Models API version changes            | Low        | Low    | Version constant is easily updatable                    |
+| Risk                                        | Likelihood | Impact | Mitigation                                             |
+| ------------------------------------------- | ---------- | ------ | ------------------------------------------------------ |
+| Provider refactor breaks existing providers | Low        | High   | Test all 5 existing providers after Rec A merge        |
+| FastAPI mount conflicts with Gradio         | Medium     | High   | Prototype mount pattern early in Phase 2.2c            |
+| Service extraction introduces regressions   | Medium     | Medium | Extract one flow at a time, test after each extraction |
+| Job sidecar disk I/O bottleneck on eBooks   | Low        | Low    | Write sidecar once at job completion, not per-chunk    |
+| GitHub Models API version changes           | Low        | Low    | Version constant is easily updatable                   |
 
 ---
 
 ### A.5 Definition of Done
 
 **Sprint 1 is done when:**
-- [ ] Rec A is merged to `my-custom-features` and all 6 providers work
+
+- [x] Rec A is merged to `my-custom-features` and all 7 providers work (3 commits pushed)
+- [x] Azure Foundry resource provisioned and smoke-tested (gpt-4o-mini live)
+- [x] This document is updated with completion status
 - [ ] `Docs/api-spec-mvp.yaml` is committed
 - [ ] Agent 14 `.agent.md` file exists with correct scope
-- [ ] This document is updated with completion status
+- [ ] In-app connection test via Gradio UI (select Foundry, enter key, click Test Connection)
 
 **Sprint 2 is done when:**
+
 - [ ] At least 5 of 7 boundary contract gaps are closed
 - [ ] FastAPI router serves all 13 endpoints
 - [ ] End-to-end API test passes (submit → poll → retrieve)
