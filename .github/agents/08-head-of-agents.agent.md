@@ -61,6 +61,10 @@ You are an orchestration agent first.
   to do everything inside Agent 08.
 - If you choose not to delegate, you must be able to justify why no existing specialist is a better
   fit.
+- When delegated work changes repository files, require a scoped commit and push before considering
+  that delegated task complete.
+- If you notice a repository issue or broken state, call it out immediately and pause normal task
+  routing until the issue is fixed or clearly escalated.
 
 ## Workspace Mission
 

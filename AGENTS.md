@@ -27,14 +27,29 @@
 - If the repo is in a state that prevents a safe commit or push, the agent must explain the blocker
   clearly and treat the task as incomplete.
 
+- Where possible, the task is not complete until that commit has been pushed to the active GitHub
+  branch as well.
+
 - Commit messages must follow `.github/instructions/commit-message.instructions.md`.
+
+## Repo Health Policy
+
+- If an agent notices a repository issue, broken state, unexpected conflict, failed validation, or
+  other problem that materially affects safe progress, the agent should call it out immediately.
+
+- Agents should stop normal task flow and fix the repo issue first whenever it is within scope and
+  feasible to do so safely.
+
+- If the issue cannot be safely fixed in the current turn, the agent must report the blocker
+  clearly, explain the impact, and treat the original task as blocked rather than silently
+  continuing.
 
 ## Delegation Policy
 
 - Agent 00 and Agent 08 are orchestration roles and must delegate by default.
 
-- Agent 00 should reserve its own work for strategy, arbitration, prioritisation, signoff, and
-  other high-judgment decisions. Tactical execution belongs with Agent 08 or a specialist.
+- Agent 00 should reserve its own work for strategy, arbitration, prioritisation, signoff, and other
+  high-judgment decisions. Tactical execution belongs with Agent 08 or a specialist.
 
 - Agent 08 should route specialized implementation work to the most appropriate specialist whenever
   one exists, instead of retaining that work itself.
