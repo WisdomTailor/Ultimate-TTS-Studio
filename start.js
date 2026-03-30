@@ -3,16 +3,22 @@ module.exports = {
     bundle: "ai",
   },
   daemon: true,
+  env: [
+    {
+      title: "Azure AI API Key (optional)",
+      description:
+        "Enter your Azure AI Services API key for Microsoft Foundry LLM provider. Get it from Azure Portal → AI Services → Keys. Leave blank if you only use local providers (Ollama, LM Studio).",
+      key: "AZURE_AI_API_KEY",
+    },
+  ],
   run: [
     {
       method: "shell.run",
       params: {
-        conda: "tts_env", // Edit this to customize the venv folder path
-        env: {}, // Edit this to customize environment variables (see documentation)
-        path: "app", // Edit this to customize the path to start the shell from
-        message: [
-          "python launch.py", // Edit with your custom commands
-        ],
+        conda: "tts_env",
+        env: {},
+        path: "app",
+        message: ["python launch.py"],
         on: [
           {
             // The regular expression pattern to monitor.
