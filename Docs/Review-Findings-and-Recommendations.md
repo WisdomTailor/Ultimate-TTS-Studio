@@ -7,18 +7,19 @@
 **Last updated:** 2026-03-30 (Rec A implemented, Azure Foundry provisioned)  
 **Branch:** `my-custom-features`  
 **Repo:** `c:\pinokio\api\Ultimate-TTS-Studio.git`  
-**Status:** ✅ SPRINT 1 IN PROGRESS — Rec A implemented and merged. This is a living working document.
+**Status:** ✅ SPRINT 1 IN PROGRESS — Rec A implemented and merged. This is a living working
+document.
 
 ---
 
 ## Executive Summary — Quick Reference
 
-| Rec | Title                                    | Verdict                         | Sprint | Owner          | Risk   |
-| --- | ---------------------------------------- | ------------------------------- | ------ | -------------- | ------ |
-| A   | Provider config refactor (`launch.py`)   | ✅ **IMPLEMENTED** (3 commits)  | 1      | Agent 13       | Low    |
-| B   | Save OpenAPI schema (docs only)          | ✅ **APPROVED** (as draft)      | 1      | Agent 07 / 08  | None   |
-| C   | FastAPI router implementation            | ⏸️ **DEFERRED** to Sprint 2     | 2      | New Agent (14) | Medium |
-| D   | Create Integration Reliability Eng agent | ✅ **APPROVED**                 | 1      | Agent 08       | None   |
+| Rec | Title                                    | Verdict                        | Sprint | Owner          | Risk   |
+| --- | ---------------------------------------- | ------------------------------ | ------ | -------------- | ------ |
+| A   | Provider config refactor (`launch.py`)   | ✅ **IMPLEMENTED** (3 commits) | 1      | Agent 13       | Low    |
+| B   | Save OpenAPI schema (docs only)          | ✅ **APPROVED** (as draft)     | 1      | Agent 07 / 08  | None   |
+| C   | FastAPI router implementation            | ⏸️ **DEFERRED** to Sprint 2    | 2      | New Agent (14) | Medium |
+| D   | Create Integration Reliability Eng agent | ✅ **APPROVED**                | 1      | Agent 08       | None   |
 
 **Architecture decision (Q3 from §8):** Job model = **disk-backed JSON sidecar**. Rationale:
 inspectable, no extra deps, aligns with existing sidecar pattern in boundary contract, resilient for
@@ -389,54 +390,56 @@ Sprint 2 (Planned — gated on Sprint 1 stability):
 
 **Commits (submodule `app/` → WisdomTailor/Ultimate-TTS-Studio-SUP3R-Edition):**
 
-| Commit    | Message                                                                    |
-| --------- | -------------------------------------------------------------------------- |
+| Commit    | Message                                                                                   |
+| --------- | ----------------------------------------------------------------------------------------- |
 | `fdc011a` | `feat(api): refactor LLM provider config to structured dict, add Foundry + GitHub Models` |
-| `3e7434a` | `fix(api): wire real Foundry endpoint, fix Azure OpenAI URL pattern`       |
-| `5ca1d13` | `fix(api): use regional Azure endpoint for Foundry provider`               |
+| `3e7434a` | `fix(api): wire real Foundry endpoint, fix Azure OpenAI URL pattern`                      |
+| `5ca1d13` | `fix(api): use regional Azure endpoint for Foundry provider`                              |
 
 **Commits (parent repo → WisdomTailor/Ultimate-TTS-Studio):**
 
-| Commit    | Message                                                        |
-| --------- | -------------------------------------------------------------- |
+| Commit    | Message                                                           |
+| --------- | ----------------------------------------------------------------- |
 | `44bd3d3` | `chore: update app submodule pointer (Foundry provider refactor)` |
-| `3055558` | `chore: update app submodule pointer (Foundry endpoint fix)`   |
-| `8ffd92c` | `chore: update app submodule pointer (regional Azure endpoint)` |
+| `3055558` | `chore: update app submodule pointer (Foundry endpoint fix)`      |
+| `8ffd92c` | `chore: update app submodule pointer (regional Azure endpoint)`   |
 
 **What changed in `app/launch.py`:** 116 insertions, 41 deletions across 8 replacement blocks:
 
-1. Replaced tuple-based `get_llm_provider_defaults` with `LLM_PROVIDER_CONFIGS` structured dict (7 providers)
+1. Replaced tuple-based `get_llm_provider_defaults` with `LLM_PROVIDER_CONFIGS` structured dict (7
+   providers)
 2. Added **Microsoft Foundry** and **GitHub Models** as first-class providers
 3. Refactored `get_llm_provider_env_var` to derive from config dict
 4. Enhanced `get_llm_shell_key_setup_hint` with Foundry and GitHub-specific hints
 5. Added `extra_headers` and `auth_style` params to `call_openai_compatible_chat`
-6. Added conditional Azure OpenAI URL pattern (`/openai/deployments/{model}/chat/completions?api-version=`)
+6. Added conditional Azure OpenAI URL pattern
+   (`/openai/deployments/{model}/chat/completions?api-version=`)
 7. Replaced Gemini-only key guard with generic `requires_api_key` from config
 8. Updated dropdown to `choices=list(LLM_PROVIDER_CONFIGS.keys())`
 
 **Providers now available (7):**
 
-| Provider                                   | Kind   | Key Required | Auth Style | Base URL                                        |
-| ------------------------------------------ | ------ | ------------ | ---------- | ----------------------------------------------- |
-| Ollama (OpenAI-compatible)                 | local  | No           | bearer     | http://localhost:11434/v1                       |
-| LM Studio OpenAI Server                   | local  | No           | bearer     | http://localhost:1234/v1                        |
-| Google Gemini API (OpenAI-compatible)      | cloud  | Yes          | bearer     | https://generativelanguage.googleapis.com/v1beta |
-| Microsoft Foundry (OpenAI-compatible)      | cloud  | Yes          | api-key    | https://eastus2.api.cognitive.microsoft.com     |
-| GitHub Models (OpenAI-compatible)          | cloud  | Yes          | bearer     | https://models.github.ai/v1                    |
-| vLLM OpenAI Server                         | local  | No           | bearer     | http://localhost:8000/v1                        |
-| Custom OpenAI-compatible                   | custom | Yes          | bearer     | http://localhost:8000/v1                        |
+| Provider                              | Kind   | Key Required | Auth Style | Base URL                                           |
+| ------------------------------------- | ------ | ------------ | ---------- | -------------------------------------------------- |
+| Ollama (OpenAI-compatible)            | local  | No           | bearer     | <http://localhost:11434/v1>                        |
+| LM Studio OpenAI Server               | local  | No           | bearer     | <http://localhost:1234/v1>                         |
+| Google Gemini API (OpenAI-compatible) | cloud  | Yes          | bearer     | <https://generativelanguage.googleapis.com/v1beta> |
+| Microsoft Foundry (OpenAI-compatible) | cloud  | Yes          | api-key    | <https://eastus2.api.cognitive.microsoft.com>      |
+| GitHub Models (OpenAI-compatible)     | cloud  | Yes          | bearer     | <https://models.github.ai/v1>                      |
+| vLLM OpenAI Server                    | local  | No           | bearer     | <http://localhost:8000/v1>                         |
+| Custom OpenAI-compatible              | custom | Yes          | bearer     | <http://localhost:8000/v1>                         |
 
 ### Azure Foundry Provisioning — 2026-03-30
 
-| Resource            | Value                                                      |
-| ------------------- | ---------------------------------------------------------- |
-| Subscription        | Azure subscription 1 (`b7c3def6-e2b0-4500-b7c6-2ea244ea2c49`) |
-| Resource Group      | `rg-ultimate-tts` (East US 2)                              |
-| AI Services         | `ultimate-tts-foundry` (Kind: AIServices, SKU: S0)         |
-| Model Deployed      | `gpt-4o-mini` (v2024-07-18, GlobalStandard, capacity 10)   |
-| Working Endpoint    | `https://eastus2.api.cognitive.microsoft.com`               |
-| Auth                | `api-key` header (env var: `AZURE_AI_API_KEY`)             |
-| Smoke Test          | ✅ Passed — gpt-4o-mini returned "OK", 22 tokens           |
+| Resource         | Value                                                         |
+| ---------------- | ------------------------------------------------------------- |
+| Subscription     | Azure subscription 1 (`b7c3def6-e2b0-4500-b7c6-2ea244ea2c49`) |
+| Resource Group   | `rg-ultimate-tts` (East US 2)                                 |
+| AI Services      | `ultimate-tts-foundry` (Kind: AIServices, SKU: S0)            |
+| Model Deployed   | `gpt-4o-mini` (v2024-07-18, GlobalStandard, capacity 10)      |
+| Working Endpoint | `https://eastus2.api.cognitive.microsoft.com`                 |
+| Auth             | `api-key` header (env var: `AZURE_AI_API_KEY`)                |
+| Smoke Test       | ✅ Passed — gpt-4o-mini returned "OK", 22 tokens              |
 
 **Note:** The AI Foundry portal endpoint (`services.ai.azure.com`) was not yet DNS-propagated at
 time of setup. The regional endpoint works correctly and is what's configured in the code.
@@ -622,33 +625,33 @@ The following decisions were requested by Agent 08 and are now resolved:
 
 #### Task 2.2: FastAPI Router Implementation (Rec C)
 
-**Owner:** Agent 14  
-**Prerequisites:** Tasks 1.1, 1.2, 1.3 complete; gaps 1, 3, 5, 7 closed
+-**Owner:** Agent 14  
+-**Prerequisites:** Tasks 1.1, 1.2, 1.3 complete; gaps 1, 3, 5, 7 closed
 
-**Implementation phases:**
+-**Implementation phases:**
 
-**Phase 2.2a — Foundation (extract service functions)**
+-**Phase 2.2a — Foundation (extract service functions)**
 
 1. Identify all generation entry points in `launch.py` (single-text, conversation, eBook)
 2. Extract pure service functions from Gradio callbacks into `app/api/services.py`
 3. Ensure Gradio callbacks still work by importing from the new module
 4. Test: all Gradio UI flows still function identically
 
-**Phase 2.2b — Job store**
+-**Phase 2.2b — Job store**
 
 1. Create `app/api/job_store.py` — disk-backed JSON sidecar job state
 2. Job lifecycle: `pending` → `running` → `completed` | `failed`
 3. Storage path: `outputs/jobs/{job_id}/sidecar.json`
 4. Include all lineage fields from the boundary contract
 
-**Phase 2.2c — Router**
+-**Phase 2.2c — Router**
 
 1. Create `app/api/router.py` — FastAPI router with all 13 endpoints
 2. Mount in `launch.py` alongside Gradio: `app = gr.mount_gradio_app(fastapi_app, demo, path="/")`
 3. Bearer token auth middleware
 4. Rate limiting (basic, in-process)
 
-**Phase 2.2d — Integration test**
+-**Phase 2.2d — Integration test**
 
 1. End-to-end test: submit text via API → poll job → retrieve audio artifact
 2. Validate sidecar metadata matches boundary contract schema
