@@ -171,9 +171,9 @@ LLM. POLISH-level transforms applied instead."_
 
 Source of truth: ElevenLabs v3 documentation and the official `Enhance` prompt.
 
-### Approved voice/delivery tags (use freely in VIVID):
+### Approved voice/delivery tags (use freely in VIVID)
 
-```
+```text
 [whispers]  [laughs]  [laughs harder]  [starts laughing]  [giggles]  [chuckles]
 [sighs]     [exhales] [inhales deeply] [exhales sharply]
 [sarcastic] [curious] [excited]        [happy]            [sad]       [angry]
@@ -183,9 +183,9 @@ Source of truth: ElevenLabs v3 documentation and the official `Enhance` prompt.
 [strong X accent]   [sings]
 ```
 
-### Tags to AVOID in automated transforms:
+### Tags to AVOID in automated transforms
 
-```
+```text
 [gunshot]  [applause]  [clapping]  [explosion]  [music]
 [standing] [grinning]  [pacing]    [fart]        [woo]
 ```
@@ -193,7 +193,7 @@ Source of truth: ElevenLabs v3 documentation and the official `Enhance` prompt.
 (These are sound effects or non-auditory actions — they should not be inserted by the LLM unless the
 source text explicitly describes those events.)
 
-### Placement rules:
+### Placement rules
 
 - Place tags **immediately before** the segment they modify, on the same line
 - Or **immediately after** a sentence as a reactive tag: `"I can't believe it." [sighs]`
@@ -461,7 +461,7 @@ The LLM prompt must include this definition so the model can apply it correctly.
 
 Replace `DEFAULT_LLM_NARRATION_SYSTEM_PROMPT` with the following:
 
-```
+```text
 You are a TTS narration script transformer for ElevenLabs Eleven v3.
 
 Your task is to transform source text into a clean, natural-sounding narration script that will be
@@ -655,25 +655,25 @@ The local fallback for EXPRESSIVE should never silently pretend it applied full 
 
 ## 11. Before/After Examples
 
-### Input text used for all examples:
+### Input text used for all examples
 
 > "Dr. Smith presented Q3 results: $4.2B revenue, up 12.5% YoY. The meeting was at 14:00 on
-> 2024-09-30. Visit https://results.example.com for details. He said 'we're proud of this.'"
+> 2024-09-30. Visit <https://results.example.com> for details. He said 'we're proud of this.'"
 
-### MINIMAL output:
+### MINIMAL output
 
 > "Doctor Smith presented third-quarter results: four point two billion dollars revenue, up twelve
 > point five percent year over year. The meeting was at two PM on September thirtieth, two thousand
 > twenty-four. Visit results dot example dot com for details. He said 'we're proud of this.'"
 
-### POLISH + news_broadcast:
+### POLISH + news_broadcast
 
 > "Doctor Smith presented third-quarter results today. Revenue reached four point two billion
 > dollars, an increase of twelve point five percent compared to the same period last year. The
 > meeting took place at two PM on September thirtieth, two thousand twenty-four. Full results are
 > available at results dot example dot com. Smith said the company was proud of the performance."
 
-### VIVID + cinematic_audiobook:
+### VIVID + cinematic_audiobook
 
 > "[thoughtful] Doctor Smith stepped forward to present the third-quarter results... Four point two
 > billion dollars. Up TWELVE point five percent year over year. The boardroom fell quiet at two PM
@@ -681,14 +681,14 @@ The local fallback for EXPRESSIVE should never silently pretend it applied full 
 > dot example dot com,' they announced, 'for every last detail.' [sighs] He paused before the final
 > words. 'We're proud of this.'"
 
-### VIVID + news_broadcast (same text, different style):
+### VIVID + news_broadcast (same text, different style)
 
 > "Doctor Smith today presented third-quarter financial results. Revenue totalled four point two
 > billion dollars — a year-on-year increase of twelve point five percent. The presentation took
 > place at two PM on September thirtieth, two thousand twenty-four. Full results are published at
 > results dot example dot com. Smith described the outcome as, quote, 'we're proud of this.'"
 
-### VIVID + commercial:
+### VIVID + commercial
 
 > "[excited] Doctor Smith just dropped the numbers — and they're BIG. Four point two billion
 > dollars. Up twelve point five percent. Year over year. September thirtieth, two thousand
