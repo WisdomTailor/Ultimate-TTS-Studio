@@ -76,6 +76,12 @@ about what the panel actually does.
 It immediately communicates the purpose: _"An AI that polishes your script so it sounds better when
 spoken aloud."_
 
+> **Architecture Note (April 2026):** "AI Script Polish" is the right label for the current
+> single-action feature. As the panel grows to include conversation structuring, normalization
+> pipelines, and casting, the broader product area should be named **Script Prep**, with
+> AI Script Polish as one action within it. This rename is deferred until conversation mode
+> enhancement ships.
+
 ---
 
 ## 3. ⚙️ Complete Field-by-Field Guide
@@ -167,6 +173,11 @@ added security.
 **Security:** The API key field is masked (password-style) in the UI. Keys are never logged or
 displayed in output.
 
+> **Security Note:** File-based persistence is convenient but stores keys in plain text.
+> For stronger security, set API keys as **environment variables** (e.g., in Pinokio's
+> ENVIRONMENT file or your system shell profile) rather than entering them in the UI.
+> OS-backed credential storage (keyring integration) is on the long-term roadmap.
+
 ---
 
 ### 🎚️ Transform Mode
@@ -257,6 +268,14 @@ audiobook narration, dramatic readings, and performance.
 **After:**
 
 > He walked into the room... and EVERYONE looked at him. [thoughtful] It was quiet — too quiet.
+
+> **Best Practice — Engine-Aware Expressiveness**
+>
+> Expressive cues (`[whispers]`, `[sighs]`, ALL-CAPS emphasis, ellipses) are not universally
+> supported across TTS engines. Some engines read cues literally or degrade cadence. The planned
+> architecture stores **semantic intent** (pause, emphasis, whisper) as structured annotations,
+> then renders or strips them per engine's capability matrix. Until this is implemented, Vivid
+> mode output should be reviewed before sending to engines that lack expressive cue support.
 
 ---
 
@@ -373,6 +392,26 @@ Polish level transformations (abbreviations, numbers, dates) but cannot do Vivid
 **When to turn off:** Only if you absolutely require AI-quality output and prefer failure over
 approximate results.
 
+#### Outcome Presets (Planned)
+
+The current raw parameters (temperature, top-p, tokens) will be wrapped into **outcome-based
+presets** as the primary interface:
+
+| Preset | Temperature | Top P | Best For |
+| ------ | ----------- | ----- | -------- |
+| **Conservative** | 0.1 | 0.8 | Minimal / Polish modes, consistency-critical work |
+| **Balanced** | 0.3 | 0.9 | General use (default) |
+| **Creative** | 0.7 | 0.95 | Vivid mode, experimental output |
+
+Raw parameter controls will move to a collapsed Advanced section.
+
+> **Planned Improvement — Non-Destructive Review Flow**
+>
+> Currently, "Apply Transform" replaces the text field in place. The planned improvement shows
+> a **side-by-side preview** with original text on the left and transformed text on the right,
+> plus Accept / Reject buttons and a provenance banner indicating whether the result came from
+> the AI provider or from local fallback rules.
+
 #### System Prompt
 
 **What it is:** The "personality instructions" sent to the AI. It tells the AI exactly how to behave
@@ -439,6 +478,14 @@ transformations instead.
 | Use ALL-CAPS emphasis            | ❌      | ❌     | ✅    |
 | Add dramatic pauses (ellipses)   | ❌      | ❌     | ✅    |
 | Style-guided rhythm changes      | ❌      | ❌     | ✅    |
+
+> **Best Practice — Deterministic First, AI Second**
+>
+> Not every transformation needs an LLM. Number expansion, abbreviation handling, date/currency
+> normalization, glossary protection, and pronunciation aliases should be **deterministic rules
+> applied first**. The LLM is reserved for ambiguity resolution, style shaping, and expressive
+> rewriting. This split improves reliability, reduces latency, lowers cost, and ensures
+> consistency across providers.
 
 ---
 
@@ -570,6 +617,23 @@ style, locale) — applied individually so each speaker's lines maintain consist
 
 The existing workflow takes over: voice assignment, pause configuration, and audio generation.
 
+> **Best Practice — Schema-First Intermediate Representation**
+>
+> The AI must return a **validated JSON structure** before populating the UI:
+>
+> ```json
+> {
+>   "lines": [
+>     {"speaker": "Alice", "type": "dialogue", "text": "Hello!", "confidence": 0.95},
+>     {"speaker": "Narrator", "type": "narration", "text": "She smiled warmly.", "confidence": 0.88},
+>     {"speaker": "Unknown", "type": "dialogue", "text": "Who's there?", "confidence": 0.45, "ambiguous": true}
+>   ]
+> }
+> ```
+>
+> Lines with low confidence or `ambiguous: true` are flagged for user review instead of
+> silently accepted. This makes conversation mode auditable and debuggable.
+
 ### What the User Does vs What the Platform Does
 
 | Step              | User Does         | Platform Does                               |
@@ -612,6 +676,11 @@ questions naturally — it uses the same LLM provider you've configured.
 **Context-Aware:** The assistant knows which tab you're on and can give relevant help. On the
 Conversation Mode tab, it can help with formatting. On the LLM panel, it can test connections.
 
+> **Architecture Decision:** The assistant uses its own provider fallback chain, independent
+> of the user's creative transform provider. Diagnostics must work even when the creative
+> provider is misconfigured, down, or rate-limited — that's precisely when users need help
+> most.
+
 **Diagnostic Capabilities:**
 
 - "Test my LM Studio connection" → runs connectivity check and reports
@@ -645,6 +714,10 @@ other AI agents) to interact with TTS capabilities programmatically.
 | `structure_conversation(text)`      | Convert raw text to speaker format |
 | `get_engine_info()`                 | Query engine capabilities          |
 
+> **Security Requirement:** MCP tools must ship with authentication, authorization scopes,
+> per-tool rate limiting, and audit logging from day one. Creative transforms, diagnostics,
+> and automation channels must be isolated so that one failure does not compromise the others.
+
 **Use case:** A VS Code agent working on a documentation project could automatically generate audio
 narration for tutorial videos without leaving the editor.
 
@@ -673,13 +746,13 @@ quality can vary. Strategies to maintain consistency:
 
 ## 10. 📅 Implementation Priority Roadmap
 
-| Phase       | Focus                    | Key Items                                                                                                            | Status     |
-| ----------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------- | ---------- |
-| **Phase 1** | UX Polish (Immediate)    | Panel tooltips, settings persistence, Gemini fix, alphabetized providers, system prompt scroll                       | ✅ Done    |
-| **Phase 2** | Transform Quality        | Redesigned prompts with mode/style definitions, mode behavior fixes (EXPRESSIVE ≠ NORMALIZE), tag density guidelines | 🔜 Next    |
-| **Phase 3** | Conversation Enhancement | AI reformatter, two-stage pipeline (structure → polish), narrator support, per-line transform                        | 📋 Planned |
-| **Phase 4** | In-App Assistant         | Chat sidebar, diagnostics, settings suggestions, error interpretation                                                | 📋 Planned |
-| **Phase 5** | Ecosystem                | MCP server, skills library, batch evaluation harness                                                                 | 📋 Future  |
+| Phase | Focus | Key Items | Status |
+| ----- | ----- | --------- | ------ |
+| **Phase 1** | UX Polish | Panel tooltips, settings persistence, Gemini fix, alphabetized providers, system prompt scroll | ✅ Done |
+| **Phase 2** | Transform Quality + Foundations | Deterministic normalization first-pass, engine capability matrix, preview/diff UX, outcome presets, evaluation harness, redesigned prompts, mode behavior fixes | 🔜 Next |
+| **Phase 3** | Conversation Enhancement | Schema-first JSON intermediate, versioned script model, pronunciation lexicon, protected terms, AI reformatter, per-line transform | 📋 Planned |
+| **Phase 4** | Assistant + Automation | Decoupled diagnostic provider, MCP with auth/scopes/rate-limits, job orchestration (queue, cancel, retry, resume) | 📋 Planned |
+| **Phase 5** | Platform Vision | Character bibles, narrator profiles, casting presets, series-wide style guides, DAW export, subtitle alignment, asset manifests | 📋 Future |
 
 ---
 
@@ -756,6 +829,7 @@ sessions in your settings file.
 | Date       | Version | Changes                                                                                                           |
 | ---------- | ------- | ----------------------------------------------------------------------------------------------------------------- |
 | 2026-03-31 | 1.0     | Initial guide covering all panel fields, modes, styles, conversation mode plan, assistant plan, MCP/tools roadmap |
+| 2026-04-01 | 1.1 | Architecture review findings integrated: engine-aware cues, deterministic normalization, schema-first conversation, outcome presets, non-destructive UX, revised roadmap, security notes |
 
 ---
 
