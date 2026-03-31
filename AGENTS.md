@@ -917,7 +917,7 @@ code:
    update the parent pointer.
 
 5. **launch.py navigation gate:** Before any review or edit of `app/launch.py`, read
-  `Docs/launch-py-index.md` first. Treat that index as the mandatory navigation map for the file.
+   `Docs/launch-py-index.md` first. Treat that index as the mandatory navigation map for the file.
 
 ## Pre-flight and Exit Checklist Template
 

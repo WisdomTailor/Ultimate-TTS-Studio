@@ -1,6 +1,8 @@
 ---
 applyTo: "app/launch.py"
-description: "Required when app/launch.py is in scope: read Docs/launch-py-index.md before reviewing, editing, or answering questions about that file."
+description:
+  "Required when app/launch.py is in scope: read Docs/launch-py-index.md before reviewing, editing,
+  or answering questions about that file."
 ---
 
 # launch.py Index — Required Pre-Read
@@ -23,6 +25,7 @@ Before reviewing, editing, or answering questions about `app/launch.py`, you mus
 
 - Search-only edits in `app/launch.py` are high-risk.
 - UI controls, handler closures, and generation functions are tightly coupled.
-- The index documents the navigation landmarks and the common coupling points that cause regressions.
+- The index documents the navigation landmarks and the common coupling points that cause
+  regressions.
 
 If the index appears stale, update the index as part of the same task.

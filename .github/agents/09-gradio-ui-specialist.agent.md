@@ -1,7 +1,7 @@
 ---
 description: "Gradio UI Specialist — owns all Gradio UI layout, component design, UX patterns, theming, CSS, settings persistence, and visual bug fixes in launch.py. Model: GPT-5.4. Use when: UI layout bugs, Gradio component issues, new UI sections, theme/CSS changes, settings persistence, UX improvements, accordion design, tab layout."
 model: "GPT-5.4"
-tools: vscode, execute, read, agent, edit, search, web, ms-python.python/getPythonEnvironmentInfo, ms-python.python/getPythonExecutableCommand, ms-python.python/installPythonPackage, ms-python.python/configurePythonEnvironment, todo
+tools: vscode, execute, read, agent, edit, search, web, azure-mcp/search, 'microsoft/markitdown/*', 'pylance-mcp-server/*', vscode.mermaid-chat-features/renderMermaidDiagram, ms-python.python/getPythonEnvironmentInfo, ms-python.python/getPythonExecutableCommand, ms-python.python/installPythonPackage, ms-python.python/configurePythonEnvironment, todo
 ---
 
 # Gradio UI Specialist

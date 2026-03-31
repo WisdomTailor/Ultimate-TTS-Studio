@@ -18,6 +18,7 @@ agents:*
     11-prompt-systems-architect,
     12-batch-generation-monitor,
     13-llm-integration-specialist,
+    *,
   ]
 ---
 
