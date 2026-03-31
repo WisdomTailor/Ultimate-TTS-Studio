@@ -916,11 +916,16 @@ code:
 4. **Submodule/dual-repo hygiene:** If `app` is tracked separately, commit in `app` first, then
    update the parent pointer.
 
+5. **launch.py navigation gate:** Before any review or edit of `app/launch.py`, read
+  `Docs/launch-py-index.md` first. Treat that index as the mandatory navigation map for the file.
+
 ## Pre-flight and Exit Checklist Template
 
 Before editing, instantiate and complete this checklist in your working notes:
 
 - [ ] Request type classified (launcher-only vs app-code change)
+
+- [ ] `Docs/launch-py-index.md` read before touching `app/launch.py`
 
 - [ ] Closest example selected from `C:\pinokio\prototype\system\examples`
 
