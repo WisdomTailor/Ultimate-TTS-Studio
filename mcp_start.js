@@ -50,5 +50,22 @@ module.exports = {
         },
       },
     },
+    {
+      method: "fs.write",
+      params: {
+        path: ".vscode/mcp.live.json",
+        json2: {
+          servers: {
+            "ultimate-tts-studio": {
+              type: "sse",
+              url: "{{local.mcp_url}}",
+              headers: {
+                Authorization: "Bearer {{input.trim()}}",
+              },
+            },
+          },
+        },
+      },
+    },
   ],
 };
