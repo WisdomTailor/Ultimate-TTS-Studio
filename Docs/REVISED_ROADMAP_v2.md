@@ -227,7 +227,7 @@ graph TD
     B --> D[v1.txt]
     B --> E[v2.txt]
     C --> F[v1.txt]
-```mermaid
+
 prompts/
 ├── narration_transform_system_v2.txt
 ├── speaker_attribution_system_v1.txt
