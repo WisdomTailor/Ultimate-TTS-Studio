@@ -979,3 +979,26 @@ Minimum validation before handoff:
 
 5. **Git gate:** Working tree is clean or intentionally scoped; generated files are not accidentally
    staged.
+
+## Phase 5 Entry Criteria
+
+Phase 5 ("Platform Vision") features are ON HOLD until the following conditions are ALL met:
+
+1. **Phase 4 shipped:** Both Phase 4a (MCP Server + Tools) and Phase 4b (Assistant + Job
+   Orchestration) are stable and released — not beta.
+2. **User demand validated:** Each Phase 5 candidate feature has ≥3 documented user requests OR ≥2
+   beta testers reporting difficulty without the feature.
+3. **Prioritization workshop:** A community feedback session is held to rank Phase 5 candidates.
+4. **Effort-scoped:** Each approved feature is scoped to ≤2 weeks of effort per item.
+
+**Without ALL criteria being met, Phase 5 items are aspirational only — not committed.**
+
+Phase 5 candidates (subject to gating):
+- Character bibles and narrator profiles
+- Casting presets and series-wide style guides
+- DAW export (multi-track audio)
+- Subtitle alignment
+- CI/CD pipeline integration
+- Asset manifests
+
+For the full roadmap, see `Docs/REVISED_ROADMAP_v2.md`.
