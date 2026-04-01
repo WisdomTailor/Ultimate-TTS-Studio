@@ -15,7 +15,7 @@ module.exports = {
     {
       method: "shell.run",
       params: {
-        conda: "tts_env",
+        conda: "tts_mcp_env",
         path: "app",
         message: [
           "conda install -c conda-forge pynini==2.1.6 -y",
@@ -23,6 +23,7 @@ module.exports = {
           "conda install -y -c conda-forge sox",
           "uv pip install devicetorch",
           "uv pip install -r requirements.txt",
+          'uv pip install "gradio[mcp]==5.35.0"',
           "uv pip install WeTextProcessing --no-deps",
           "pip uninstall phonemizer-fork -y",
           "pip install phonemizer-fork",
@@ -36,7 +37,7 @@ module.exports = {
       params: {
         uri: "torch.js",
         params: {
-          conda: "tts_env",
+          conda: "tts_mcp_env",
           path: "app",
           triton: true,
         },
@@ -88,8 +89,8 @@ module.exports = {
       id: "end",
       method: "input",
       params: {
-        title: "Install Complete!!",
-        description: "Install Complete.",
+        title: "MCP Install Complete!!",
+        description: "Optional MCP environment install complete.",
       },
     },
   ],

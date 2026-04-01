@@ -2,6 +2,17 @@
 
 A Pinokio script for <https://github.com/SUP3RMASS1VE/Ultimate-TTS-Studio-SUP3R-Edition>
 
+## Optional MCP Sidecar
+
+The default `Install` and `Start` flow now keeps MCP dependencies out of the main `app/tts_env`
+environment.
+
+- `Install` provisions the normal Ultimate TTS Studio UI environment only.
+- `Install MCP` provisions a separate optional `app/tts_mcp_env` environment for the MCP sidecar.
+- `Start` continues to launch the normal UI unchanged.
+- `Start MCP` launches the isolated Gradio MCP sidecar. Its SSE endpoint is
+  `<sidecar-url>/gradio_api/mcp/sse`, and the bearer token is written to `app/.mcp_token`.
+
 ## Voice Presets + Wrapper Pipeline
 
 The app now includes a unified preset and generation wrapper workflow in `app/launch.py`:
