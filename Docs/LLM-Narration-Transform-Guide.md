@@ -749,10 +749,15 @@ quality can vary. Strategies to maintain consistency:
 | Phase | Focus | Key Items | Status |
 | ----- | ----- | --------- | ------ |
 | **Phase 1** | UX Polish | Panel tooltips, settings persistence, Gemini fix, alphabetized providers, system prompt scroll | ✅ Done |
-| **Phase 2** | Transform Quality + Foundations | Deterministic normalization first-pass, engine capability matrix, preview/diff UX, outcome presets, evaluation harness, redesigned prompts, mode behavior fixes | 🔜 Next |
-| **Phase 3** | Conversation Enhancement | Schema-first JSON intermediate, versioned script model, pronunciation lexicon, protected terms, AI reformatter, per-line transform | 📋 Planned |
-| **Phase 4** | Assistant + Automation | Decoupled diagnostic provider, MCP with auth/scopes/rate-limits, job orchestration (queue, cancel, retry, resume) | 📋 Planned |
-| **Phase 5** | Platform Vision | Character bibles, narrator profiles, casting presets, series-wide style guides, DAW export, subtitle alignment, asset manifests | 📋 Future |
+| **Phase 2** | Transform Quality + Foundations | Deterministic normalization, engine capability matrix, preview/diff UX, outcome presets, evaluation harness, redesigned prompts, mode renames | ✅ Done |
+| **Phase 2.5** | Pre-Phase 3 Prerequisites | Module extraction (`narration_transform.py`), evaluation metrics, golden datasets, VibeVoice fix, repo hygiene, Phase 5 gate docs | 🔜 Next |
+| **Phase 3** | Conversation Enhancement | NarrationScript model, AI conversation formatter, conversation UI, per-line transform, pronunciation lexicon, module extraction (`engine_registry.py` + `conversation_logic.py`) | 📋 Planned |
+| **Phase 4a** | MCP Server + Tools | Gradio MCP evaluation, tool implementation, streamable-http transport, security layer, subprocess threading | 📋 Planned |
+| **Phase 4b** | Assistant + Job Orchestration | Assistant UI (status bar + tab), LLM decoupling, diagnostics, job queue/cancel/retry | 📋 Planned |
+| **Phase 5** | Platform Vision | Character bibles, DAW export, subtitle alignment, CI/CD pipelines (gated on Phase 4 completion + user demand) | 🚪 Gated |
+
+> For the complete revised roadmap with council verdicts, architectural decisions, evaluation
+> metrics, and risk register, see [REVISED_ROADMAP_v2.md](REVISED_ROADMAP_v2.md).
 
 ---
 
@@ -830,6 +835,7 @@ sessions in your settings file.
 | ---------- | ------- | ----------------------------------------------------------------------------------------------------------------- |
 | 2026-03-31 | 1.0     | Initial guide covering all panel fields, modes, styles, conversation mode plan, assistant plan, MCP/tools roadmap |
 | 2026-04-01 | 1.1 | Architecture review findings integrated: engine-aware cues, deterministic normalization, schema-first conversation, outcome presets, non-destructive UX, revised roadmap, security notes |
+| 2026-04-04 | 1.2     | Roadmap updated to v2.0 phase structure (Phase 2.5 added, Phase 4 split into 4a/4b, Phase 5 gated). Full roadmap details moved to REVISED_ROADMAP_v2.md. |
 
 ---
 
