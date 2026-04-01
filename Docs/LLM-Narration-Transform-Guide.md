@@ -78,9 +78,8 @@ spoken aloud."_
 
 > **Architecture Note (April 2026):** "AI Script Polish" is the right label for the current
 > single-action feature. As the panel grows to include conversation structuring, normalization
-> pipelines, and casting, the broader product area should be named **Script Prep**, with
-> AI Script Polish as one action within it. This rename is deferred until conversation mode
-> enhancement ships.
+> pipelines, and casting, the broader product area should be named **Script Prep**, with AI Script
+> Polish as one action within it. This rename is deferred until conversation mode enhancement ships.
 
 ---
 
@@ -173,10 +172,10 @@ added security.
 **Security:** The API key field is masked (password-style) in the UI. Keys are never logged or
 displayed in output.
 
-> **Security Note:** File-based persistence is convenient but stores keys in plain text.
-> For stronger security, set API keys as **environment variables** (e.g., in Pinokio's
-> ENVIRONMENT file or your system shell profile) rather than entering them in the UI.
-> OS-backed credential storage (keyring integration) is on the long-term roadmap.
+> **Security Note:** File-based persistence is convenient but stores keys in plain text. For
+> stronger security, set API keys as **environment variables** (e.g., in Pinokio's ENVIRONMENT file
+> or your system shell profile) rather than entering them in the UI. OS-backed credential storage
+> (keyring integration) is on the long-term roadmap.
 
 ---
 
@@ -273,9 +272,9 @@ audiobook narration, dramatic readings, and performance.
 >
 > Expressive cues (`[whispers]`, `[sighs]`, ALL-CAPS emphasis, ellipses) are not universally
 > supported across TTS engines. Some engines read cues literally or degrade cadence. The planned
-> architecture stores **semantic intent** (pause, emphasis, whisper) as structured annotations,
-> then renders or strips them per engine's capability matrix. Until this is implemented, Vivid
-> mode output should be reviewed before sending to engines that lack expressive cue support.
+> architecture stores **semantic intent** (pause, emphasis, whisper) as structured annotations, then
+> renders or strips them per engine's capability matrix. Until this is implemented, Vivid mode
+> output should be reviewed before sending to engines that lack expressive cue support.
 
 ---
 
@@ -397,20 +396,20 @@ approximate results.
 The current raw parameters (temperature, top-p, tokens) will be wrapped into **outcome-based
 presets** as the primary interface:
 
-| Preset | Temperature | Top P | Best For |
-| ------ | ----------- | ----- | -------- |
-| **Conservative** | 0.1 | 0.8 | Minimal / Polish modes, consistency-critical work |
-| **Balanced** | 0.3 | 0.9 | General use (default) |
-| **Creative** | 0.7 | 0.95 | Vivid mode, experimental output |
+| Preset           | Temperature | Top P | Best For                                          |
+| ---------------- | ----------- | ----- | ------------------------------------------------- |
+| **Conservative** | 0.1         | 0.8   | Minimal / Polish modes, consistency-critical work |
+| **Balanced**     | 0.3         | 0.9   | General use (default)                             |
+| **Creative**     | 0.7         | 0.95  | Vivid mode, experimental output                   |
 
 Raw parameter controls will move to a collapsed Advanced section.
 
 > **Planned Improvement — Non-Destructive Review Flow**
 >
-> Currently, "Apply Transform" replaces the text field in place. The planned improvement shows
-> a **side-by-side preview** with original text on the left and transformed text on the right,
-> plus Accept / Reject buttons and a provenance banner indicating whether the result came from
-> the AI provider or from local fallback rules.
+> Currently, "Apply Transform" replaces the text field in place. The planned improvement shows a
+> **side-by-side preview** with original text on the left and transformed text on the right, plus
+> Accept / Reject buttons and a provenance banner indicating whether the result came from the AI
+> provider or from local fallback rules.
 
 #### System Prompt
 
@@ -484,8 +483,8 @@ transformations instead.
 > Not every transformation needs an LLM. Number expansion, abbreviation handling, date/currency
 > normalization, glossary protection, and pronunciation aliases should be **deterministic rules
 > applied first**. The LLM is reserved for ambiguity resolution, style shaping, and expressive
-> rewriting. This split improves reliability, reduces latency, lowers cost, and ensures
-> consistency across providers.
+> rewriting. This split improves reliability, reduces latency, lowers cost, and ensures consistency
+> across providers.
 
 ---
 
@@ -624,15 +623,26 @@ The existing workflow takes over: voice assignment, pause configuration, and aud
 > ```json
 > {
 >   "lines": [
->     {"speaker": "Alice", "type": "dialogue", "text": "Hello!", "confidence": 0.95},
->     {"speaker": "Narrator", "type": "narration", "text": "She smiled warmly.", "confidence": 0.88},
->     {"speaker": "Unknown", "type": "dialogue", "text": "Who's there?", "confidence": 0.45, "ambiguous": true}
+>     { "speaker": "Alice", "type": "dialogue", "text": "Hello!", "confidence": 0.95 },
+>     {
+>       "speaker": "Narrator",
+>       "type": "narration",
+>       "text": "She smiled warmly.",
+>       "confidence": 0.88
+>     },
+>     {
+>       "speaker": "Unknown",
+>       "type": "dialogue",
+>       "text": "Who's there?",
+>       "confidence": 0.45,
+>       "ambiguous": true
+>     }
 >   ]
 > }
 > ```
 >
-> Lines with low confidence or `ambiguous: true` are flagged for user review instead of
-> silently accepted. This makes conversation mode auditable and debuggable.
+> Lines with low confidence or `ambiguous: true` are flagged for user review instead of silently
+> accepted. This makes conversation mode auditable and debuggable.
 
 ### What the User Does vs What the Platform Does
 
@@ -676,10 +686,9 @@ questions naturally — it uses the same LLM provider you've configured.
 **Context-Aware:** The assistant knows which tab you're on and can give relevant help. On the
 Conversation Mode tab, it can help with formatting. On the LLM panel, it can test connections.
 
-> **Architecture Decision:** The assistant uses its own provider fallback chain, independent
-> of the user's creative transform provider. Diagnostics must work even when the creative
-> provider is misconfigured, down, or rate-limited — that's precisely when users need help
-> most.
+> **Architecture Decision:** The assistant uses its own provider fallback chain, independent of the
+> user's creative transform provider. Diagnostics must work even when the creative provider is
+> misconfigured, down, or rate-limited — that's precisely when users need help most.
 
 **Diagnostic Capabilities:**
 
@@ -714,9 +723,9 @@ other AI agents) to interact with TTS capabilities programmatically.
 | `structure_conversation(text)`      | Convert raw text to speaker format |
 | `get_engine_info()`                 | Query engine capabilities          |
 
-> **Security Requirement:** MCP tools must ship with authentication, authorization scopes,
-> per-tool rate limiting, and audit logging from day one. Creative transforms, diagnostics,
-> and automation channels must be isolated so that one failure does not compromise the others.
+> **Security Requirement:** MCP tools must ship with authentication, authorization scopes, per-tool
+> rate limiting, and audit logging from day one. Creative transforms, diagnostics, and automation
+> channels must be isolated so that one failure does not compromise the others.
 
 **Use case:** A VS Code agent working on a documentation project could automatically generate audio
 narration for tutorial videos without leaving the editor.
@@ -746,15 +755,15 @@ quality can vary. Strategies to maintain consistency:
 
 ## 10. 📅 Implementation Priority Roadmap
 
-| Phase | Focus | Key Items | Status |
-| ----- | ----- | --------- | ------ |
-| **Phase 1** | UX Polish | Panel tooltips, settings persistence, Gemini fix, alphabetized providers, system prompt scroll | ✅ Done |
-| **Phase 2** | Transform Quality + Foundations | Deterministic normalization, engine capability matrix, preview/diff UX, outcome presets, evaluation harness, redesigned prompts, mode renames | ✅ Done |
-| **Phase 2.5** | Pre-Phase 3 Prerequisites | Module extraction (`narration_transform.py`), evaluation metrics, golden datasets, VibeVoice fix, repo hygiene, Phase 5 gate docs | 🔜 Next |
-| **Phase 3** | Conversation Enhancement | NarrationScript model, AI conversation formatter, conversation UI, per-line transform, pronunciation lexicon, module extraction (`engine_registry.py` + `conversation_logic.py`) | 📋 Planned |
-| **Phase 4a** | MCP Server + Tools | Gradio MCP evaluation, tool implementation, streamable-http transport, security layer, subprocess threading | 📋 Planned |
-| **Phase 4b** | Assistant + Job Orchestration | Assistant UI (status bar + tab), LLM decoupling, diagnostics, job queue/cancel/retry | 📋 Planned |
-| **Phase 5** | Platform Vision | Character bibles, DAW export, subtitle alignment, CI/CD pipelines (gated on Phase 4 completion + user demand) | 🚪 Gated |
+| Phase         | Focus                           | Key Items                                                                                                                                                                        | Status     |
+| ------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| **Phase 1**   | UX Polish                       | Panel tooltips, settings persistence, Gemini fix, alphabetized providers, system prompt scroll                                                                                   | ✅ Done    |
+| **Phase 2**   | Transform Quality + Foundations | Deterministic normalization, engine capability matrix, preview/diff UX, outcome presets, evaluation harness, redesigned prompts, mode renames                                    | ✅ Done    |
+| **Phase 2.5** | Pre-Phase 3 Prerequisites       | Module extraction (`narration_transform.py`), evaluation metrics, golden datasets, VibeVoice fix, repo hygiene, Phase 5 gate docs                                                | 🔜 Next    |
+| **Phase 3**   | Conversation Enhancement        | NarrationScript model, AI conversation formatter, conversation UI, per-line transform, pronunciation lexicon, module extraction (`engine_registry.py` + `conversation_logic.py`) | 📋 Planned |
+| **Phase 4a**  | MCP Server + Tools              | Gradio MCP evaluation, tool implementation, streamable-http transport, security layer, subprocess threading                                                                      | 📋 Planned |
+| **Phase 4b**  | Assistant + Job Orchestration   | Assistant UI (status bar + tab), LLM decoupling, diagnostics, job queue/cancel/retry                                                                                             | 📋 Planned |
+| **Phase 5**   | Platform Vision                 | Character bibles, DAW export, subtitle alignment, CI/CD pipelines (gated on Phase 4 completion + user demand)                                                                    | 🚪 Gated   |
 
 > For the complete revised roadmap with council verdicts, architectural decisions, evaluation
 > metrics, and risk register, see [REVISED_ROADMAP_v2.md](REVISED_ROADMAP_v2.md).
@@ -831,11 +840,11 @@ sessions in your settings file.
 
 ## 📝 Document Revision History
 
-| Date       | Version | Changes                                                                                                           |
-| ---------- | ------- | ----------------------------------------------------------------------------------------------------------------- |
-| 2026-03-31 | 1.0     | Initial guide covering all panel fields, modes, styles, conversation mode plan, assistant plan, MCP/tools roadmap |
-| 2026-04-01 | 1.1 | Architecture review findings integrated: engine-aware cues, deterministic normalization, schema-first conversation, outcome presets, non-destructive UX, revised roadmap, security notes |
-| 2026-04-04 | 1.2     | Roadmap updated to v2.0 phase structure (Phase 2.5 added, Phase 4 split into 4a/4b, Phase 5 gated). Full roadmap details moved to REVISED_ROADMAP_v2.md. |
+| Date       | Version | Changes                                                                                                                                                                                  |
+| ---------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-03-31 | 1.0     | Initial guide covering all panel fields, modes, styles, conversation mode plan, assistant plan, MCP/tools roadmap                                                                        |
+| 2026-04-01 | 1.1     | Architecture review findings integrated: engine-aware cues, deterministic normalization, schema-first conversation, outcome presets, non-destructive UX, revised roadmap, security notes |
+| 2026-04-04 | 1.2     | Roadmap updated to v2.0 phase structure (Phase 2.5 added, Phase 4 split into 4a/4b, Phase 5 gated). Full roadmap details moved to REVISED_ROADMAP_v2.md.                                 |
 
 ---
 

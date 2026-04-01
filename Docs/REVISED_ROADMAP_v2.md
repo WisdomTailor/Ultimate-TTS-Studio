@@ -10,24 +10,27 @@
 
 ## 1. Council Review Summary
 
-Architecture Review 040426 proposed 10 strategic changes across Phases 3–5. A four-member council reviewed feasibility, risk, and scoping. All 10 recommendations were accepted (most with scoping adjustments). Key structural changes: Phase 4 split into 4a/4b; module extraction phased across 2.5 and 3; Phase 5 auto-gated on Phase 4 completion.
+Architecture Review 040426 proposed 10 strategic changes across Phases 3–5. A four-member council
+reviewed feasibility, risk, and scoping. All 10 recommendations were accepted (most with scoping
+adjustments). Key structural changes: Phase 4 split into 4a/4b; module extraction phased across 2.5
+and 3; Phase 5 auto-gated on Phase 4 completion.
 
 ---
 
 ## 2. Final Verdicts
 
-| # | Recommendation | Council Consensus | PM Verdict | Implementation Phase | Notes |
-|---|----------------|-------------------|------------|----------------------|-------|
-| 1 | **NarrationScript model** | Unanimous Accept | ACCEPT | Phase 3 | Pydantic dataclass. Closed SemanticCue enum (WHISPER, PAUSE, EMPHASIS, EMOTIONAL_BEAT). Semantic versioning with explicit `migrate_v1_to_v2()` functions. Renderer returns `rendered_text` + `engine_overrides`. |
-| 2 | **Pronunciation lexicon / protected terms** | Unanimous Accept | ACCEPT | Phase 3 | Placeholder masking pre-LLM; pronunciation overrides post-LLM, pre-synthesis. Two-table Glossary accordion UI (protected terms + pronunciation overrides). |
-| 3 | **MCP security day-one** | Unanimous Accept | ACCEPT | Phase 4a | OAuth-aligned auth (not custom `.mcp-token`). Per-tool rate limits. Token/session-based limiting, not IP-based. |
-| 4 | **MCP transport: streamable-http** | Unanimous Accept | ACCEPT | Phase 4a | Protocol: `streamable-http`. VS Code config: `.vscode/mcp.json`. Evaluate Gradio built-in MCP (`mcp_server=True` at `/gradio_api/mcp/`) before building custom FastMCP. |
-| 5 | **MCP tool decomposition** | Unanimous Accept | ACCEPT | Phase 4a | Decomposed tools: `transform_text`, `list_engines`, `list_voices`, `synthesize`, `structure_conversation`, `get_engine_info`. Job-oriented additions: `submit_synthesis_job`, `get_job_status`, `cancel_job`, `list_outputs`. |
-| 6 | **Assistant: Status Bar + Tab** | Unanimous Accept | ACCEPT | Phase 4b | `gr.Row` at page top for status indicator. Full Assistant tab for interaction. No sticky-on-scroll — not worth CSS fragility. |
-| 7 | **Module extraction (phased)** | Accept (scope divergence resolved) | ACCEPT — PHASED | Phase 2.5 + Phase 3 | Extract `narration_transform.py` as Phase 2.5 prerequisite (~2–3K lines, pure functions, zero Gradio imports). Extract `engine_registry.py` + `conversation_logic.py` during Phase 3. ≥80% unit test coverage for each module. |
-| 8 | **Threading model** | Accept (prefer subprocess) | ACCEPT | Phase 4a | Prefer separate MCP subprocess with IPC (crash isolation, easier restarts). Same-process shared ASGI app as fallback. |
-| 9 | **Evaluation expansion** | Unanimous Accept | ACCEPT | Phase 2.5 + Phase 3 gate | Define metrics before Phase 3: consistency (exact match for Minimal), provider parity (cosine >0.80), speaker attribution (F1 >0.75). Create 5–10 golden multi-speaker scripts. Add prompt versioning and regression log. |
-| 10 | **Phase 5 gating** | Unanimous Accept | ACCEPT | Before Phase 3 | Auto-gate on Phase 4 completion. Phase 5 = fresh prioritization with user feedback, not predetermined backlog. Document gate criteria. |
+| #   | Recommendation                              | Council Consensus                  | PM Verdict      | Implementation Phase     | Notes                                                                                                                                                                                                                          |
+| --- | ------------------------------------------- | ---------------------------------- | --------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | **NarrationScript model**                   | Unanimous Accept                   | ACCEPT          | Phase 3                  | Pydantic dataclass. Closed SemanticCue enum (WHISPER, PAUSE, EMPHASIS, EMOTIONAL_BEAT). Semantic versioning with explicit `migrate_v1_to_v2()` functions. Renderer returns `rendered_text` + `engine_overrides`.               |
+| 2   | **Pronunciation lexicon / protected terms** | Unanimous Accept                   | ACCEPT          | Phase 3                  | Placeholder masking pre-LLM; pronunciation overrides post-LLM, pre-synthesis. Two-table Glossary accordion UI (protected terms + pronunciation overrides).                                                                     |
+| 3   | **MCP security day-one**                    | Unanimous Accept                   | ACCEPT          | Phase 4a                 | OAuth-aligned auth (not custom `.mcp-token`). Per-tool rate limits. Token/session-based limiting, not IP-based.                                                                                                                |
+| 4   | **MCP transport: streamable-http**          | Unanimous Accept                   | ACCEPT          | Phase 4a                 | Protocol: `streamable-http`. VS Code config: `.vscode/mcp.json`. Evaluate Gradio built-in MCP (`mcp_server=True` at `/gradio_api/mcp/`) before building custom FastMCP.                                                        |
+| 5   | **MCP tool decomposition**                  | Unanimous Accept                   | ACCEPT          | Phase 4a                 | Decomposed tools: `transform_text`, `list_engines`, `list_voices`, `synthesize`, `structure_conversation`, `get_engine_info`. Job-oriented additions: `submit_synthesis_job`, `get_job_status`, `cancel_job`, `list_outputs`.  |
+| 6   | **Assistant: Status Bar + Tab**             | Unanimous Accept                   | ACCEPT          | Phase 4b                 | `gr.Row` at page top for status indicator. Full Assistant tab for interaction. No sticky-on-scroll — not worth CSS fragility.                                                                                                  |
+| 7   | **Module extraction (phased)**              | Accept (scope divergence resolved) | ACCEPT — PHASED | Phase 2.5 + Phase 3      | Extract `narration_transform.py` as Phase 2.5 prerequisite (~2–3K lines, pure functions, zero Gradio imports). Extract `engine_registry.py` + `conversation_logic.py` during Phase 3. ≥80% unit test coverage for each module. |
+| 8   | **Threading model**                         | Accept (prefer subprocess)         | ACCEPT          | Phase 4a                 | Prefer separate MCP subprocess with IPC (crash isolation, easier restarts). Same-process shared ASGI app as fallback.                                                                                                          |
+| 9   | **Evaluation expansion**                    | Unanimous Accept                   | ACCEPT          | Phase 2.5 + Phase 3 gate | Define metrics before Phase 3: consistency (exact match for Minimal), provider parity (cosine >0.80), speaker attribution (F1 >0.75). Create 5–10 golden multi-speaker scripts. Add prompt versioning and regression log.      |
+| 10  | **Phase 5 gating**                          | Unanimous Accept                   | ACCEPT          | Before Phase 3           | Auto-gate on Phase 4 completion. Phase 5 = fresh prioritization with user feedback, not predetermined backlog. Document gate criteria.                                                                                         |
 
 ---
 
@@ -46,15 +49,24 @@ Architecture Review 040426 proposed 10 strategic changes across Phases 3–5. A 
 
 ### Phase 2.5 — Pre-Phase 3 Prerequisites (NEW)
 
-**Purpose:** Reduce architectural debt and establish evaluation infrastructure before Phase 3 adds complexity.
+**Purpose:** Reduce architectural debt and establish evaluation infrastructure before Phase 3 adds
+complexity.
 
-1. **Module extraction: `narration_transform.py`** — Extract constants, deterministic normalization, provider helpers, and transform functions from launch.py. Zero Gradio imports. ≥80% unit test coverage.
-2. **Evaluation metric definitions** — Document metric specs: consistency (exact match for Minimal/Polish, >95% for Vivid), provider parity (cosine >0.80 via sentence-transformers), speaker attribution (F1 >0.75). Create test execution plan.
-3. **Golden multi-speaker dataset** — Create 5–10 annotated conversation scripts for speaker attribution evaluation.
+1. **Module extraction: `narration_transform.py`** — Extract constants, deterministic normalization,
+   provider helpers, and transform functions from launch.py. Zero Gradio imports. ≥80% unit test
+   coverage.
+2. **Evaluation metric definitions** — Document metric specs: consistency (exact match for
+   Minimal/Polish, >95% for Vivid), provider parity (cosine >0.80 via sentence-transformers),
+   speaker attribution (F1 >0.75). Create test execution plan.
+3. **Golden multi-speaker dataset** — Create 5–10 annotated conversation scripts for speaker
+   attribution evaluation.
 4. **Phase 5 gate documentation** — Add Phase 5 entry criteria to AGENTS.md.
-5. **VibeVoice ENGINE_EXPRESSIVENESS fix** — Add VibeVoice to the engine capability matrix (currently missing).
-6. **Smoke test Phase 2 end-to-end** — Run the full pipeline via Pinokio to validate all Phase 2 changes work together.
-7. **Repo hygiene** — Commit or gitignore loose artifacts (`APPENDIX_DRAFT.md`, `Docs/Review - feedback-010426.txt`).
+5. **VibeVoice ENGINE_EXPRESSIVENESS fix** — Add VibeVoice to the engine capability matrix
+   (currently missing).
+6. **Smoke test Phase 2 end-to-end** — Run the full pipeline via Pinokio to validate all Phase 2
+   changes work together.
+7. **Repo hygiene** — Commit or gitignore loose artifacts (`APPENDIX_DRAFT.md`,
+   `Docs/Review - feedback-010426.txt`).
 
 **Estimated effort:** 3–4 weeks.
 
@@ -64,15 +76,22 @@ Architecture Review 040426 proposed 10 strategic changes across Phases 3–5. A 
 
 **Purpose:** Build multi-speaker conversation structuring on top of the transform pipeline.
 
-1. **NarrationScript model** — Pydantic dataclass with SemanticCue enum, versioning, migration functions.
-2. **AI conversation formatter** — LLM-powered speaker detection and attribution, returning NarrationScript JSON.
-3. **Conversation mode UI** — Character roster + selected-character detail pane + read-only script Dataframe + selected-line editor. "Guided form editor" pattern (NOT spreadsheet/script editor).
+1. **NarrationScript model** — Pydantic dataclass with SemanticCue enum, versioning, migration
+   functions.
+2. **AI conversation formatter** — LLM-powered speaker detection and attribution, returning
+   NarrationScript JSON.
+3. **Conversation mode UI** — Character roster + selected-character detail pane + read-only script
+   Dataframe + selected-line editor. "Guided form editor" pattern (NOT spreadsheet/script editor).
 4. **Per-line transform** — Apply AI Script Polish per speaker line with mode/style/locale.
-5. **Pronunciation lexicon UI** — Two-table Glossary accordion: protected terms + pronunciation overrides.
-6. **Pronunciation pipeline** — Placeholder masking pre-LLM; pronunciation substitution post-LLM, pre-synthesis.
-7. **Module extraction: `engine_registry.py` + `conversation_logic.py`** — Continue modularization. Zero Gradio imports. ≥80% test coverage each.
+5. **Pronunciation lexicon UI** — Two-table Glossary accordion: protected terms + pronunciation
+   overrides.
+6. **Pronunciation pipeline** — Placeholder masking pre-LLM; pronunciation substitution post-LLM,
+   pre-synthesis.
+7. **Module extraction: `engine_registry.py` + `conversation_logic.py`** — Continue modularization.
+   Zero Gradio imports. ≥80% test coverage each.
 
-**Completion gate:** Provider parity tests pass (same input on Ollama, LM Studio, Gemini → cosine similarity >0.80). Speaker attribution F1 >0.75 on golden dataset.
+**Completion gate:** Provider parity tests pass (same input on Ollama, LM Studio, Gemini → cosine
+similarity >0.80). Speaker attribution F1 >0.75 on golden dataset.
 
 ---
 
@@ -80,10 +99,14 @@ Architecture Review 040426 proposed 10 strategic changes across Phases 3–5. A 
 
 **Purpose:** Expose TTS Studio capabilities to external tools and coding agents.
 
-1. **Gradio built-in MCP evaluation spike** — Test `mcp_server=True` fitness. If ≥80% tool surface covered, build on top of it.
-2. **Tool implementation** — `transform_text`, `list_engines`, `list_voices`, `synthesize`, `structure_conversation`, `get_engine_info` + job tools: `submit_synthesis_job`, `get_job_status`, `cancel_job`, `list_outputs`.
+1. **Gradio built-in MCP evaluation spike** — Test `mcp_server=True` fitness. If ≥80% tool surface
+   covered, build on top of it.
+2. **Tool implementation** — `transform_text`, `list_engines`, `list_voices`, `synthesize`,
+   `structure_conversation`, `get_engine_info` + job tools: `submit_synthesis_job`,
+   `get_job_status`, `cancel_job`, `list_outputs`.
 3. **Transport: streamable-http** — Bound to 127.0.0.1. `.vscode/mcp.json` config example.
-4. **Security layer** — OAuth-aligned auth. Per-tool rate limits (synthesize: 1-2 concurrent, transform: higher, reads: loose). Token/session-based limiting. Audit logging.
+4. **Security layer** — OAuth-aligned auth. Per-tool rate limits (synthesize: 1-2 concurrent,
+   transform: higher, reads: loose). Token/session-based limiting. Audit logging.
 5. **Threading** — Separate MCP subprocess with IPC. Fallback: shared ASGI app.
 
 ---
@@ -93,9 +116,11 @@ Architecture Review 040426 proposed 10 strategic changes across Phases 3–5. A 
 **Purpose:** In-app help and batch processing infrastructure.
 
 1. **Assistant UI** — Status bar (`gr.Row` at top) + full Assistant tab with chatbot component.
-2. **Assistant LLM decoupling** — Shared provider infrastructure with separate config namespaces (`narration_llm` vs `assistant_llm`). Shorter retries/timeouts for assistant.
+2. **Assistant LLM decoupling** — Shared provider infrastructure with separate config namespaces
+   (`narration_llm` vs `assistant_llm`). Shorter retries/timeouts for assistant.
 3. **Diagnostic capabilities** — Connection testing, error interpretation, settings suggestions.
-4. **Job orchestration** — Background job system with gr.Timer polling. Queue, cancel, retry, resume. Progress reporting for eBook/batch generation.
+4. **Job orchestration** — Background job system with gr.Timer polling. Queue, cancel, retry,
+   resume. Progress reporting for eBook/batch generation.
 
 **Phase 4b depends on Phase 4a being stable.**
 
@@ -106,7 +131,8 @@ Architecture Review 040426 proposed 10 strategic changes across Phases 3–5. A 
 **Entry criteria (ALL must be met):**
 
 1. Phase 4 (both 4a and 4b) stable and shipped (not beta)
-2. User demand for each Phase 5 item validated: ≥3 documented user requests OR ≥2 beta testers report difficulty without the feature
+2. User demand for each Phase 5 item validated: ≥3 documented user requests OR ≥2 beta testers
+   report difficulty without the feature
 3. Prioritization workshop held with community feedback
 4. Each feature scoped to ≤2 weeks effort per item
 
@@ -127,7 +153,7 @@ Architecture Review 040426 proposed 10 strategic changes across Phases 3–5. A 
 
 ### Module Architecture (Target: End of Phase 3)
 
-```
+```text
 launch.py              — Gradio UI, event handlers, app lifecycle
 narration_transform.py — Constants, deterministic normalization, LLM transform, prompt assembly
 engine_registry.py     — Engine handlers, capability matrix, cue stripping
@@ -182,19 +208,26 @@ This keeps within Gradio's strengths and avoids the UI ceiling (per Agent 09).
 
 ### Metrics Specification (Define in Phase 2.5)
 
-| Test Type | Input | Method | Metric | Pass Threshold |
-|-----------|-------|--------|--------|----------------|
-| Transform Consistency (Minimal) | 100 test sentences | Run 3x | Exact string match | 100% |
-| Transform Consistency (Vivid) | 50 test sentences | Run 3x | Cosine similarity | >0.95 |
-| Provider Parity (Polish) | 20 representative sentences | Compare across 3 providers | Cosine similarity (sentence-transformers) | Mean >0.80 |
-| Speaker Attribution | 5–10 golden scripts | Compare AI vs manual labels | F1 score | >0.75 |
-| Audio Regression | Reference audio set | Duration, silence ratio, clip detection | Within tolerance | ±10% duration |
+| Test Type                       | Input                       | Method                                  | Metric                                    | Pass Threshold |
+| ------------------------------- | --------------------------- | --------------------------------------- | ----------------------------------------- | -------------- |
+| Transform Consistency (Minimal) | 100 test sentences          | Run 3x                                  | Exact string match                        | 100%           |
+| Transform Consistency (Vivid)   | 50 test sentences           | Run 3x                                  | Cosine similarity                         | >0.95          |
+| Provider Parity (Polish)        | 20 representative sentences | Compare across 3 providers              | Cosine similarity (sentence-transformers) | Mean >0.80     |
+| Speaker Attribution             | 5–10 golden scripts         | Compare AI vs manual labels             | F1 score                                  | >0.75          |
+| Audio Regression                | Reference audio set         | Duration, silence ratio, clip detection | Within tolerance                          | ±10% duration  |
 
 ### Prompt Versioning
 
 Track system prompt changes in a versioned directory:
 
-```
+```mermaid
+graph TD
+    A[Prompts] --> B[Narration Transform System]
+    A --> C[Speaker Attribution System]
+    B --> D[v1.txt]
+    B --> E[v2.txt]
+    C --> F[v1.txt]
+```mermaid
 prompts/
 ├── narration_transform_system_v2.txt
 ├── speaker_attribution_system_v1.txt
@@ -209,23 +242,25 @@ Before shipping any phase, require a test report showing all relevant tests pass
 
 ## 6. Risk Register
 
-| Risk | Phase | Severity | Mitigation |
-|------|-------|----------|------------|
-| Gradio UI ceiling — conversation UI too complex for Gradio | Phase 3 | HIGH | "Guided form editor" pattern. If insufficient, evaluate Gradio custom components before considering platform switch. |
-| Provider parity — LLM outputs vary significantly across providers | Phase 3 | MEDIUM | Provider parity tests as Phase 3 completion gate. Model-specific prompt templates for weaker models. |
-| NarrationScript migration — schema changes break saved scripts | Phase 3+ | MEDIUM | Semantic versioning with explicit migration functions. Never delete fields — deprecate with fallback. |
-| MCP security gaps — localhost exposure without auth | Phase 4a | HIGH | Security from day one. OAuth-aligned auth, per-tool rate limits, audit logging. |
-| Phase 5 scope creep — features creep into Phase 3/4 | All | HIGH | Auto-gate on Phase 4 completion. Explicit entry criteria. Fresh prioritization. |
-| Module extraction regression — refactoring breaks existing features | Phase 2.5 | MEDIUM | ≥80% test coverage before extraction. Run evaluation harness after each module cut. |
+| Risk                                                                | Phase     | Severity | Mitigation                                                                                                           |
+| ------------------------------------------------------------------- | --------- | -------- | -------------------------------------------------------------------------------------------------------------------- |
+| Gradio UI ceiling — conversation UI too complex for Gradio          | Phase 3   | HIGH     | "Guided form editor" pattern. If insufficient, evaluate Gradio custom components before considering platform switch. |
+| Provider parity — LLM outputs vary significantly across providers   | Phase 3   | MEDIUM   | Provider parity tests as Phase 3 completion gate. Model-specific prompt templates for weaker models.                 |
+| NarrationScript migration — schema changes break saved scripts      | Phase 3+  | MEDIUM   | Semantic versioning with explicit migration functions. Never delete fields — deprecate with fallback.                |
+| MCP security gaps — localhost exposure without auth                 | Phase 4a  | HIGH     | Security from day one. OAuth-aligned auth, per-tool rate limits, audit logging.                                      |
+| Phase 5 scope creep — features creep into Phase 3/4                 | All       | HIGH     | Auto-gate on Phase 4 completion. Explicit entry criteria. Fresh prioritization.                                      |
+| Module extraction regression — refactoring breaks existing features | Phase 2.5 | MEDIUM   | ≥80% test coverage before extraction. Run evaluation harness after each module cut.                                  |
 
 ---
 
 ## 7. Document Revision History
 
-| Date | Version | Changes |
-|------|---------|---------|
-| 2026-04-04 | 2.0 | Initial revised roadmap incorporating Architecture Review 040426 findings, four-member council review. Phase 4 split into 4a/4b. Phase 2.5 added. Module extraction phased. Phase 5 auto-gated. |
+| Date       | Version | Changes                                                                                                                                                                                         |
+| ---------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-04-04 | 2.0     | Initial revised roadmap incorporating Architecture Review 040426 findings, four-member council review. Phase 4 split into 4a/4b. Phase 2.5 added. Module extraction phased. Phase 5 auto-gated. |
 
 ---
 
-_This document is the authoritative roadmap for Ultimate TTS Studio development. For the user-facing feature guide, see `LLM-Narration-Transform-Guide.md`. For project-wide agent policy, see `AGENTS.md`._
+_This document is the authoritative roadmap for Ultimate TTS Studio development. For the user-facing
+feature guide, see `LLM-Narration-Transform-Guide.md`. For project-wide agent policy, see
+`AGENTS.md`._

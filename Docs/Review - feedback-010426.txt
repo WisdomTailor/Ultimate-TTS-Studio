@@ -1,0 +1,67 @@
+I’m treating this as a product and architecture review of the narration-transform feature and the broader TTS platform. I’ll first extract the highest-impact issues and better alternatives from the guide itself, then I’ll widen out to platform-level recommendations on reliability, UX, extensibility, and fit for purpose.
+
+Analyzed AI-assisted TTS platform and evaluated various aspects
+I’ve finished the document-level pass and am now tightening it into product and architecture findings rather than line-edit nitpicks. Next I’m organizing the better alternatives into two buckets: what should be inserted into this guide, and what should change in the platform roadmap so the feature set stays reliable as it grows.
+
+Considered documentation structures and outlined development steps
+Findings
+
+High: The guide treats Vivid output as if bracketed cues, ellipses, em-dash pacing, and ALL-CAPS are universally good for speech output, but that is not true across engines. Some engines will read cues literally, over-emphasize punctuation, or degrade cadence. The better architecture is an engine-aware render layer: store semantic intent such as pause, emphasis, whisper, narrator note, then render or strip it per engine capability. See LLM-Narration-Transform-Guide.md:238-259, LLM-Narration-Transform-Guide.md:309-321, and LLM-Narration-Transform-Guide.md:428-441.
+High: The conversation plan is directionally right but too trusting of free-form AI attribution. Speaker detection is the hardest failure mode here, and the current plan lacks a strict schema, confidence scores, ambiguity handling, and validation before the UI is populated. Make the first pass schema-first JSON with fields like line type, speaker id, confidence, evidence span, and ambiguity flag, then only convert to editable speaker text after validation. See LLM-Narration-Transform-Guide.md:545-590 and LLM-Narration-Transform-Guide.md:661-670.
+High: Secret handling and external automation are under-specified. Saving API keys in a settings file is a weak default unless the file is encrypted and protected by OS credential storage. The MCP plan is also missing authentication, authorization scopes, rate limits, and audit logging. Those are platform risks, not later polish. See LLM-Narration-Transform-Guide.md:163-168 and LLM-Narration-Transform-Guide.md:633-649.
+High: The UX around transform application is still too destructive. “Apply transform” replacing the source text, with fallback silently stepping in and undo relying on Ctrl+Z, is not strong enough for a production writing workflow. This needs explicit before/after diff, accept and reject, transform provenance, and a banner that states whether the result came from AI or fallback rules. See LLM-Narration-Transform-Guide.md:412-426, LLM-Narration-Transform-Guide.md:715-723.
+Medium: “AI Script Polish” is good feature copy, but not the best long-term information architecture for the whole surface. The feature is already broader than polish and is heading toward normalization, structuring, directing, and casting. Better: use a larger product area such as Speech Prep or Script Prep, with AI Script Polish as one action inside it. See LLM-Narration-Transform-Guide.md:59-77 and LLM-Narration-Transform-Guide.md:526-582.
+Medium: The assistant plan couples support and diagnostics to the same provider path the user chose for creative transforms. That is convenient, but operationally brittle. Diagnostics should be able to run even when the creative provider is misconfigured, down, rate-limited, or too expensive. See LLM-Narration-Transform-Guide.md:607-619.
+Medium: Advanced parameters are still model-centric instead of outcome-centric. Most users do not want temperature, top-p, and token ceilings; they want “safe”, “balanced”, “performative”, “cheap”, or “high fidelity”. The current guide explains the knobs well, but the product would be better if presets were primary and raw knobs were expert-only. See LLM-Narration-Transform-Guide.md:305-393.
+Medium: The roadmap order is slightly off. Evaluation and validation should move earlier, before conversation expansion and assistant rollout. Otherwise you will scale non-determinism before you have a way to measure quality regressions. See LLM-Narration-Transform-Guide.md:661-670 and LLM-Narration-Transform-Guide.md:674-682.
+Insertion Blocks
+I could not annotate the file in-place in this session, so below are insertion-ready review blocks you can place directly into the guide.
+
+Place after the rename recommendation:
+
+Architect Review — Better IA
+AI Script Polish is strong wording for a single action, but it is too narrow for the broader system this panel is becoming. Recommended structure: Speech Prep as the feature area, with actions such as Normalize, Polish, Perform, and Structure Conversation. This keeps beginner-friendly language while leaving room for non-AI and conversation-first workflows.
+Place after Transform Mode:
+
+Best Practice — Split deterministic cleanup from creative rewriting
+Not every transformation should go through an LLM. Number expansion, abbreviation handling, date and currency normalization, glossary protection, and pronunciation aliases should be deterministic first. Use the LLM only for ambiguity resolution, style shaping, and expressive rewriting. This improves reliability, speed, and consistency across providers.
+Place after Vivid mode:
+
+Best Practice — Make expressiveness engine-aware
+Expressive cues should not be emitted as raw text until the app knows the target engine can use them correctly. The better model is to store semantic intent, then render that intent into engine-specific markup, punctuation, or plain text depending on the selected engine.
+Place after the conversation workflow plan:
+
+Best Practice — Use a schema-first intermediate representation
+Before showing speaker-formatted text, the AI should return a validated structure for each line: speaker, line type, confidence, ambiguity, and optional evidence. Low-confidence lines should be flagged for review instead of silently accepted. This makes conversation mode auditable and much easier to debug.
+Place after API Key or MCP sections:
+
+Best Practice — Separate secrets, automation, and user content boundaries
+API keys should default to OS-backed secure storage rather than plain settings persistence. MCP tools should require explicit authentication, scoped permissions, rate limiting, and audit logging. Creative transforms, diagnostics, and automation should be isolated enough that one failure or misconfiguration does not compromise the others.
+Place after the undo FAQ:
+
+Best Practice — Non-destructive review flow
+Transform results should open as a preview with sentence-level diff, apply, reject, and re-run controls. The UI should always show whether the output came from the configured AI provider or from local fallback rules.
+Platform Review
+The app today is a multi-engine TTS production workbench with a promising AI-assisted script preparation layer. Its core value is not just “generate speech”; it is “make text speakable, castable, and reusable across engines.” That is already more valuable than a simple TTS front end.
+
+What it could become is an end-to-end voice production platform: ingest raw text, normalize it deterministically, structure dialogue, protect glossary and pronunciation rules, cast voices, render engine-aware output, review deltas, batch-generate assets, and expose the whole pipeline safely through automation. That is a much stronger product category than a loose collection of engine tabs and LLM settings.
+
+What I would do next, in order:
+
+Introduce a versioned intermediate script model for narration lines, speakers, cues, glossary locks, and provenance.
+Make deterministic normalization the default first pass, with the LLM reserved for ambiguity and style.
+Add a pronunciation lexicon, protected terms list, and brand-name locking as first-class features.
+Replace destructive transform apply with preview, diff, history, and per-sentence audio spot-check.
+Build an engine capability matrix so transform output adapts to each TTS engine instead of assuming one universal text style.
+Move evaluation harnesses forward: golden scripts, speaker attribution benchmarks, and audio regression checks.
+Secure the platform properly: OS credential storage, scoped MCP auth, audit logs, request isolation, and explicit fallback banners.
+Add job orchestration for long-running work: queueing, cancellation, retries, resume, and cached outputs.
+Create project-level workflows: character bible, narrator profile, casting presets, series-wide style guides, and reusable templates.
+Expose higher-value automation than raw generation alone: chapter batching, subtitle or transcript alignment, export to DAW-friendly formats, and asset manifests.
+One product-level challenge to the document: the best version of this platform is not “an LLM panel inside a TTS app.” The best version is “a speech production pipeline with AI as one component.” That framing will lead to better architecture, better UX, and fewer reliability failures.
+
+The requested Foundry skill workflow could not be executed here because those tools were not available in this session. If you want, I can next turn this into either:
+
+A rewritten v2 of the guide with the review points folded in cleanly.
+A platform roadmap document with explicit product, architecture, security, and reliability milestones.
+A set of ADR-style recommendations for the biggest decisions: transform pipeline, conversation schema, secrets storage, and MCP security.

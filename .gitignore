@@ -51,3 +51,4 @@ app/tools/llm_narration_transform/data/train.jsonl
 app/tools/llm_narration_transform/data/valid.jsonl
 app/tools/llm_narration_transform/data/*.pred.jsonl
 app/tools/llm_narration_transform/data/*.report.json
+APPENDIX_DRAFT.md

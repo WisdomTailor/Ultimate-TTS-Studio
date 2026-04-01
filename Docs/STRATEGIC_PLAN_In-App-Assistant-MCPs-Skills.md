@@ -774,7 +774,8 @@ print(f"Audio saved to: {response['audio_path']}") \`\`\`
 
 ### Question: Could TTS Studio benefit from integrating external MCP servers?
 
-**Short Answer:** Yes, with strong caveats. An MCP server for **document-to-dialogue conversion** or **speaker identification** could enhance conversation mode.
+**Short Answer:** Yes, with strong caveats. An MCP server for **document-to-dialogue conversion** or
+**speaker identification** could enhance conversation mode.
 
 ---
 
@@ -796,12 +797,13 @@ print(f"Audio saved to: {response['audio_path']}") \`\`\`
     }
   }
 }
+```
 ````
 
-**Benefit:** For conversation mode, this MCP could pre-parse scripts, identify speakers, and suggest
+- **Benefit:** For conversation mode, this MCP could pre-parse scripts, identify speakers, and suggest
 voice assignments.
 
-**Caution:** Adding external MCP dependency complicates deployment. Evaluate if the existing
+- **Caution:** Adding external MCP dependency complicates deployment. Evaluate if the existing
 LLM-based conversation mode is sufficient.
 
 #### MCP 2: Voice Cloning Service (Hypothetical)
