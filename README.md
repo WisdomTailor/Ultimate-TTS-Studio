@@ -13,6 +13,37 @@ environment.
 - `Start MCP` launches the isolated Gradio MCP sidecar. Its SSE endpoint is
   `<sidecar-url>/gradio_api/mcp/sse`, and the bearer token is written to `app/.mcp_token`.
 
+### MCP Launcher Flow
+
+1. Run `Install MCP` from the root Pinokio launcher menu. This creates the isolated
+  `app/tts_mcp_env` environment and installs the sidecar-specific MCP runtime.
+2. Run `Start MCP`. The launcher starts `python mcp_sidecar.py --port {{port}}` from `app/` and
+  captures the sidecar URL so Pinokio can show both `Open MCP Sidecar UI` and `MCP SSE Endpoint`.
+3. Open `MCP SSE Endpoint` from the menu, or build it manually as
+  `<captured-sidecar-url>/gradio_api/mcp/sse`.
+4. Read the bearer token from `app/.mcp_token`. The sidecar rewrites this token on startup.
+
+### Verifying The MCP Sidecar
+
+After `Start MCP` is running:
+
+1. Confirm the token file exists at `app/.mcp_token`.
+2. Confirm the sidecar terminal shows `MCP security initialized. Token file: .mcp_token`.
+3. Verify the SSE endpoint with PowerShell:
+
+```powershell
+$token = Get-Content .\app\.mcp_token -Raw
+$headers = @{
+  Authorization = "Bearer $token"
+  Accept = "text/event-stream"
+}
+Invoke-WebRequest -Uri "http://127.0.0.1:<PORT>/gradio_api/mcp/sse" -Headers $headers
+```
+
+Replace `<PORT>` with the port shown in the Pinokio `MCP SSE Endpoint` menu item or sidecar log.
+If authentication is wired correctly, the request should connect without an auth failure and the
+token in `app/.mcp_token` should match the current sidecar session.
+
 ## Voice Presets + Wrapper Pipeline
 
 The app now includes a unified preset and generation wrapper workflow in `app/launch.py`:
