@@ -55,26 +55,26 @@ complexity.
 
 All 7 work items delivered:
 
-| WI  | Title                                    | App commit | Parent commit        |
-| --- | ---------------------------------------- | ---------- | -------------------- |
-| 1   | Module extraction: `narration_transform.py` | `20afb9b` | `e3bb7fc`            |
-| 2   | Evaluation metric definitions            | —          | `7923b41`            |
-| 3   | Golden multi-speaker dataset             | `2440279`  | `c51e40f`            |
-| 4   | Phase 5 gate docs in AGENTS.md           | —          | `90342bf`            |
-| 5   | VibeVoice `ENGINE_EXPRESSIVENESS` fix    | `4b4d712`  | `445ff7e`            |
-| 6   | Smoke test Phase 2 end-to-end            | N/A (verified, no code changes) | N/A   |
-| 7   | Repo hygiene                             | `300f29e`  | `61fd1c3`, `fb69a6d` |
+| WI  | Title                                       | App commit                      | Parent commit        |
+| --- | ------------------------------------------- | ------------------------------- | -------------------- |
+| 1   | Module extraction: `narration_transform.py` | `20afb9b`                       | `e3bb7fc`            |
+| 2   | Evaluation metric definitions               | —                               | `7923b41`            |
+| 3   | Golden multi-speaker dataset                | `2440279`                       | `c51e40f`            |
+| 4   | Phase 5 gate docs in AGENTS.md              | —                               | `90342bf`            |
+| 5   | VibeVoice `ENGINE_EXPRESSIVENESS` fix       | `4b4d712`                       | `445ff7e`            |
+| 6   | Smoke test Phase 2 end-to-end               | N/A (verified, no code changes) | N/A                  |
+| 7   | Repo hygiene                                | `300f29e`                       | `61fd1c3`, `fb69a6d` |
 
 1. **Module extraction: `narration_transform.py`** ✅ — Constants, deterministic normalization,
-   provider helpers, and transform functions extracted from `launch.py`. Zero Gradio imports.
-   ≥80% unit test coverage achieved (app `20afb9b`, parent `e3bb7fc`).
+   provider helpers, and transform functions extracted from `launch.py`. Zero Gradio imports. ≥80%
+   unit test coverage achieved (app `20afb9b`, parent `e3bb7fc`).
 2. **Evaluation metric definitions** ✅ — Metric specs documented: consistency (exact match for
    Minimal/Polish, >95% for Vivid), provider parity (cosine >0.80 via sentence-transformers),
    speaker attribution (F1 >0.75). Test execution plan created (parent `7923b41`).
 3. **Golden multi-speaker dataset** ✅ — 5–10 annotated conversation scripts created for speaker
    attribution evaluation (app `2440279`, parent `c51e40f`).
-4. **Phase 5 gate documentation** ✅ — Phase 5 entry criteria added to `AGENTS.md`
-   (parent `90342bf`).
+4. **Phase 5 gate documentation** ✅ — Phase 5 entry criteria added to `AGENTS.md` (parent
+   `90342bf`).
 5. **VibeVoice `ENGINE_EXPRESSIVENESS` fix** ✅ — VibeVoice added to the engine capability matrix
    (app `4b4d712`, parent `445ff7e`).
 6. **Smoke test Phase 2 end-to-end** ✅ — Full pipeline verified via Pinokio; all Phase 2 changes
@@ -267,9 +267,9 @@ Before shipping any phase, require a test report showing all relevant tests pass
 
 ## 7. Document Revision History
 
-| Date       | Version | Changes                                                                                                                                                                                         |
-| ---------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 2026-04-04 | 2.0     | Initial revised roadmap incorporating Architecture Review 040426 findings, four-member council review. Phase 4 split into 4a/4b. Phase 2.5 added. Module extraction phased. Phase 5 auto-gated. |
+| Date       | Version | Changes                                                                                                                                                                                                                                                                                      |
+| ---------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-04-04 | 2.0     | Initial revised roadmap incorporating Architecture Review 040426 findings, four-member council review. Phase 4 split into 4a/4b. Phase 2.5 added. Module extraction phased. Phase 5 auto-gated.                                                                                              |
 | 2026-04-04 | 2.1     | Phase 2.5 marked complete. All 7 work items delivered. `narration_transform.py` extraction shipped (WI-1). Evaluation metrics and golden dataset in place (WI-2, WI-3). Phase 5 gate documented (WI-4). VibeVoice fix landed (WI-5). Smoke test passed (WI-6). Repo hygiene complete (WI-7). |
 
 ---

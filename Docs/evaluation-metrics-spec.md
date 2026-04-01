@@ -34,22 +34,27 @@ until all relevant tests pass.
 #### 2.1.2 Polish Mode Consistency
 
 - **Input:** 50 representative sentences (subset of Minimal corpus)
-- **Method:** Run `apply_llm_narration_transform()` with Polish mode 3× on each input, same provider and model
+- **Method:** Run `apply_llm_narration_transform()` with Polish mode 3× on each input, same provider
+  and model
 - **Metric:** Exact string match across all 3 runs (LLM temperature should be ~0 for Polish)
-- **Pass threshold:** 95% of sentences match exactly (5% variance allowed for LLM non-determinism at low temperature)
+- **Pass threshold:** 95% of sentences match exactly (5% variance allowed for LLM non-determinism at
+  low temperature)
 - **Tooling:** `pytest` + LLM provider fixture
 - **Frequency:** Nightly (requires LLM provider running)
-- **Failure action:** Investigate if temperature is set correctly; if LLM is non-deterministic at temp=0, document the provider-specific behavior
+- **Failure action:** Investigate if temperature is set correctly; if LLM is non-deterministic at
+  temp=0, document the provider-specific behavior
 
 #### 2.1.3 Vivid Mode Consistency
 
 - **Input:** 50 representative sentences
-- **Method:** Run `apply_llm_narration_transform()` with Vivid mode 3× on each input, same provider and model
+- **Method:** Run `apply_llm_narration_transform()` with Vivid mode 3× on each input, same provider
+  and model
 - **Metric:** Pairwise cosine similarity of sentence embeddings (using `sentence-transformers`)
 - **Pass threshold:** Mean pairwise similarity >0.95
 - **Tooling:** `pytest` + `sentence-transformers` (`all-MiniLM-L6-v2`)
 - **Frequency:** Nightly
-- **Failure action:** If below threshold, check temperature setting — Vivid uses higher temp, some variance is expected
+- **Failure action:** If below threshold, check temperature setting — Vivid uses higher temp, some
+  variance is expected
 
 ### 2.2 Provider Parity
 
@@ -58,12 +63,14 @@ until all relevant tests pass.
 #### 2.2.1 Cross-Provider Polish Parity
 
 - **Input:** 20 representative sentences
-- **Method:** Run Polish mode transform on the same input across 3 providers (e.g., Ollama + LM Studio + Google Gemini)
+- **Method:** Run Polish mode transform on the same input across 3 providers (e.g., Ollama + LM
+  Studio + Google Gemini)
 - **Metric:** Pairwise cosine similarity of sentence embeddings across providers
 - **Pass threshold:** Mean similarity >0.80
 - **Tooling:** `pytest` + `sentence-transformers` + provider fixtures
 - **Frequency:** Weekly (requires multiple providers available)
-- **Failure action:** If a specific provider consistently diverges, add model-specific prompt template. Document which provider/model combinations are validated.
+- **Failure action:** If a specific provider consistently diverges, add model-specific prompt
+  template. Document which provider/model combinations are validated.
 
 #### 2.2.2 Workaround Documentation
 
@@ -81,7 +88,8 @@ When a provider fails parity tests:
 #### 2.3.1 Attribution Accuracy
 
 - **Input:** 7 golden scripts (`tests/golden_scripts/*.json`)
-- **Method:** Feed `source_text` to the conversation formatter, compare output speaker labels against `expected_output`
+- **Method:** Feed `source_text` to the conversation formatter, compare output speaker labels
+  against `expected_output`
 - **Metric:** Precision, Recall, F1 score per script (macro-averaged)
   - **Precision:** Of lines assigned to a speaker, what % are correct?
   - **Recall:** Of lines that should be assigned to a speaker, what % were found?
@@ -156,7 +164,8 @@ app/prompts/
 1. System prompts are tracked in git with version numbers in filenames
 2. When a prompt is modified, increment the version number
 3. Test results are saved with the prompt version + date
-4. Before shipping a phase, require test results showing all relevant tests pass with the current prompt version
+4. Before shipping a phase, require test results showing all relevant tests pass with the current
+   prompt version
 5. Never modify a prompt version in-place — create a new version file
 
 ### 3.3 Regression Tracking
@@ -174,12 +183,12 @@ After each prompt version change:
 
 ### 4.1 Tiers
 
-| Tier             | Tests                                               | Trigger           | Requirements                      |
-| ---------------- | --------------------------------------------------- | ----------------- | --------------------------------- |
-| **CI (fast)**    | Minimal consistency, engine coverage, cue stripping | Every commit      | No LLM provider needed            |
-| **Nightly**      | Polish/Vivid consistency, single-provider parity    | Nightly schedule  | 1 LLM provider running            |
-| **Weekly**       | Cross-provider parity, speaker attribution          | Weekly schedule   | 3 LLM providers + golden scripts  |
-| **Release gate** | All of the above + audio regression                 | Before phase ship | Full test environment             |
+| Tier             | Tests                                               | Trigger           | Requirements                     |
+| ---------------- | --------------------------------------------------- | ----------------- | -------------------------------- |
+| **CI (fast)**    | Minimal consistency, engine coverage, cue stripping | Every commit      | No LLM provider needed           |
+| **Nightly**      | Polish/Vivid consistency, single-provider parity    | Nightly schedule  | 1 LLM provider running           |
+| **Weekly**       | Cross-provider parity, speaker attribution          | Weekly schedule   | 3 LLM providers + golden scripts |
+| **Release gate** | All of the above + audio regression                 | Before phase ship | Full test environment            |
 
 ### 4.2 Test Infrastructure
 
@@ -224,6 +233,6 @@ Phase 3 CANNOT ship until:
 
 ## 6. Revision History
 
-| Date       | Version | Changes                                                                                             |
-| ---------- | ------- | --------------------------------------------------------------------------------------------------- |
-| 2026-04-04 | 1.0     | Initial metric specification covering consistency, parity, attribution, and regression              |
+| Date       | Version | Changes                                                                                |
+| ---------- | ------- | -------------------------------------------------------------------------------------- |
+| 2026-04-04 | 1.0     | Initial metric specification covering consistency, parity, attribution, and regression |

@@ -994,6 +994,7 @@ Phase 5 ("Platform Vision") features are ON HOLD until the following conditions 
 **Without ALL criteria being met, Phase 5 items are aspirational only — not committed.**
 
 Phase 5 candidates (subject to gating):
+
 - Character bibles and narrator profiles
 - Casting presets and series-wide style guides
 - DAW export (multi-track audio)
