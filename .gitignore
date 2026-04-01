@@ -35,6 +35,7 @@ VENV/
 # IDE / OS
 .vscode/*
 !.vscode/mcp.json
+!.vscode/mcp.sample.json
 .idea/
 *.swp
 *.swo
