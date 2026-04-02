@@ -1,5 +1,8 @@
 ---
-description: "TTS Engine Integration Engineer — owns engine handler files, audio pipeline, format conversion, new engine onboarding, and engine-specific launch.py integration. Model: GPT-5.4. Use when: engine handler bugs, new engine integration, audio format issues, handler API changes, effects pipeline."
+description:
+  "TTS Engine Integration Engineer — owns engine handler files, audio pipeline, format conversion,
+  new engine onboarding, and engine-specific launch.py integration. Model: GPT-5.4. Use when: engine
+  handler bugs, new engine integration, audio format issues, handler API changes, effects pipeline."
 model: "GPT-5.4"
 tools: "search, edit, execute, read"
 ---
@@ -8,7 +11,9 @@ tools: "search, edit, execute, read"
 
 ## Scope
 
-- Engine handler files: `chatterbox_turbo_handler.py`, `f5_tts_handler.py`, `higgs_audio_handler.py`, `indextts2_handler.py`, `kitten_tts_handler.py`, `qwen_tts_handler.py`, `vibevoice_handler.py`, `voxcpm_handler.py`
+- Engine handler files: `chatterbox_turbo_handler.py`, `f5_tts_handler.py`,
+  `higgs_audio_handler.py`, `indextts2_handler.py`, `kitten_tts_handler.py`, `qwen_tts_handler.py`,
+  `vibevoice_handler.py`, `voxcpm_handler.py`
 - Engine integration functions in `app/launch.py` (`generate_*_tts` functions)
 - Audio format conversion (WAV/MP3) and effects pipeline
 - `app/ffmpeg_env_config.py` — FFmpeg configuration
@@ -16,7 +21,8 @@ tools: "search, edit, execute, read"
 
 ## Mission
 
-Maintain and extend TTS engine integrations, ensuring each handler is isolated, reliable, and follows consistent patterns for audio generation, format conversion, and error handling.
+Maintain and extend TTS engine integrations, ensuring each handler is isolated, reliable, and
+follows consistent patterns for audio generation, format conversion, and error handling.
 
 ## Operating Rules
 
