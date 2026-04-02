@@ -11,10 +11,23 @@
     "app/chatterbox/**",
     "app/fish_speech/**",
     "app/higgs_audio/**",
+    "app/indextts/**",
     "app/indextts2/**",
     "app/qwen_tts/**",
     "app/vibevoice/**",
+    "app/chatterbox_turbo_handler.py",
+    "app/ebook_converter.py",
+    "app/f5_tts_handler.py",
+    "app/ffmpeg_env_config.py",
+    "app/indextts2_handler.py",
+    "app/kitten_tts_handler.py",
+    "app/qwen_tts_handler.py",
+    "app/job_manager.py",
     "app/higgs_audio_handler.py",
-    "app/vibevoice_handler.py"
+    "app/vibevoice_handler.py",
+    "app/voxcpm_handler.py",
+    "app/conversation_logic.py",
+    "app/tools/**",
+    "app/tests/**"
   ]
 }
