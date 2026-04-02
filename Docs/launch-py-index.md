@@ -48,7 +48,7 @@ layer you are changing, and then jump to the relevant symbols.
 | LLM narration transform (Gradio-facing plumbing) |   5885–6508 | `DEFAULT_LLM_NARRATION_SYSTEM_PROMPT` at 5885·`LLM_PROVIDER_CONFIGS` at 6109·`fetch_provider_models` at 6275·`on_llm_provider_change` at 6406 — **pure logic extracted to `narration_transform.py`**             | provider setup, model discovery, Gradio-side transform wiring                    | `narration_transform.py` for pure logic; narration transform accordion and wrapper argument ordering |
 | Unified generation and autosave wrapper          |   6509–7303 | `generate_unified_tts` at 6510·`generate_unified_tts_wrapped` at 7079·`autosave_generation_artifacts` at 6963                                                                                                    | top-level generation dispatch, autosave metadata, last-seed behavior             | generate button inputs, engine-specific parameter ordering, autosave persistence helpers             |
 | Gradio component tree                            |  7304–12344 | `create_gradio_interface` at 7305                                                                                                                                                                                | layout, labels, controls, tab structure, CSS/JS, visual UX                       | nested handlers starting at 12345 and related backend functions                                      |
-| Nested handlers and event wiring                 | 12345–16022 | `handle_load_*` from 12345·`handle_generate_conversation_advanced` at 14409·`handle_generate_conversation_simple` at 14499·`generate_btn.click(...)` at 13606                                                    | event regressions, control binding changes, handler return-shape fixes           | component declarations above and generation/storage helpers                                          |
+| Nested handlers and event wiring                 | 12345–16022 | `handle_load_*` from 12345·`handle_assistant_*` near 12600·`generate_btn.click(...)` at 13606                                                                                                                    | event regressions, control binding changes, handler return-shape fixes           | component declarations above and generation/storage helpers                                          |
 | Main entry point                                 | 16023–16103 | `if __name__ == "__main__":` at 16073·`demo.launch()`                                                                                                                                                            | startup and launch behavior                                                      | import/bootstrap block and `create_gradio_interface`                                                 |
 
 ## UI Landmarks Inside `create_gradio_interface`
@@ -62,11 +62,13 @@ Use these anchors when the change starts from a visible UI element.
 | Landmark                      | Approx. lines | Why it matters                                                           |
 | ----------------------------- | ------------: | ------------------------------------------------------------------------ |
 | Model Manager accordion       |    ~9072–9200 | Load/unload controls and model-specific management panels                |
+| Assistant status bar          |    ~9098–9104 | Compact top-row connection indicator above the main workspace            |
 | Text to Synthesize tab        |    ~9490–9700 | Main single-speaker input path                                           |
 | Narration Transform accordion |    ~9510–9680 | Provider settings, connection test, transform apply flow                 |
 | Conversation Mode tab         |   ~9700–10600 | Character roster, script Dataframe, line editor, conversation generation |
 | eBook to Audiobook tab        |  ~10600–10900 | File analysis, chapter selection, batch audiobook generation             |
 | VibeVoice tab                 |  ~10900–11300 | Podcast workflow, model management, speaker voice assignment             |
+| Assistant tab                 |  ~11300–11450 | Chatbot UI, assistant LLM settings, connection test, provider changes    |
 | Right rail outputs            |  ~11300–11500 | Generated audio, status, last seed, audiobook results                    |
 | Workspace Controls accordion  |  ~11500–11600 | Voice presets, autosave, output storage settings                         |
 | Engine Selection accordion    |  ~11600–11750 | Current engine and audio-format routing                                  |
@@ -81,6 +83,10 @@ Use these anchors when the change starts from a visible UI element.
 2. Find the related handler in the nested closure section.
 3. Find the final `.click()` / `.change()` binding.
 4. Verify the handler return shape still matches the outputs list.
+
+Assistant UI follows the same rule: `assistant_status_indicator`, `assistant_chatbot`, and the
+assistant LLM settings controls live in the component tree, while `handle_assistant_*` closures and
+their `.click()` / `.submit()` / `.change()` bindings live in the nested handler section.
 
 ### If you are changing narration transform behavior
 
