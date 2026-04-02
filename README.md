@@ -25,6 +25,27 @@ environment.
 5. `Start MCP` now also rewrites `.vscode/mcp.json` and `.vscode/mcp.live.json` with the current
   sidecar URL and bearer token.
 
+### VS Code MCP Startup Behavior
+
+VS Code reads `.vscode/mcp.json` as soon as the workspace opens. If that file contains a fake or
+stale MCP endpoint, VS Code tries to connect immediately and reports a startup failure before
+`Start MCP` has had a chance to write a live config.
+
+To prevent that, the tracked default `.vscode/mcp.json` is intentionally safe and empty:
+
+```json
+{
+  "servers": {}
+}
+```
+
+Once `Start MCP` is running, it replaces `.vscode/mcp.json` and writes `.vscode/mcp.live.json`
+with the current sidecar URL and bearer token from `app/.mcp_token`.
+
+If you need a manual template, use `.vscode/mcp.sample.json`. It keeps the preferred config shape,
+but with obvious placeholders for the MCP port and bearer token so it is not mistaken for a live
+config.
+
 ### Verifying The MCP Sidecar
 
 After `Start MCP` is running:
@@ -48,9 +69,12 @@ in `app/.mcp_token` should match the current sidecar session.
 
 ### MCP Config Files
 
-- `.vscode/mcp.json`: active live MCP client config, rewritten by `Start MCP`
-- `.vscode/mcp.live.json`: extra live-session copy for inspection/debugging
-- `.vscode/mcp.sample.json`: static sample/reference config
+- `.vscode/mcp.json`: tracked safe default until `Start MCP` rewrites it with the active live MCP
+  client config
+- `.vscode/mcp.live.json`: extra live-session copy written by `Start MCP` for inspection and
+  debugging
+- `.vscode/mcp.sample.json`: manual sample/reference config with obvious placeholders, not a live
+  default
 
 ### Verify MCP Action
 

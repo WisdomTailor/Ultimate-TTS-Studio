@@ -2,9 +2,9 @@
   "servers": {
     "ultimate-tts-studio": {
       "type": "sse",
-      "url": "http://127.0.0.1:7860/gradio_api/mcp/sse",
+      "url": "http://127.0.0.1:<MCP_PORT>/gradio_api/mcp/sse",
       "headers": {
-        "Authorization": "Bearer YOUR_TOKEN_HERE"
+        "Authorization": "Bearer <PASTE_MCP_TOKEN_HERE>"
       }
     }
   }
