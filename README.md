@@ -16,12 +16,14 @@ environment.
 ### MCP Launcher Flow
 
 1. Run `Install MCP` from the root Pinokio launcher menu. This creates the isolated
-  `app/tts_mcp_env` environment and installs the sidecar-specific MCP runtime.
+   `app/tts_mcp_env` environment and installs the sidecar-specific MCP runtime.
 2. Run `Start MCP`. The launcher starts `python mcp_sidecar.py --port {{port}}` from `app/` and
-  captures the sidecar URL so Pinokio can show both `Open MCP Sidecar UI` and `MCP SSE Endpoint`.
+   captures the sidecar URL so Pinokio can show both `Open MCP Sidecar UI` and `MCP SSE Endpoint`.
 3. Open `MCP SSE Endpoint` from the menu, or build it manually as
-  `<captured-sidecar-url>/gradio_api/mcp/sse`.
+   `<captured-sidecar-url>/gradio_api/mcp/sse`.
 4. Read the bearer token from `app/.mcp_token`. The sidecar rewrites this token on startup.
+5. `Start MCP` now also rewrites `.vscode/mcp.json` and `.vscode/mcp.live.json` with the current
+  sidecar URL and bearer token.
 
 ### Verifying The MCP Sidecar
 
@@ -40,9 +42,24 @@ $headers = @{
 Invoke-WebRequest -Uri "http://127.0.0.1:<PORT>/gradio_api/mcp/sse" -Headers $headers
 ```
 
-Replace `<PORT>` with the port shown in the Pinokio `MCP SSE Endpoint` menu item or sidecar log.
-If authentication is wired correctly, the request should connect without an auth failure and the
-token in `app/.mcp_token` should match the current sidecar session.
+Replace `<PORT>` with the port shown in the Pinokio `MCP SSE Endpoint` menu item or sidecar log. If
+authentication is wired correctly, the request should connect without an auth failure and the token
+in `app/.mcp_token` should match the current sidecar session.
+
+### MCP Config Files
+
+- `.vscode/mcp.json`: active live MCP client config, rewritten by `Start MCP`
+- `.vscode/mcp.live.json`: extra live-session copy for inspection/debugging
+- `.vscode/mcp.sample.json`: static sample/reference config
+
+### Verify MCP Action
+
+If MCP is installed, the Pinokio menu exposes `Verify MCP`.
+
+1. It reads `app/.mcp_token`.
+2. It probes `<sidecar-url>/status`.
+3. It probes the authenticated SSE endpoint at `<sidecar-url>/gradio_api/mcp/sse`.
+4. It prints both responses in the terminal and raises a completion notification.
 
 ## Voice Presets + Wrapper Pipeline
 

@@ -12,6 +12,7 @@ module.exports = {
       mcpInstall: info.running("mcp_install.js"),
       start: info.running("start.js"),
       mcpStart: info.running("mcp_start.js"),
+      mcpVerify: info.running("mcp_verify.js"),
       update: info.running("update.js"),
       reset: info.running("reset.js"),
       link: info.running("link.js"),
@@ -35,6 +36,17 @@ module.exports = {
           icon: "fa-solid fa-plug",
           text: "Installing MCP",
           href: "mcp_install.js",
+        },
+      ];
+    }
+
+    if (running.mcpVerify) {
+      return [
+        {
+          default: true,
+          icon: "fa-solid fa-terminal",
+          text: "Verifying MCP",
+          href: "mcp_verify.js",
         },
       ];
     }
@@ -87,6 +99,13 @@ module.exports = {
             text: "MCP Terminal",
             href: "mcp_start.js",
           });
+          if (mcpLocal && mcpLocal.url) {
+            items.push({
+              icon: "fa-solid fa-shield-halved",
+              text: "Verify MCP",
+              href: "mcp_verify.js?url={{encodeURIComponent(mcpLocal.url)}}",
+            });
+          }
         } else if (mcpInstalled) {
           items.push({
             icon: "fa-solid fa-plug",
@@ -135,6 +154,14 @@ module.exports = {
             icon: "fa-solid fa-network-wired",
             text: "MCP SSE Endpoint",
             href: local.mcp_url,
+          });
+        }
+
+        if (local && local.url) {
+          items.push({
+            icon: "fa-solid fa-shield-halved",
+            text: "Verify MCP",
+            href: "mcp_verify.js?url={{encodeURIComponent(local.url)}}",
           });
         }
 
@@ -205,6 +232,11 @@ module.exports = {
           icon: "fa-solid fa-plug",
           text: "Start MCP",
           href: "mcp_start.js",
+        });
+        items.push({
+          icon: "fa-solid fa-shield-halved",
+          text: "Verify MCP",
+          href: "mcp_verify.js",
         });
       }
 
