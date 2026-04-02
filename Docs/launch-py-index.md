@@ -69,6 +69,7 @@ Use these anchors when the change starts from a visible UI element.
 | eBook to Audiobook tab        |  ~10600–10900 | File analysis, chapter selection, batch audiobook generation             |
 | VibeVoice tab                 |  ~10900–11300 | Podcast workflow, model management, speaker voice assignment             |
 | Assistant tab                 |  ~11300–11450 | Chatbot UI, assistant LLM settings, connection test, provider changes    |
+| Jobs tab                      |  ~11450–11620 | Queue view, timer polling, cancel/retry controls, detailed job status    |
 | Right rail outputs            |  ~11300–11500 | Generated audio, status, last seed, audiobook results                    |
 | Workspace Controls accordion  |  ~11500–11600 | Voice presets, autosave, output storage settings                         |
 | Engine Selection accordion    |  ~11600–11750 | Current engine and audio-format routing                                  |
