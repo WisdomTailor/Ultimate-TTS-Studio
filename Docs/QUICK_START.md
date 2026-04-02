@@ -2,8 +2,8 @@
 
 **Your first generated audio in under 5 minutes.**
 
-This guide takes you from a freshly launched app to a working audio file. It skips options you
-don't need yet and focuses on the fastest path to something you can hear.
+This guide takes you from a freshly launched app to a working audio file. It skips options you don't
+need yet and focuses on the fastest path to something you can hear.
 
 > **Already installed?** Jump straight to [Step 1: Launch the App](#step-1-launch-the-app).  
 > **Need installation help?** Open the Pinokio launcher and click **Install**, then come back here.
@@ -17,8 +17,8 @@ don't need yet and focuses on the fastest path to something you can hear.
 3. Load the model into memory
 4. Type your first sentence
 5. Click Generate and listen
-6. *(Optional)* Clean up the text with AI Script Polish
-7. *(Optional)* Try a second engine to compare
+6. _(Optional)_ Clean up the text with AI Script Polish
+7. _(Optional)_ Try a second engine to compare
 8. Explore from here
 
 ---
@@ -42,9 +42,9 @@ generated audio when it's ready.
 Ultimate TTS Studio includes 14 TTS engines. You don't need to know them all right now. For your
 first run, use one of these two — both are beginner-friendly and auto-download their models:
 
-| Engine | Best for first try if... |
-|---|---|
-| **🗣️ Kokoro TTS** | You want to generate speech immediately, no setup. Comes with built-in voices. |
+| Engine               | Best for first try if...                                                                 |
+| -------------------- | ---------------------------------------------------------------------------------------- |
+| **🗣️ Kokoro TTS**    | You want to generate speech immediately, no setup. Comes with built-in voices.           |
 | **🎤 ChatterboxTTS** | You have a short voice recording of someone (5–30 seconds) and want to clone that voice. |
 
 **Not sure? Choose 🗣️ Kokoro TTS.** It's the fastest path to audio with no extra files needed.
@@ -77,12 +77,11 @@ when it's ready.
 
 With the model loaded, tell the app which engine to use for generation.
 
-<!-- screenshot: Engine Selection accordion showing the Kokoro tab selected -->
+<!-- screenshot: Engine Selection accordion showing the engine dropdown with Kokoro TTS selected, and the Engine Settings panel below displaying Kokoro's voice options -->
 
 1. Scroll down slightly in the left column to find the **Engine Selection** accordion. Expand it.
-2. Click the **🗣️ Kokoro TTS** tab (or the tab for your chosen engine).
-3. For Kokoro: a **Voice** dropdown will appear. Pick any voice from the list — `af_heart` and
-   `am_michael` are popular starting points.
+2. In the **Engine** dropdown, select **🗣️ Kokoro TTS** (or your chosen engine).
+3. The **Engine Settings** panel below updates to show that engine's options. For Kokoro, a **Voice** dropdown appears — pick any voice from the list. `af_heart` and `am_michael` are popular starting points.
 
 You don't need to change any other settings. The defaults work fine for a first test.
 
@@ -96,7 +95,7 @@ You don't need to change any other settings. The defaults work fine for a first 
 2. In the large text area, type or paste a sentence. Something short and clear works best for a
    first test:
 
-   > *"Welcome to Ultimate TTS Studio. Let's see what this engine sounds like."*
+   > _"Welcome to Ultimate TTS Studio. Let's see what this engine sounds like."_
 
 Keep it to two or three sentences for now.
 
@@ -108,21 +107,23 @@ Look for the **Generate** button at the bottom of the left column. Click it.
 
 <!-- screenshot: The Generate button, and the right column showing an audio player after generation -->
 
-The right column will show a progress indicator while the audio is being created. When it's done,
-an audio player appears. Click play and listen.
+The right column will show a progress indicator while the audio is being created. When it's done, an
+audio player appears. Click play and listen.
+
+Your generated audio plays directly in the browser. Files are saved to the `outputs/` folder, organized by date.
 
 **What you're hearing:** The exact text you typed, spoken by the voice you selected, using the TTS
 engine you loaded.
 
-> **If nothing happens:** Check that the status indicator next to your engine in Model Management
-> is green (loaded). If it's not, the model didn't finish loading — wait a moment and try again.
+> **If nothing happens:** Check that the status indicator next to your engine in Model Management is
+> green (loaded). If it's not, the model didn't finish loading — wait a moment and try again.
 
 ---
 
 ## Step 7 (Optional): Clean Up Your Text with AI Script Polish
 
 TTS engines read text literally. Numbers, abbreviations, and awkward punctuation can produce odd
-results. **AI Script Polish** is a feature that prepares your text before it's spoken — expanding
+results. **AI Script Polish** (labeled **Narration Transform** in the UI) is a feature that prepares your text before it's spoken — expanding
 "e.g." to "for example," smoothing run-on sentences, and adding natural pacing cues.
 
 <!-- screenshot: The Narration Transform accordion inside the 📝 TEXT TO SYNTHESIZE tab, expanded -->
@@ -141,8 +142,8 @@ results. **AI Script Polish** is a feature that prepares your text before it's s
 5. Click **Apply Transform**. The text box updates with the polished version.
 6. Review the result, then click **Generate** as before.
 
-You'll notice the generated speech sounds more natural — smoother transitions, cleaner
-pronunciation of numbers and abbreviations.
+You'll notice the generated speech sounds more natural — smoother transitions, cleaner pronunciation
+of numbers and abbreviations.
 
 > **Skipping this step is fine.** AI Script Polish is optional. Come back to it once you're
 > comfortable with basic generation.
@@ -154,15 +155,14 @@ pronunciation of numbers and abbreviations.
 Each engine has its own sound. Spending five minutes comparing two of them is the fastest way to
 understand which one suits your project.
 
-1. Go back to **Model Management** and load a second engine — try **🎤 ChatterboxTTS** or
-   **🐱 KittenTTS** (KittenTTS is tiny and fast, with 8 built-in expressive voices).
-2. In the **Engine Selection** accordion, click the new engine's tab.
-3. Configure its voice option (KittenTTS shows a voice dropdown; ChatterboxTTS asks for a reference
-   audio clip).
+1. Go back to **Model Management** and load a second engine — try **🎤 ChatterboxTTS** or **🐱
+   KittenTTS** (KittenTTS is tiny and fast, with 8 built-in expressive voices).
+2. In the **Engine Selection** accordion, select the new engine from the **Engine** dropdown.
+3. The **Engine Settings** panel updates for your chosen engine — configure its voice option (KittenTTS shows a voice dropdown; ChatterboxTTS asks for a reference audio clip).
 4. Click **Generate** with the same text.
 
-Listen to both results side by side. You'll immediately hear how engines differ in tone, naturalness,
-and character.
+Listen to both results side by side. You'll immediately hear how engines differ in tone,
+naturalness, and character.
 
 ---
 
@@ -170,15 +170,15 @@ and character.
 
 You've generated your first audio. Here's what each next step unlocks:
 
-| I want to... | Go to... |
-|---|---|
-| Understand every control in depth | [USER_GUIDE.md](USER_GUIDE.md) |
-| Compare all 14 engines at a glance | [FEATURE_MATRIX.md](FEATURE_MATRIX.md) |
-| Clone my own voice | [WORKFLOWS.md](WORKFLOWS.md) — *Clone My Voice and Read Text* |
-| Make a two-person podcast or dialogue | [WORKFLOWS.md](WORKFLOWS.md) — *Create a Podcast Episode* |
-| Convert an eBook to an audiobook | [WORKFLOWS.md](WORKFLOWS.md) — *Convert My eBook to Audiobook* |
-| Get answers to common problems | [FAQ.md](FAQ.md) |
+| I want to...                          | Go to...                                                       |
+| ------------------------------------- | -------------------------------------------------------------- |
+| Understand every control in depth     | [USER_GUIDE.md](USER_GUIDE.md)                                 |
+| Compare all 14 engines at a glance    | [FEATURE_MATRIX.md](FEATURE_MATRIX.md)                         |
+| Clone my own voice                    | [WORKFLOWS.md](WORKFLOWS.md) — _Clone My Voice and Read Text_  |
+| Make a two-person podcast or dialogue | [WORKFLOWS.md](WORKFLOWS.md) — _Create a Podcast Episode_      |
+| Convert an eBook to an audiobook      | [WORKFLOWS.md](WORKFLOWS.md) — _Convert My eBook to Audiobook_ |
+| Get answers to common problems        | [FAQ.md](FAQ.md)                                               |
 
 ---
 
-*Ultimate TTS Studio SUP3R Edition — Documentation Suite v1.0*
+_Ultimate TTS Studio SUP3R Edition — Documentation Suite v1.0_
