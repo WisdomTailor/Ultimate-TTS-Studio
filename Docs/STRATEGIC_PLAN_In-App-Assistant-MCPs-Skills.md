@@ -2,7 +2,34 @@
 
 **Date:** 2026-03-31  
 **Version:** 1.0  
-**Status:** Actionable — ready for phased implementation
+**Status:** ⚠️ PARTIALLY SUPERSEDED — see notes below
+
+---
+
+> **⚠️ Superseded sections (as of 2026-04-02):**
+>
+> This document was the planning input for Phases 4a and 4b. Several of its proposals were accepted
+> in modified form. The authoritative current state is in
+> **[REVISED_ROADMAP_v2.md](REVISED_ROADMAP_v2.md)**. Key divergences:
+>
+> - **MCP implementation** — Phase 4a was implemented as `app/mcp_sidecar.py` (standalone FastAPI +
+>   FastMCP), **not** the `app/mcp_server.py` + threading pattern proposed here. The SSE endpoint
+>   `/gradio_api/mcp/sse` is preserved, but the server is a separate process. Bears reading for
+>   Phase 4b background only.
+> - **Auth model** — Bearer-token auth via `.mcp_token` file was implemented (not the OAuth-aligned
+>   flow originally proposed). See `app/mcp_security.py`.
+> - **Assistant UI pattern** — The sidebar assistant layout (Option A, sidebar chatbot) was
+>   superseded by the Phase 4b plan of Status Bar (`gr.Row` at top) + full Assistant tab. Section
+>   1.2 / Option A should not be implemented as described.
+> - **Tool names** — The final Phase 4a tool set (`list_engines`, `get_engine_info`, `list_voices`,
+>   `list_outputs`, `get_app_version`, `normalize_text`, `list_llm_providers`, `transform_text`,
+>   `structure_conversation`, `synthesize`, `submit_synthesis_job`, `get_job_status`, `cancel_job`)
+>   differs from the 5-tool proposal in Section 2.1.2.
+>
+> The remainder of this document remains useful as background context and rationale. Do not treat
+> any unchecked `[ ]` items here as the current backlog — use `REVISED_ROADMAP_v2.md` instead.
+
+---
 
 ---
 
@@ -800,11 +827,11 @@ print(f"Audio saved to: {response['audio_path']}") \`\`\`
 ```
 ````
 
-- **Benefit:** For conversation mode, this MCP could pre-parse scripts, identify speakers, and suggest
-voice assignments.
+- **Benefit:** For conversation mode, this MCP could pre-parse scripts, identify speakers, and
+  suggest voice assignments.
 
 - **Caution:** Adding external MCP dependency complicates deployment. Evaluate if the existing
-LLM-based conversation mode is sufficient.
+  LLM-based conversation mode is sufficient.
 
 #### MCP 2: Voice Cloning Service (Hypothetical)
 

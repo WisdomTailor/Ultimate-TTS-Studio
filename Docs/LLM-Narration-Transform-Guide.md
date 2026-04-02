@@ -753,15 +753,15 @@ quality can vary. Strategies to maintain consistency:
 
 ## 10. 📅 Implementation Priority Roadmap
 
-| Phase         | Focus                           | Key Items                                                                                                                                                                        | Status     |
-| ------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
-| **Phase 1**   | UX Polish                       | Panel tooltips, settings persistence, Gemini fix, alphabetized providers, system prompt scroll                                                                                   | ✅ Done    |
-| **Phase 2**   | Transform Quality + Foundations | Deterministic normalization, engine capability matrix, preview/diff UX, outcome presets, evaluation harness, redesigned prompts, mode renames                                    | ✅ Done    |
-| **Phase 2.5** | Pre-Phase 3 Prerequisites       | Module extraction (`narration_transform.py`), evaluation metrics, golden datasets, VibeVoice fix, repo hygiene, Phase 5 gate docs                                                | 🔜 Next    |
-| **Phase 3**   | Conversation Enhancement        | NarrationScript model, AI conversation formatter, conversation UI, per-line transform, pronunciation lexicon, module extraction (`engine_registry.py` + `conversation_logic.py`) | 📋 Planned |
-| **Phase 4a**  | MCP Server + Tools              | Gradio MCP evaluation, tool implementation, streamable-http transport, security layer, subprocess threading                                                                      | 📋 Planned |
-| **Phase 4b**  | Assistant + Job Orchestration   | Assistant UI (status bar + tab), LLM decoupling, diagnostics, job queue/cancel/retry                                                                                             | 📋 Planned |
-| **Phase 5**   | Platform Vision                 | Character bibles, DAW export, subtitle alignment, CI/CD pipelines (gated on Phase 4 completion + user demand)                                                                    | 🚪 Gated   |
+| Phase         | Focus                           | Key Items                                                                                                                                                                        | Status                      |
+| ------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| **Phase 1**   | UX Polish                       | Panel tooltips, settings persistence, Gemini fix, alphabetized providers, system prompt scroll                                                                                   | ✅ Done                     |
+| **Phase 2**   | Transform Quality + Foundations | Deterministic normalization, engine capability matrix, preview/diff UX, outcome presets, evaluation harness, redesigned prompts, mode renames                                    | ✅ Done                     |
+| **Phase 2.5** | Pre-Phase 3 Prerequisites       | Module extraction (`narration_transform.py`), evaluation metrics, golden datasets, VibeVoice fix, repo hygiene, Phase 5 gate docs                                                | ✅ Done                     |
+| **Phase 3**   | Conversation Enhancement        | NarrationScript model, AI conversation formatter, conversation UI, per-line transform, pronunciation lexicon, module extraction (`engine_registry.py` + `conversation_logic.py`) | ✅ Done                     |
+| **Phase 4a**  | MCP Server + Tools              | FastAPI + FastMCP sidecar, full tool set (13 tools), bearer-token security, job manager, rate limits, audit logging                                                              | 🔍 Awaiting sign-off        |
+| **Phase 4b**  | Assistant + Job Orchestration   | Assistant UI (status bar + tab), LLM decoupling, diagnostics, job queue/cancel/retry                                                                                             | 🔜 Next (after 4a sign-off) |
+| **Phase 5**   | Platform Vision                 | Character bibles, DAW export, subtitle alignment, CI/CD pipelines (gated on Phase 4 completion + user demand)                                                                    | 🚪 Gated                    |
 
 > For the complete revised roadmap with council verdicts, architectural decisions, evaluation
 > metrics, and risk register, see [REVISED_ROADMAP_v2.md](REVISED_ROADMAP_v2.md).
@@ -843,6 +843,7 @@ sessions in your settings file.
 | 2026-03-31 | 1.0     | Initial guide covering all panel fields, modes, styles, conversation mode plan, assistant plan, MCP/tools roadmap                                                                        |
 | 2026-04-01 | 1.1     | Architecture review findings integrated: engine-aware cues, deterministic normalization, schema-first conversation, outcome presets, non-destructive UX, revised roadmap, security notes |
 | 2026-04-04 | 1.2     | Roadmap updated to v2.0 phase structure (Phase 2.5 added, Phase 4 split into 4a/4b, Phase 5 gated). Full roadmap details moved to REVISED_ROADMAP_v2.md.                                 |
+| 2026-04-02 | 1.3     | Phase statuses updated: Phase 2.5 ✅ Done, Phase 3 ✅ Done, Phase 4a 🔍 Awaiting sign-off (FastAPI + FastMCP, 13 tools), Phase 4b 🔜 Next.                                               |
 
 ---
 

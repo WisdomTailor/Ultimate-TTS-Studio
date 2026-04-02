@@ -10,8 +10,9 @@ environment.
 - `Install` provisions the normal Ultimate TTS Studio UI environment only.
 - `Install MCP` provisions a separate optional `app/tts_mcp_env` environment for the MCP sidecar.
 - `Start` continues to launch the normal UI unchanged.
-- `Start MCP` launches the isolated Gradio MCP sidecar. Its SSE endpoint is
-  `<sidecar-url>/gradio_api/mcp/sse`, and the bearer token is written to `app/.mcp_token`.
+- `Start MCP` launches the isolated MCP sidecar (`app/mcp_sidecar.py`), implemented as a standalone
+  FastAPI + FastMCP server. Its SSE endpoint is mounted at `<sidecar-url>/gradio_api/mcp/sse`, and
+  the bearer token is written to `app/.mcp_token`.
 
 ### MCP Launcher Flow
 
@@ -75,6 +76,32 @@ in `app/.mcp_token` should match the current sidecar session.
   debugging
 - `.vscode/mcp.sample.json`: manual sample/reference config with obvious placeholders, not a live
   default
+
+### MCP Tools (Phase 4a)
+
+The sidecar exposes these MCP tools via `app/mcp_sidecar.py`:
+
+| Tool                     | Category    | Description                                   |
+| ------------------------ | ----------- | --------------------------------------------- |
+| `list_engines`           | Read-only   | List registered TTS engines and availability  |
+| `get_engine_info`        | Read-only   | Capabilities and status for a specific engine |
+| `list_voices`            | Read-only   | Available voices for an engine                |
+| `list_outputs`           | Read-only   | Enumerate generated output files              |
+| `get_app_version`        | Read-only   | Application version string                    |
+| `normalize_text`         | Stateless   | Deterministic text normalization (no LLM)     |
+| `list_llm_providers`     | Stateless   | Configured LLM providers                      |
+| `transform_text`         | Stateless   | AI Script Polish transform via configured LLM |
+| `structure_conversation` | Stateless   | Format dialogue into NarrationScript JSON     |
+| `synthesize`             | GPU-heavy   | Single-utterance synchronous synthesis        |
+| `submit_synthesis_job`   | Job control | Submit a long-running synthesis job           |
+| `get_job_status`         | Job control | Poll job lifecycle state                      |
+| `cancel_job`             | Job control | Cancel a queued or running job                |
+
+Security (`app/mcp_security.py`): bearer-token auth via `.mcp_token`, per-tool rate limits, and
+audit logging under `logs/mcp/audit.log`.
+
+Job state (`app/job_manager.py`): disk-backed JSON under `app_state/jobs/*.json` with subprocess
+workers.
 
 ### Verify MCP Action
 

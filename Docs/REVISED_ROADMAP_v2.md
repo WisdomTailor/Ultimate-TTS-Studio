@@ -139,47 +139,55 @@ F1 >0.75) require live LLM endpoints — deferred to user smoke-test session.
 
 ---
 
-### Phase 4a — MCP Server + Tools
+### Phase 4a — MCP Server + Tools ✅ IMPLEMENTED (awaiting Agent 00 sign-off)
 
+**Completed:** 2026-04-02 (implementation complete; sign-off pending)  
 **Purpose:** Expose TTS Studio capabilities to external tools and coding agents.
 
-**Design principle:** MCP tools bind to a thin service layer over extracted pure modules — never to
-Gradio callbacks or launch.py argument plumbing. Risk-sequenced: read-only and stateless tools
-first, GPU-heavy synthesis second, long-running job control last.
+**Implementation summary:**
 
-0. **Secret hygiene (blocker)** — Move API key persistence out of JSON app state. Resolve secrets
-   from environment variables only; persist only non-secret provider metadata (endpoint URL, model
-   name, provider type). Remove `llm_api_key` from `save_app_state_settings()` / settings.json
-   schema. Add env-var resolution helper.
-1. **Gradio MCP spike (fitness test)** — Test `mcp_server=True` on Gradio 5.35+. Validate
-   transport shape, schema discovery, VS Code `.vscode/mcp.json` interop, and local auth posture.
-   Result is a Go/No-Go decision, not a production architecture.
-2. **Service layer extraction: `tts_service.py`** — Extract synthesis orchestration from launch.py
-   into a non-Gradio module. Includes `generate_tts()`, `list_available_voices()`, engine
-   dispatch, and output file management. Zero Gradio imports. ≥80% test coverage.
-3. **Read-only MCP tools** — `list_engines`, `get_engine_info`, `list_voices`. Bind to
-   `engine_registry.py` and `tts_service.py`. No GPU, no state mutation.
-4. **Stateless transform tools** — `transform_text`, `structure_conversation`. Bind to
-   `narration_transform.py` and `conversation_logic.py`. Short-lived, no GPU.
-5. **Security layer** — OAuth-aligned auth. Per-tool rate limits (synthesize: 1–2 concurrent,
-   transform: higher, reads: loose). Token/session-based limiting, not IP-based. Audit logging.
-   Applied to tools from WI-3 and WI-4 before synthesis is exposed.
-6. **Synthesis tool: `synthesize`** — GPU-aware, binds to `tts_service.py`. Basic synchronous
-   single-utterance synthesis with timeout. Depends on WI-2 (service layer) and WI-5 (security).
-7. **Job tools** — `submit_synthesis_job`, `get_job_status`, `cancel_job`, `list_outputs`.
-   Long-running generation, cancellation, retries, output enumeration. Requires subprocess model
-   for crash isolation (not shared process). Depends on WI-6.
-8. **Transport + config** — `streamable-http` bound to 127.0.0.1. `.vscode/mcp.json` config
-   example. Subprocess host for job tools; shared-process acceptable for read-only/stateless tools.
+- Architecture chosen: **standalone FastAPI + FastMCP** (`app/mcp_sidecar.py`), mounted at
+  `/gradio_api/mcp/`. The Gradio built-in MCP spike (WI-1) confirmed that a separate process was the
+  better isolation boundary. Custom FastMCP was chosen over the Gradio built-in.
+- Service layer: `app/tts_service.py` — synthesis orchestration, voice listing, output management.
+  Zero Gradio imports.
+- Security: `app/mcp_security.py` — bearer-token auth via `.mcp_token` file, per-tool rate limits,
+  audit logging at `logs/mcp/audit.log`.
+- Job persistence: `app/job_manager.py` — disk-backed JSON state under `app_state/jobs/*.json`,
+  subprocess workers for crash isolation.
 
-**Completion gate:** Read-only and stateless tools (WI-3, WI-4) pass contract tests. Security layer
-(WI-5) validated. Synthesis tool (WI-6) smoke-tested on ≥2 engines. `.vscode/mcp.json` config works
-in VS Code Copilot.
+**⚠️ Auth implementation delta:** WI-5 originally specified OAuth-aligned auth (council verdict #3).
+The implemented solution uses bearer-token via `.mcp_token` file — simpler and functional for local
+usage, but not OAuth-aligned. This is an open decision for sign-off: accept as current-state, or
+upgrade to a proper OAuth flow before closing Phase 4a.
+
+**Work items as delivered:**
+
+| WI  | Title                           | Status | Notes                                                                                            |
+| --- | ------------------------------- | ------ | ------------------------------------------------------------------------------------------------ |
+| 0   | Secret hygiene                  | ✅     | API keys resolved via env vars; no plain-text persistence                                        |
+| 1   | Gradio MCP spike                | ✅     | Evaluated; chosen architecture: standalone FastAPI + FastMCP                                     |
+| 2   | Service layer: `tts_service.py` | ✅     | Zero Gradio imports; synthesis, voice listing, output mgmt                                       |
+| 3   | Read-only MCP tools             | ✅     | `list_engines`, `get_engine_info`, `list_voices`, `list_outputs`, `get_app_version`              |
+| 4   | Stateless transform tools       | ✅     | `normalize_text`, `list_llm_providers`, `transform_text`, `structure_conversation`               |
+| 5   | Security layer                  | ✅     | Bearer-token auth (`.mcp_token`), per-tool rate limits, audit logging (delta: not OAuth-aligned) |
+| 6   | Synthesis tool: `synthesize`    | ✅     | GPU-aware, single-utterance, synchronous with timeout                                            |
+| 7   | Job tools                       | ✅     | `submit_synthesis_job`, `get_job_status`, `cancel_job`; subprocess workers                       |
+| 8   | Transport + config              | ✅     | SSE endpoint at `/gradio_api/mcp/sse`; `.vscode/mcp.json` rewritten by `Start MCP`               |
+
+**Full tool list (13 tools):** `list_engines`, `get_engine_info`, `list_voices`, `list_outputs`,
+`get_app_version`, `normalize_text`, `list_llm_providers`, `transform_text`,
+`structure_conversation`, `synthesize`, `submit_synthesis_job`, `get_job_status`, `cancel_job`.
+
+**Completion gate (for sign-off):** Read-only and stateless tools pass contract tests. Security
+layer validated. Synthesis tool smoke-tested on ≥2 engines. `.vscode/mcp.json` config works in VS
+Code Copilot. Auth delta decision documented and accepted or escalated.
 
 ---
 
-### Phase 4b — Assistant + Job Orchestration
+### Phase 4b — Assistant + Job Orchestration 🔜 NEXT (pending Phase 4a sign-off)
 
+**Status:** Ready to start. Implementation begins after Agent 00 signs off on Phase 4a.  
 **Purpose:** In-app help and batch processing infrastructure.
 
 **Prerequisites (must land before any visible assistant UI):**
@@ -187,14 +195,14 @@ in VS Code Copilot.
 - **Config namespace separation** — Split `llm_*` settings into `narration_llm` and `assistant_llm`
   namespaces with independent endpoint, model, and timeout configuration. Shared provider
   infrastructure, separate runtime behavior (shorter retries/timeouts for assistant).
-- **Job-state model** — Persistence layer for background job lifecycle: submit, poll, cancel,
-  retry, resume. Consumed by both MCP job tools (Phase 4a WI-7) and assistant UI.
+- **Job-state model** — Phase 4a `job_manager.py` satisfies this prerequisite. Verify the API
+  contract is sufficient before building the Phase 4b UI on top of it.
 
 **Work items (after prerequisites):**
 
-1. **Assistant UI** — Status bar (`gr.Row` at top) + full Assistant tab with chatbot component.
-   The assistant is a consumer of the same service contracts and job APIs as MCP tools — not a
-   special path inside the UI.
+1. **Assistant UI** — Status bar (`gr.Row` at top) + full Assistant tab with chatbot component. The
+   assistant is a consumer of the same service contracts and job APIs as MCP tools — not a special
+   path inside the UI.
 2. **Diagnostic capabilities** — Connection testing, error interpretation, settings suggestions.
 3. **Job orchestration UI** — `gr.Timer` polling for background job progress. Queue visualization,
    cancel/retry controls. Progress reporting for eBook/batch generation.
@@ -228,7 +236,7 @@ in VS Code Copilot.
 
 ## 4. Key Architectural Decisions
 
-### Module Architecture (Current: End of Phase 3 · Target: End of Phase 4a)
+### Module Architecture (Current: End of Phase 4a)
 
 ```text
 launch.py              — Gradio UI, event handlers, app lifecycle
@@ -237,11 +245,14 @@ narration_script.py    — NarrationScript Pydantic model, SemanticCue enum, ver
 engine_registry.py     — Engine capability matrix, cue stripping, metadata control
 conversation_logic.py  — Conversation parsing, speaker extraction, AI formatter, per-line transform
 pronunciation.py       — Protected term masking, phonetic overrides, lexicon persistence
-tts_service.py         — [Phase 4a] Synthesis orchestration, voice listing, output management
+tts_service.py         — Synthesis orchestration, voice listing, output management
+mcp_sidecar.py         — FastAPI + FastMCP server; all 13 MCP tools; subprocess entry point
+mcp_security.py        — Bearer-token auth, per-tool rate limits, audit logging
+job_manager.py         — Disk-backed JSON job state, subprocess workers
 ```
 
-All extracted modules: zero Gradio imports, ≥80% unit test coverage, importable independently.
-MCP tools bind to these modules, never to launch.py callbacks.
+All extracted modules: zero Gradio imports, ≥80% unit test coverage, importable independently. MCP
+tools bind to these modules, never to launch.py callbacks.
 
 ### NarrationScript Schema (Phase 3)
 
@@ -266,12 +277,15 @@ class NarrationScript(BaseModel):
     metadata: dict = {}
 ```
 
-### MCP Architecture (Phase 4a)
+### MCP Architecture (Phase 4a — as implemented)
 
-- Evaluate Gradio built-in MCP (`mcp_server=True`) before custom FastMCP
-- Transport: `streamable-http` on 127.0.0.1
-- VS Code config: `.vscode/mcp.json`
-- Prefer subprocess with IPC for crash isolation
+- **Transport:** SSE endpoint at `/gradio_api/mcp/sse` (FastMCP mounted on FastAPI)
+- **Process model:** Separate subprocess (`app/mcp_sidecar.py`), not embedded in the Gradio process
+- **Auth:** Bearer-token via `.mcp_token` file (written on sidecar startup)
+- **Security module:** `app/mcp_security.py` — rate limiting, audit logging at `logs/mcp/audit.log`
+- **Job state:** `app/job_manager.py` — disk-backed JSON under `app_state/jobs/*.json`
+- **VS Code config:** `.vscode/mcp.json` rewritten by `Start MCP`; safe empty default tracked in
+  repo
 
 ### Conversation Mode UI Pattern (Phase 3)
 
@@ -329,8 +343,8 @@ Before shipping any phase, require a test report showing all relevant tests pass
 | Provider parity — LLM outputs vary significantly across providers   | Phase 3   | MEDIUM   | Provider parity tests as Phase 3 completion gate. Model-specific prompt templates for weaker models.                 |
 | NarrationScript migration — schema changes break saved scripts      | Phase 3+  | MEDIUM   | Semantic versioning with explicit migration functions. Never delete fields — deprecate with fallback.                |
 | MCP security gaps — localhost exposure without auth                 | Phase 4a  | HIGH     | Security from day one. OAuth-aligned auth, per-tool rate limits, audit logging.                                      |
-| MCP–UI coupling — tools bound to Gradio callbacks                   | Phase 4a  | HIGH     | Service layer extraction (WI-2) before any tool wiring. MCP binds only to pure modules.                             |
-| Secret hygiene — API keys in plaintext JSON app state               | Phase 4a  | HIGH     | Blocker WI-0: env-var resolution only. Remove key fields from settings.json schema.                                 |
+| MCP–UI coupling — tools bound to Gradio callbacks                   | Phase 4a  | HIGH     | Service layer extraction (WI-2) before any tool wiring. MCP binds only to pure modules.                              |
+| Secret hygiene — API keys in plaintext JSON app state               | Phase 4a  | HIGH     | Blocker WI-0: env-var resolution only. Remove key fields from settings.json schema.                                  |
 | Phase 5 scope creep — features creep into Phase 3/4                 | All       | HIGH     | Auto-gate on Phase 4 completion. Explicit entry criteria. Fresh prioritization.                                      |
 | Module extraction regression — refactoring breaks existing features | Phase 2.5 | MEDIUM   | ≥80% test coverage before extraction. Run evaluation harness after each module cut.                                  |
 
@@ -343,7 +357,7 @@ Before shipping any phase, require a test report showing all relevant tests pass
 | 2026-04-04 | 2.0     | Initial revised roadmap incorporating Architecture Review 040426 findings, four-member council review. Phase 4 split into 4a/4b. Phase 2.5 added. Module extraction phased. Phase 5 auto-gated.                                                                                                                                                                                                                                                                         |
 | 2026-04-04 | 2.1     | Phase 2.5 marked complete. All 7 work items delivered. `narration_transform.py` extraction shipped (WI-1). Evaluation metrics and golden dataset in place (WI-2, WI-3). Phase 5 gate documented (WI-4). VibeVoice fix landed (WI-5). Smoke test passed (WI-6). Repo hygiene complete (WI-7).                                                                                                                                                                            |
 | 2026-04-07 | 2.2     | Phase 3 marked complete. All 7 work items delivered. `narration_script.py` created (WI-1). AI conversation formatter added to `conversation_logic.py` (WI-2). Conversation mode UI redesigned with guided form editor (WI-3). Per-line transform with pronunciation integration (WI-4). Pronunciation glossary UI (WI-5). `pronunciation.py` pipeline (WI-6). `engine_registry.py` + `conversation_logic.py` extraction (WI-7). Module architecture updated to 6 files. |
-| 2026-04-07 | 2.3     | Phase 4a restructured: risk-sequenced 9-WI plan (WI-0–WI-8). Secret hygiene blocker added. Service layer extraction (`tts_service.py`) before MCP tool wiring. Read-only/stateless tools first, synthesis second, job control last. Phase 4b amended with explicit prerequisites (config namespace separation, job-state model). Two new risks added to register (MCP–UI coupling, secret hygiene). Grounded in codebase architecture review. |
+| 2026-04-07 | 2.3     | Phase 4a restructured: risk-sequenced 9-WI plan (WI-0–WI-8). Secret hygiene blocker added. Service layer extraction (`tts_service.py`) before MCP tool wiring. Read-only/stateless tools first, synthesis second, job control last. Phase 4b amended with explicit prerequisites (config namespace separation, job-state model). Two new risks added to register (MCP–UI coupling, secret hygiene). Grounded in codebase architecture review.                           |
 
 ---
 
