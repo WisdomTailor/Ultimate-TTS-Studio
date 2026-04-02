@@ -4,52 +4,38 @@ module.exports = {
   },
   run: [
     {
+      method: "shell.run",
+      params: {
+        conda: "tts_mcp_env",
+        path: "app",
+        message: [
+          "python mcp_verify_summary.py --url \"{{args.url || 'http://127.0.0.1:7860'}}\" --summary-path \"../app_state/mcp_verify_summary.json\"",
+        ],
+      },
+    },
+    {
+      method: "log",
+      params: {
+        raw: "MCP verification summary saved to app_state/mcp_verify_summary.json",
+      },
+    },
+    {
       method: "fs.read",
       params: {
-        path: "app/.mcp_token",
+        path: "app_state/mcp_verify_summary.json",
         encoding: "utf8",
       },
     },
     {
-      method: "local.set",
-      params: {
-        token: "{{input.trim()}}",
-      },
-    },
-    {
-      method: "net",
-      params: {
-        url: "{{args.url || 'http://127.0.0.1:7860'}}/status",
-        method: "get",
-      },
-    },
-    {
       method: "log",
       params: {
-        raw: "MCP status response: {{JSON.stringify(input)}}",
-      },
-    },
-    {
-      method: "net",
-      params: {
-        url: "{{args.url || 'http://127.0.0.1:7860'}}/gradio_api/mcp/sse",
-        method: "get",
-        headers: {
-          Authorization: "Bearer {{local.token}}",
-          Accept: "text/event-stream",
-        },
-      },
-    },
-    {
-      method: "log",
-      params: {
-        raw: "MCP SSE probe response: {{JSON.stringify(input)}}",
+        raw: "MCP verification summary JSON: {{input}}",
       },
     },
     {
       method: "notify",
       params: {
-        html: "<strong>MCP verify complete</strong><div>Check the terminal output for the status and SSE probe results.</div>",
+        html: "<strong>MCP verify complete</strong><div>Summary: app_state/mcp_verify_summary.json</div><div>See terminal output for pass/fail details.</div>",
       },
     },
   ],
