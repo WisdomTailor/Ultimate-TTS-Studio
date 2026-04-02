@@ -267,12 +267,12 @@ audiobook narration, dramatic readings, and performance.
 **After:**
 
 > He walked into the room... and EVERYONE looked at him. [thoughtful] It was quiet — too quiet.
-> **Best Practice — Engine-Aware Expressiveness**
-> Expressive cues (`[whispers]`, `[sighs]`, ALL-CAPS emphasis, ellipses) are not universally
-> supported across TTS engines. Some engines read cues literally or degrade cadence. The planned
-> architecture stores **semantic intent** (pause, emphasis, whisper) as structured annotations, then
-> renders or strips them per engine's capability matrix. Until this is implemented, Vivid mode
-> output should be reviewed before sending to engines that lack expressive cue support.
+> **Best Practice — Engine-Aware Expressiveness** Expressive cues (`[whispers]`, `[sighs]`, ALL-CAPS
+> emphasis, ellipses) are not universally supported across TTS engines. Some engines read cues
+> literally or degrade cadence. The planned architecture stores **semantic intent** (pause,
+> emphasis, whisper) as structured annotations, then renders or strips them per engine's capability
+> matrix. Until this is implemented, Vivid mode output should be reviewed before sending to engines
+> that lack expressive cue support.
 
 ---
 
