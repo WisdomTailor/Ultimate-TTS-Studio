@@ -11,8 +11,8 @@
 ## 📋 Table of Contents
 
 1. [Executive Summary](#1--executive-summary)
-2. [Panel Rename Recommendation](#2--panel-rename-recommendation)
-3. [Complete Field-by-Field Guide](#3--complete-field-by-field-guide)
+2. Panel Rename Recommendation
+3. Complete Field-by-Field Guide
 4. [How Transform Mode Works](#4--how-transform-mode-works)
 5. [How Style Influences Output](#5--how-style-influences-output)
 6. [Single Speaker vs Conversation Mode](#6--single-speaker-vs-conversation-mode)
@@ -267,9 +267,7 @@ audiobook narration, dramatic readings, and performance.
 **After:**
 
 > He walked into the room... and EVERYONE looked at him. [thoughtful] It was quiet — too quiet.
-
 > **Best Practice — Engine-Aware Expressiveness**
->
 > Expressive cues (`[whispers]`, `[sighs]`, ALL-CAPS emphasis, ellipses) are not universally
 > supported across TTS engines. Some engines read cues literally or degrade cadence. The planned
 > architecture stores **semantic intent** (pause, emphasis, whisper) as structured annotations, then
