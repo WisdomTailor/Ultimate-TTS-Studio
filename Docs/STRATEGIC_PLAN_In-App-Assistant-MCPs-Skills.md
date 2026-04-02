@@ -825,7 +825,6 @@ print(f"Audio saved to: {response['audio_path']}") \`\`\`
   }
 }
 ```
-````
 
 - **Benefit:** For conversation mode, this MCP could pre-parse scripts, identify speakers, and
   suggest voice assignments.
@@ -835,11 +834,11 @@ print(f"Audio saved to: {response['audio_path']}") \`\`\`
 
 #### MCP 2: Voice Cloning Service (Hypothetical)
 
-    **Purpose:** Generate new voices from audio samples.
+**Purpose:** Generate new voices from audio samples.
 
-    **Benefit:** Users could integrate with voice cloning services without reinventing the wheel.
+**Benefit:** Users could integrate with voice cloning services without reinventing the wheel.
 
-    **Caution:** Out of scope for MVP. Only consider if user demand is clear.
+**Caution:** Out of scope for MVP. Only consider if user demand is clear.
 
 ---
 

@@ -1,4 +1,10 @@
 {
+  "ignore": [
+    "app/tts_env/**",
+    "app/tts_mcp_env/**",
+    "app/tts_env/Lib/site-packages/**",
+    "app/tts_mcp_env/Lib/site-packages/**"
+  ],
   "exclude": [
     "app/tts_env",
     "app/tts_mcp_env",
