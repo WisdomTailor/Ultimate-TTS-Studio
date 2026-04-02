@@ -9,7 +9,7 @@ module.exports = {
         conda: "tts_mcp_env",
         path: "app",
         message: [
-          "python mcp_verify_summary.py --url \"{{args.url || 'http://127.0.0.1:7860'}}\" --summary-path \"../app_state/mcp_verify_summary.json\"",
+          'python mcp_verify_summary.py --url "{{args.url || \'http://127.0.0.1:7860\'}}" --summary-path "../app_state/mcp_verify_summary.json"',
         ],
       },
     },

@@ -23,7 +23,7 @@ environment.
    `<captured-sidecar-url>/gradio_api/mcp/sse`.
 4. Read the bearer token from `app/.mcp_token`. The sidecar rewrites this token on startup.
 5. `Start MCP` now also rewrites `.vscode/mcp.json` and `.vscode/mcp.live.json` with the current
-  sidecar URL and bearer token.
+   sidecar URL and bearer token.
 
 ### VS Code MCP Startup Behavior
 
@@ -39,8 +39,8 @@ To prevent that, the tracked default `.vscode/mcp.json` is intentionally safe an
 }
 ```
 
-Once `Start MCP` is running, it replaces `.vscode/mcp.json` and writes `.vscode/mcp.live.json`
-with the current sidecar URL and bearer token from `app/.mcp_token`.
+Once `Start MCP` is running, it replaces `.vscode/mcp.json` and writes `.vscode/mcp.live.json` with
+the current sidecar URL and bearer token from `app/.mcp_token`.
 
 If you need a manual template, use `.vscode/mcp.sample.json`. It keeps the preferred config shape,
 but with obvious placeholders for the MCP port and bearer token so it is not mistaken for a live
