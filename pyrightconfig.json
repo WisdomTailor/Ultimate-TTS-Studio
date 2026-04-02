@@ -1,0 +1,14 @@
+{
+  "exclude": [
+    "app/tts_env",
+    "app/tts_mcp_env",
+    "app/chatterbox/**",
+    "app/fish_speech/**",
+    "app/higgs_audio/**",
+    "app/indextts2/**",
+    "app/qwen_tts/**",
+    "app/vibevoice/**",
+    "app/higgs_audio_handler.py",
+    "app/vibevoice_handler.py"
+  ]
+}
