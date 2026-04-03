@@ -21,8 +21,8 @@ need yet and focuses on the fastest path to something you can hear.
 7. _(Optional)_ Try a second engine to compare
 8. Explore from here
 
-**Ready for more?** Jump to [Your First Voice Cloning Project](#your-first-voice-cloning-project)
-to produce a multi-speaker audiobook with cloned voices using Fish Speech.
+**Ready for more?** Jump to [Your First Voice Cloning Project](#your-first-voice-cloning-project) to
+produce a multi-speaker audiobook with cloned voices using Fish Speech.
 
 ---
 
@@ -183,8 +183,8 @@ the next step: you'll produce a short multi-speaker piece where each character s
 distinct person — because each voice is cloned from a real reference clip.
 
 You'll use **🐟 Fish Speech**, the voice-cloning engine in the suite, with three voice references:
-Narrator, a male character, and a female character. Budget about 20 minutes for your first run.
-The second run takes five.
+Narrator, a male character, and a female character. Budget about 20 minutes for your first run. The
+second run takes five.
 
 ---
 
@@ -193,8 +193,8 @@ The second run takes five.
 Click the **📝 TEXT TO SYNTHESIZE** tab and paste your story into the text area. Three or four short
 paragraphs with some dialogue work well for a test:
 
-> *The forest was quiet except for the crunch of leaves. "Are you sure about this?" Emma asked.
-> Marcus didn't answer. He just kept walking.*
+> _The forest was quiet except for the crunch of leaves. "Are you sure about this?" Emma asked.
+> Marcus didn't answer. He just kept walking._
 
 <!-- screenshot: 📝 TEXT TO SYNTHESIZE tab with story text pasted in the text area -->
 
@@ -204,12 +204,13 @@ paragraphs with some dialogue work well for a test:
 
 TTS engines read text literally. Dialogue tags, em dashes, and raw quoted speech can produce
 unnatural pauses or mispronunciations. **AI Script Polish** (accessed via the **Narration
-Transform** accordion in the **📝 TEXT TO SYNTHESIZE** tab) rewrites the text to flow naturally
-when spoken.
+Transform** accordion in the **📝 TEXT TO SYNTHESIZE** tab) rewrites the text to flow naturally when
+spoken.
 
 <!-- screenshot: Narration Transform accordion expanded inside the 📝 TEXT TO SYNTHESIZE tab -->
 
-1. Scroll down in the **📝 TEXT TO SYNTHESIZE** tab and expand the **Narration Transform** accordion.
+1. Scroll down in the **📝 TEXT TO SYNTHESIZE** tab and expand the **Narration Transform**
+   accordion.
 2. Set **Transform Mode** to **Vivid** — the best choice for storytelling and dramatic narration.
 3. Choose an **LLM Provider**. Ollama or LM Studio (if running locally) require no API key. Cloud
    options include GitHub Models and Google Gemini.
@@ -217,8 +218,8 @@ when spoken.
 5. Click **Apply Transform** and review the result in the text area.
 
 > 💡 **Tip:** Vivid mode often restructures dialogue into `Speaker: Text` format automatically —
-> exactly what Conversation Mode expects. Review the output before moving on and correct any
-> speaker names that don't look right.
+> exactly what Conversation Mode expects. Review the output before moving on and correct any speaker
+> names that don't look right.
 
 ---
 
@@ -227,7 +228,7 @@ when spoken.
 Click the **🎭 CONVERSATION MODE** tab. Paste your polished script into the script text area. The
 script must follow this format — one line per spoken segment:
 
-```
+```text
 Narrator: The forest was quiet except for the crunch of leaves.
 Emma: Are you sure about this?
 Narrator: Marcus didn't answer. He just kept walking.
@@ -259,12 +260,12 @@ find **🐟 Fish Speech**. Click **Load**.
 
 If the model hasn't been downloaded yet, the app displays an error with the exact command to run:
 
-```
+```python
 hf download cocktailpeanut/oa --local-dir ./checkpoints/openaudio-s1-mini
 ```
 
-Open the **Pinokio terminal** and run that command. When the download finishes, click **Load** again.
-The status badge turns green when Fish Speech is ready.
+Open the **Pinokio terminal** and run that command. When the download finishes, click **Load**
+again. The status badge turns green when Fish Speech is ready.
 
 <!-- screenshot: Model Management accordion showing 🐟 Fish Speech with Load button and status badge -->
 
@@ -290,8 +291,8 @@ Each speaker card in the character roster has three controls:
 - **Reference Text** — an optional transcription of what's spoken in the clip
 - **Transcribe** button — auto-fills the Reference Text from the uploaded clip
 
-For each of your three speakers, upload a 5–30 second voice clip. Supported formats: WAV, MP3,
-FLAC, M4A, OGG.
+For each of your three speakers, upload a 5–30 second voice clip. Supported formats: WAV, MP3, FLAC,
+M4A, OGG.
 
 <!-- screenshot: Character roster card showing the audio upload control, Reference Text field, and Transcribe button -->
 
@@ -310,10 +311,10 @@ FLAC, M4A, OGG.
 
 Below the character roster, two timing controls shape how the conversation flows:
 
-- **Speaker Change Pause** — silence between two different speakers. Default is 0.8s. For a
-  narrated story, **1.0s** gives listeners a clear beat between characters.
-- **Same Speaker Pause** — silence when the same speaker has back-to-back lines. The default
-  0.3s works well for most scripts.
+- **Speaker Change Pause** — silence between two different speakers. Default is 0.8s. For a narrated
+  story, **1.0s** gives listeners a clear beat between characters.
+- **Same Speaker Pause** — silence when the same speaker has back-to-back lines. The default 0.3s
+  works well for most scripts.
 
 ---
 
@@ -347,16 +348,16 @@ line's text or reference audio and regenerate just that segment, without redoing
 
 You've generated your first audio. Here's what each next step unlocks:
 
-| I want to...                          | Go to...                                                       |
-| ------------------------------------- | -------------------------------------------------------------- |
-| Understand every control in depth     | [USER_GUIDE.md](USER_GUIDE.md)                                 |
-| Compare all 14 engines at a glance    | [FEATURE_MATRIX.md](FEATURE_MATRIX.md)                         |
-| Clone my own voice                    | [WORKFLOWS.md](WORKFLOWS.md) — _Clone My Voice and Read Text_  |
-| Make a two-person podcast or dialogue          | [WORKFLOWS.md](WORKFLOWS.md) — _Create a Podcast Episode_                              |
-| Try a multi-speaker, voice-cloned story        | [Your First Voice Cloning Project](#your-first-voice-cloning-project) (this page)      |
-| Convert an eBook to an audiobook               | [WORKFLOWS.md](WORKFLOWS.md) — _Convert My eBook to Audiobook_                         |
-| Get answers to common problems        | [FAQ.md](FAQ.md)                                               |
+| I want to...                            | Go to...                                                                          |
+| --------------------------------------- | --------------------------------------------------------------------------------- |
+| Understand every control in depth       | [USER_GUIDE.md](USER_GUIDE.md)                                                    |
+| Compare all 14 engines at a glance      | [FEATURE_MATRIX.md](FEATURE_MATRIX.md)                                            |
+| Clone my own voice                      | [WORKFLOWS.md](WORKFLOWS.md) — _Clone My Voice and Read Text_                     |
+| Make a two-person podcast or dialogue   | [WORKFLOWS.md](WORKFLOWS.md) — _Create a Podcast Episode_                         |
+| Try a multi-speaker, voice-cloned story | [Your First Voice Cloning Project](#your-first-voice-cloning-project) (this page) |
+| Convert an eBook to an audiobook        | [WORKFLOWS.md](WORKFLOWS.md) — _Convert My eBook to Audiobook_                    |
+| Get answers to common problems          | [FAQ.md](FAQ.md)                                                                  |
 
 ---
 
-_Ultimate TTS Studio SUP3R Edition — Documentation Suite v1.0_
+Ultimate TTS Studio SUP3R Edition — Documentation Suite v1.0

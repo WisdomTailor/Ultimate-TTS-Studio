@@ -53,22 +53,22 @@ The 14 available TTS engines are compared below across eight capability dimensio
 - **Auto-Download** — Does the model download automatically on first **Load**, or does it require a
   manual step? See the note on 🐟 Fish Speech.
 
-| Engine | Voice Cloning | Multilingual | Emotion Control | Speed | Quality | Voice Source | Auto-Download |
-|---|---|---|---|---|---|---|---|
-| 🎤 ChatterboxTTS | ✅ Yes | ❌ No | ❌ No | Medium | Great | Reference audio | ✅ Yes |
-| 🌍 Chatterbox Multilingual | ✅ Yes | ✅ Yes (23 languages) | ❌ No | Medium | Great | Reference audio | ✅ Yes |
-| 🚀 Chatterbox Turbo | ✅ Yes | ❌ No | ❌ No | **Fast** | Good | Reference audio | ✅ Yes |
-| 🗣️ Kokoro TTS | ❌ No | ✅ Yes | ❌ No | Fast | Great | Built-in voices + custom .pt | ✅ Yes |
-| 🐟 Fish Speech | ✅ Yes | ✅ Yes | ❌ No | Medium | Excellent | Custom voices | ⚠️ Manual |
-| 🎯 IndexTTS | ✅ Yes | ❌ No | ❌ No | Medium | Great | Reference audio | ✅ Yes |
-| 🎯 IndexTTS2 | ✅ Yes | ❌ No | ✅ Yes (8-axis) | Medium | Excellent | Reference audio | ✅ Yes |
-| 🎵 F5-TTS | ✅ Yes | ✅ Yes | ❌ No | Medium | Great | Reference audio | ✅ Yes |
-| 🎙️ Higgs Audio | ❌ No | ✅ Yes | ❌ No | Medium | Great | Voice presets | ✅ Yes |
-| 🎤 VoxCPM | ✅ Yes | ❌ No | ❌ No | Medium | Great | Reference audio | ✅ Yes |
-| 🐱 KittenTTS | ❌ No | ❌ No | ❌ No | **Fast** | Good | 8 built-in voices | ✅ Yes |
-| 🎨 Qwen Voice Design | ❌ No | ✅ Yes | ❌ No | Slow | Great | Text description | ✅ Yes |
-| 🎭 Qwen Voice Clone | ✅ Yes | ✅ Yes | ❌ No | Medium | Great | Reference audio | ✅ Yes |
-| 🗣️ Qwen Custom Voice | ❌ No | ✅ Yes | ❌ No | Medium | Great | Built-in speaker profiles | ✅ Yes |
+| Engine                     | Voice Cloning | Multilingual          | Emotion Control | Speed    | Quality   | Voice Source                 | Auto-Download |
+| -------------------------- | ------------- | --------------------- | --------------- | -------- | --------- | ---------------------------- | ------------- |
+| 🎤 ChatterboxTTS           | ✅ Yes        | ❌ No                 | ❌ No           | Medium   | Great     | Reference audio              | ✅ Yes        |
+| 🌍 Chatterbox Multilingual | ✅ Yes        | ✅ Yes (23 languages) | ❌ No           | Medium   | Great     | Reference audio              | ✅ Yes        |
+| 🚀 Chatterbox Turbo        | ✅ Yes        | ❌ No                 | ❌ No           | **Fast** | Good      | Reference audio              | ✅ Yes        |
+| 🗣️ Kokoro TTS              | ❌ No         | ✅ Yes                | ❌ No           | Fast     | Great     | Built-in voices + custom .pt | ✅ Yes        |
+| 🐟 Fish Speech             | ✅ Yes        | ✅ Yes                | ❌ No           | Medium   | Excellent | Custom voices                | ⚠️ Manual     |
+| 🎯 IndexTTS                | ✅ Yes        | ❌ No                 | ❌ No           | Medium   | Great     | Reference audio              | ✅ Yes        |
+| 🎯 IndexTTS2               | ✅ Yes        | ❌ No                 | ✅ Yes (8-axis) | Medium   | Excellent | Reference audio              | ✅ Yes        |
+| 🎵 F5-TTS                  | ✅ Yes        | ✅ Yes                | ❌ No           | Medium   | Great     | Reference audio              | ✅ Yes        |
+| 🎙️ Higgs Audio             | ❌ No         | ✅ Yes                | ❌ No           | Medium   | Great     | Voice presets                | ✅ Yes        |
+| 🎤 VoxCPM                  | ✅ Yes        | ❌ No                 | ❌ No           | Medium   | Great     | Reference audio              | ✅ Yes        |
+| 🐱 KittenTTS               | ❌ No         | ❌ No                 | ❌ No           | **Fast** | Good      | 8 built-in voices            | ✅ Yes        |
+| 🎨 Qwen Voice Design       | ❌ No         | ✅ Yes                | ❌ No           | Slow     | Great     | Text description             | ✅ Yes        |
+| 🎭 Qwen Voice Clone        | ✅ Yes        | ✅ Yes                | ❌ No           | Medium   | Great     | Reference audio              | ✅ Yes        |
+| 🗣️ Qwen Custom Voice       | ❌ No         | ✅ Yes                | ❌ No           | Medium   | Great     | Built-in speaker profiles    | ✅ Yes        |
 
 **Important notes:**
 
@@ -86,9 +86,9 @@ The 14 available TTS engines are compared below across eight capability dimensio
 
 ## 3. Use Case Recommendations
 
-Find the scenario closest to your goal and follow the recommendation. For step-by-step
-instructions, each recommendation links to the relevant section of [WORKFLOWS.md](WORKFLOWS.md) or
-the [User Guide](USER_GUIDE.md).
+Find the scenario closest to your goal and follow the recommendation. For step-by-step instructions,
+each recommendation links to the relevant section of [WORKFLOWS.md](WORKFLOWS.md) or the
+[User Guide](USER_GUIDE.md).
 
 ---
 
@@ -97,18 +97,18 @@ the [User Guide](USER_GUIDE.md).
 These engines accept a short reference audio clip (5–30 seconds of clean speech) and generate new
 text in that voice:
 
-| Engine | Why Choose It |
-|---|---|
-| 🎤 **ChatterboxTTS** | Best starting point. Auto-downloads, minimal setup, excellent results from a clean recording. |
-| 🌍 **Chatterbox Multilingual** | Same voice quality as ChatterboxTTS, but generates across 23 languages. |
-| 🚀 **Chatterbox Turbo** | Speed-optimized variant. Trade some quality for significantly faster generation. |
-| 🐟 **Fish Speech** | Top-tier prosody and naturalness. Requires a manual download — worth it for premium long-form work. |
-| 🎤 **VoxCPM** | Highly configurable. Built-in bad-case detection retries automatically when output falls below threshold. |
-| 🎵 **F5-TTS** | Clean and smooth. Adjustable speed and cross-fade make it well-suited for multi-pass projects. |
-| 🎭 **Qwen Voice Clone** | Multilingual voice cloning. Clone a voice and generate in a different language from the reference. |
+| Engine                         | Why Choose It                                                                                             |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------- |
+| 🎤 **ChatterboxTTS**           | Best starting point. Auto-downloads, minimal setup, excellent results from a clean recording.             |
+| 🌍 **Chatterbox Multilingual** | Same voice quality as ChatterboxTTS, but generates across 23 languages.                                   |
+| 🚀 **Chatterbox Turbo**        | Speed-optimized variant. Trade some quality for significantly faster generation.                          |
+| 🐟 **Fish Speech**             | Top-tier prosody and naturalness. Requires a manual download — worth it for premium long-form work.       |
+| 🎤 **VoxCPM**                  | Highly configurable. Built-in bad-case detection retries automatically when output falls below threshold. |
+| 🎵 **F5-TTS**                  | Clean and smooth. Adjustable speed and cross-fade make it well-suited for multi-pass projects.            |
+| 🎭 **Qwen Voice Clone**        | Multilingual voice cloning. Clone a voice and generate in a different language from the reference.        |
 
-> 💡 **Quality tip:** Use a 10–20 second clip recorded in a quiet room with consistent vocal
-> energy. Avoid background music, reverb, or multiple speakers in the reference. See the
+> 💡 **Quality tip:** Use a 10–20 second clip recorded in a quiet room with consistent vocal energy.
+> Avoid background music, reverb, or multiple speakers in the reference. See the
 > [Clone My Voice workflow](WORKFLOWS.md) for a guided walkthrough.
 
 ---
@@ -133,13 +133,13 @@ Speed matters when you're prototyping, drafting, or running large batches:
 Only one engine offers direct, per-axis emotional shaping:
 
 **🎯 IndexTTS2** provides eight independent emotion sliders — **Happy, Angry, Sad, Afraid,
-Disgusted, Melancholic, Surprised, and Calm**. Each axis can be set independently between 0 and
-1.0. You can combine them: a character who is largely Calm but carries a trace of Melancholic reads
-very differently from one with Calm at maximum and Surprised dialed in.
+Disgusted, Melancholic, Surprised, and Calm**. Each axis can be set independently between 0 and 1.0.
+You can combine them: a character who is largely Calm but carries a trace of Melancholic reads very
+differently from one with Calm at maximum and Surprised dialed in.
 
-The **Emotion Alpha** control governs the overall weight given to the emotion settings — how strongly
-they override the neutral baseline. Start with a low Alpha and increase until the character feels
-right.
+The **Emotion Alpha** control governs the overall weight given to the emotion settings — how
+strongly they override the neutral baseline. Start with a low Alpha and increase until the character
+feels right.
 
 This is particularly powerful for audiobooks and character-driven content. Save a preset for each
 character's emotional baseline, then adjust per scene as needed.
@@ -157,8 +157,8 @@ Two options, depending on how much control you want:
   VibeVoice model (compact or Large), write your script, assign voices per speaker, and generate.
   The simplest path to a multi-speaker output.
 - **🎭 Conversation Mode** with any of the 14 engines — More flexible: mix different engines per
-  speaker, use voice cloning for specific characters, apply per-line AI Script Polish. Best when
-  you want engine variety or precise control over individual lines.
+  speaker, use voice cloning for specific characters, apply per-line AI Script Polish. Best when you
+  want engine variety or precise control over individual lines.
 
 Both approaches produce polished multi-speaker dialogue. VibeVoice is simpler; Conversation Mode is
 more powerful.
@@ -169,9 +169,9 @@ more powerful.
 
 ### "I want an audiobook"
 
-- **📚 eBook to Audiobook tab** — Upload an `.epub`, `.pdf`, `.txt`, or other supported file,
-  select chapters, choose your engine and format, and generate chapter by chapter. Built for
-  long-form work.
+- **📚 eBook to Audiobook tab** — Upload an `.epub`, `.pdf`, `.txt`, or other supported file, select
+  chapters, choose your engine and format, and generate chapter by chapter. Built for long-form
+  work.
 - **Best engines for long-form consistency:**
   - 🗣️ **Kokoro TTS** — Built-in voices stay consistent across long runs; fast to generate.
   - 🐟 **Fish Speech** — Excellent natural prosody for storytelling; worth the manual download step.
@@ -195,16 +195,16 @@ No reference audio required. Ideal when you have a clear concept but no recordin
 
 ### "I want multilingual content"
 
-| Engine | Language Support |
-|---|---|
+| Engine                     | Language Support                                             |
+| -------------------------- | ------------------------------------------------------------ |
 | 🌍 Chatterbox Multilingual | 23 languages (with voice cloning across language boundaries) |
-| 🗣️ Kokoro TTS | Multiple (built-in multilingual voice library) |
-| 🐟 Fish Speech | Multiple |
-| 🎵 F5-TTS | Multiple |
-| 🎙️ Higgs Audio | Multiple |
-| 🎨 Qwen Voice Design | Multiple |
-| 🎭 Qwen Voice Clone | Multiple |
-| 🗣️ Qwen Custom Voice | Multiple |
+| 🗣️ Kokoro TTS              | Multiple (built-in multilingual voice library)               |
+| 🐟 Fish Speech             | Multiple                                                     |
+| 🎵 F5-TTS                  | Multiple                                                     |
+| 🎙️ Higgs Audio             | Multiple                                                     |
+| 🎨 Qwen Voice Design       | Multiple                                                     |
+| 🎭 Qwen Voice Clone        | Multiple                                                     |
+| 🗣️ Qwen Custom Voice       | Multiple                                                     |
 
 For voice cloning across languages — where the cloned voice speaks in a language different from the
 reference recording — **🌍 Chatterbox Multilingual** and **🎭 Qwen Voice Clone** are the strongest
@@ -228,11 +228,11 @@ choices.
 _AI Script Polish_ (labeled "Narration Transform" in the UI) prepares your text before it reaches
 the TTS engine. Choosing the right mode depends on your content type.
 
-| Mode | What It Changes | Best When | What It Leaves Alone |
-|---|---|---|---|
-| **Minimal** | Expands abbreviations, numbers, dates, units | Factual text, technical content, news scripts | Phrasing, sentence structure, tone |
-| **Polish** | Everything Minimal does + smooths phrasing, adds natural transitions | Podcasts, blog narration, presentations | Creative content, emotional emphasis |
-| **Vivid** | Everything Polish does + adds dramatic pacing, pauses, emotional beats | Audiobooks, fiction, cinematic narration | Factual accuracy (meaning is preserved) |
+| Mode        | What It Changes                                                        | Best When                                     | What It Leaves Alone                    |
+| ----------- | ---------------------------------------------------------------------- | --------------------------------------------- | --------------------------------------- |
+| **Minimal** | Expands abbreviations, numbers, dates, units                           | Factual text, technical content, news scripts | Phrasing, sentence structure, tone      |
+| **Polish**  | Everything Minimal does + smooths phrasing, adds natural transitions   | Podcasts, blog narration, presentations       | Creative content, emotional emphasis    |
+| **Vivid**   | Everything Polish does + adds dramatic pacing, pauses, emotional beats | Audiobooks, fiction, cinematic narration      | Factual accuracy (meaning is preserved) |
 
 ### When to Use Each Mode
 
@@ -270,10 +270,10 @@ setting handles regional English conventions (spelling, date formats, honorifics
 Generated audio can be saved as **WAV** or **MP3**. The right choice depends on what you plan to do
 with the file next.
 
-| Format | File Size | Quality | Best For |
-|---|---|---|---|
-| **WAV** | Large (uncompressed) | Lossless — no quality loss | Editing, post-production, archival |
-| **MP3** | Small (compressed) | Slightly reduced — generally imperceptible for speech | Sharing, streaming, publishing, podcasts |
+| Format  | File Size            | Quality                                               | Best For                                 |
+| ------- | -------------------- | ----------------------------------------------------- | ---------------------------------------- |
+| **WAV** | Large (uncompressed) | Lossless — no quality loss                            | Editing, post-production, archival       |
+| **MP3** | Small (compressed)   | Slightly reduced — generally imperceptible for speech | Sharing, streaming, publishing, podcasts |
 
 ### The Simple Rule
 
@@ -292,11 +292,11 @@ speech quality.
 
 ### File Size at a Glance
 
-| Duration | WAV (approx.) | MP3 (approx.) |
-|---|---|---|
-| 1 minute | ~10 MB | ~1–2 MB |
-| 10 minutes | ~100 MB | ~10–20 MB |
-| 1 hour | ~600 MB | ~55–100 MB |
+| Duration   | WAV (approx.) | MP3 (approx.) |
+| ---------- | ------------- | ------------- |
+| 1 minute   | ~10 MB        | ~1–2 MB       |
+| 10 minutes | ~100 MB       | ~10–20 MB     |
+| 1 hour     | ~600 MB       | ~55–100 MB    |
 
 For full audiobooks, MP3 is practical for final delivery. For chapter-level editing before final
 assembly, WAV is worth the disk space.
@@ -309,15 +309,15 @@ AI Script Polish uses a language model (LLM) to rewrite your text before synthes
 are supported: three run entirely on your machine (no API key required), and four connect to cloud
 services.
 
-| Provider | Requires API Key | Runs Locally | Privacy | Best For |
-|---|---|---|---|---|
-| **Ollama** | No | ✅ Yes | Full — nothing leaves your machine | Local GPU users wanting maximum privacy and control |
-| **LM Studio** | No | ✅ Yes | Full — nothing leaves your machine | Local GPU users who prefer a visual model manager |
-| **vLLM** | No | ✅ Yes | Full — nothing leaves your machine | Advanced users running high-throughput local inference |
-| **GitHub Models** | Yes (free tier) | ❌ Cloud | Text sent to Microsoft | Easy cloud access, no GPU needed, generous free tier |
-| **Google Gemini** | Yes | ❌ Cloud | Text sent to Google | High-quality cloud generation with a free-tier API |
-| **Microsoft Foundry** | Yes | ❌ Cloud | Enterprise data handling policies | Enterprise users in the Microsoft Azure ecosystem |
-| **Custom OpenAI-compatible** | Configurable | Local or cloud | Depends on endpoint | Advanced users with custom model endpoints |
+| Provider                     | Requires API Key | Runs Locally   | Privacy                            | Best For                                               |
+| ---------------------------- | ---------------- | -------------- | ---------------------------------- | ------------------------------------------------------ |
+| **Ollama**                   | No               | ✅ Yes         | Full — nothing leaves your machine | Local GPU users wanting maximum privacy and control    |
+| **LM Studio**                | No               | ✅ Yes         | Full — nothing leaves your machine | Local GPU users who prefer a visual model manager      |
+| **vLLM**                     | No               | ✅ Yes         | Full — nothing leaves your machine | Advanced users running high-throughput local inference |
+| **GitHub Models**            | Yes (free tier)  | ❌ Cloud       | Text sent to Microsoft             | Easy cloud access, no GPU needed, generous free tier   |
+| **Google Gemini**            | Yes              | ❌ Cloud       | Text sent to Google                | High-quality cloud generation with a free-tier API     |
+| **Microsoft Foundry**        | Yes              | ❌ Cloud       | Enterprise data handling policies  | Enterprise users in the Microsoft Azure ecosystem      |
+| **Custom OpenAI-compatible** | Configurable     | Local or cloud | Depends on endpoint                | Advanced users with custom model endpoints             |
 
 ### Privacy First
 
@@ -328,8 +328,8 @@ Ollama, LM Studio, or vLLM. All three run entirely locally — nothing is transm
 ### Recommended Starting Points
 
 - **If you have an NVIDIA GPU:** Start with **Ollama**. No API key, full privacy, and strong
-  performance on a mid-range GPU. Install a 7B-parameter model (such as Llama 3 or Mistral 7B) for
-  a good balance of speed and output quality.
+  performance on a mid-range GPU. Install a 7B-parameter model (such as Llama 3 or Mistral 7B) for a
+  good balance of speed and output quality.
 - **If you don't have a GPU, or want the easiest setup:** Start with **GitHub Models**. The free
   tier is genuinely useful, setup requires a single personal access token (free from GitHub), and
   quality across all three transform modes is excellent.
@@ -339,10 +339,10 @@ Ollama, LM Studio, or vLLM. All three run entirely locally — nothing is transm
 > ⚠️ **Two separate LLM connections:** AI Script Polish and the in-app **🤖 Assistant** each have
 > their own LLM settings panels. You can run Ollama locally for text preparation and GitHub Models
 > for the assistant — or use the same provider for both. Configuring one does not affect the other.
-
+>
 > 💡 For a step-by-step connection guide, see
 > [Section 5 of the User Guide](USER_GUIDE.md#5-ai-script-polish).
 
 ---
 
-_Ultimate TTS Studio SUP3R Edition — Documentation Suite v1.0_
+Ultimate TTS Studio SUP3R Edition — Documentation Suite v1.0

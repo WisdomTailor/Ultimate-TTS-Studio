@@ -26,8 +26,8 @@ the [Workflow Recipes](WORKFLOWS.md) show you step-by-step paths through the mos
 
 You'll get the best experience with an NVIDIA GPU — most engines are GPU-accelerated, and an NVIDIA
 card dramatically improves generation speed. Lightweight engines like 🐱 **KittenTTS** can run on
-lower-end hardware. Heavier engines like 🐟 **Fish Speech**, 🎤 **ChatterboxTTS**, and
-🎯 **IndexTTS2** benefit most from 8 GB or more of VRAM. Running on CPU is possible but noticeably
+lower-end hardware. Heavier engines like 🐟 **Fish Speech**, 🎤 **ChatterboxTTS**, and 🎯
+**IndexTTS2** benefit most from 8 GB or more of VRAM. Running on CPU is possible but noticeably
 slower. If you're not sure what you have, a good rule of thumb: if you can play modern games, you
 can run most engines. For a full breakdown of engine speed and GPU demands, see the
 [Feature Matrix](FEATURE_MATRIX.md#2-engine-comparison-table).
@@ -46,8 +46,8 @@ smoothest experience, the Pinokio one-click install is Windows-only.
 
 **Q: How much disk space do the models take?**
 
-It varies quite a bit by engine. 🐱 **KittenTTS** is a few hundred megabytes — genuinely small.
-🗣️ **Kokoro TTS** is in the 1–2 GB range. Voice cloning engines (**ChatterboxTTS**,
+It varies quite a bit by engine. 🐱 **KittenTTS** is a few hundred megabytes — genuinely small. 🗣️
+**Kokoro TTS** is in the 1–2 GB range. Voice cloning engines (**ChatterboxTTS**,
 **ChatterboxTurbo**, **F5-TTS**) sit in the 2–6 GB range. 🐟 **Fish Speech**, 🎯 **IndexTTS2**, and
 the **Qwen** engines are the heaviest — plan for 10–20 GB each. You don't need to install all 14
 engines. Install only what you'll actually use. The app lets you pick engines individually and
@@ -87,11 +87,11 @@ through your first generation from there.
 
 "Best" depends entirely on your goal. 🐟 **Fish Speech** and 🎯 **IndexTTS2** consistently produce
 the most natural-sounding output — great for audiobooks and professional narration. 🎤
-**ChatterboxTTS** and 🎵 **F5-TTS** are excellent for voice cloning from a short reference clip.
-🗣️ **Kokoro TTS** is unbeatable for speed and simplicity when you don't need to clone a specific
-voice. 🐱 **KittenTTS** is small, fast, and fun for casual use. The [Feature Matrix](FEATURE_MATRIX.md#3-use-case-recommendations)
-has a full use case guide — read it to match an engine to your actual goal rather than chasing a
-single "best" answer.
+**ChatterboxTTS** and 🎵 **F5-TTS** are excellent for voice cloning from a short reference clip. 🗣️
+**Kokoro TTS** is unbeatable for speed and simplicity when you don't need to clone a specific voice.
+🐱 **KittenTTS** is small, fast, and fun for casual use. The
+[Feature Matrix](FEATURE_MATRIX.md#3-use-case-recommendations) has a full use case guide — read it
+to match an engine to your actual goal rather than chasing a single "best" answer.
 
 ---
 
@@ -122,8 +122,8 @@ can clearly hear.
 
 **Q: Why does my cloned voice sound different from the reference?**
 
-A few things affect cloning quality. Background noise is the biggest culprit — even subtle room
-echo or low-level hum can degrade results noticeably. Short clips (under 8 seconds) may not capture
+A few things affect cloning quality. Background noise is the biggest culprit — even subtle room echo
+or low-level hum can degrade results noticeably. Short clips (under 8 seconds) may not capture
 enough voice characteristics. Clips with music, multiple speakers, or strong effects like reverb
 confuse the engine. Try a longer clip, record in a quieter environment, or add a **Reference Text**
 transcription (the actual words spoken in the clip) — some engines like 🎤 **ChatterboxTTS** use
@@ -136,18 +136,19 @@ this to calibrate more precisely.
 Each engine has a different specialty: voice cloning, emotion control, speed, multilingual output,
 or voice design. Rather than summarizing 14 engines here, the best resource is the
 [Feature Matrix](FEATURE_MATRIX.md#2-engine-comparison-table), which compares them side by side
-across eight capability dimensions. The [User Guide — Section 9: Engine Reference](USER_GUIDE.md#9-engine-reference)
-gives a narrative walkthrough of each engine's strengths, settings, and best use cases.
+across eight capability dimensions. The
+[User Guide — Section 9: Engine Reference](USER_GUIDE.md#9-engine-reference) gives a narrative
+walkthrough of each engine's strengths, settings, and best use cases.
 
 ---
 
 **Q: Can I use multiple engines in one conversation?**
 
-Not currently. Each conversation session uses one active engine for all speakers. If you're in 
-🎭 **Conversation Mode** and want two characters with very different voice qualities, the best
-approach is to pick the engine whose voice cloning fits both characters well (🎤 **ChatterboxTTS**
-is popular for this, with a different reference clip per character). In 🎙️ **VibeVoice**, you assign
-different voice profiles to each speaker — those profiles all come from the VibeVoice model itself.
+Not currently. Each conversation session uses one active engine for all speakers. If you're in 🎭
+**Conversation Mode** and want two characters with very different voice qualities, the best approach
+is to pick the engine whose voice cloning fits both characters well (🎤 **ChatterboxTTS** is popular
+for this, with a different reference clip per character). In 🎙️ **VibeVoice**, you assign different
+voice profiles to each speaker — those profiles all come from the VibeVoice model itself.
 
 ---
 
@@ -163,10 +164,10 @@ different voice profiles to each speaker — those profiles all come from the Vi
 
 It's optional but genuinely helpful for almost every use case. Even at the **Minimal** level, it
 expands abbreviations, converts numbers to spoken form, and handles dates and units — which means
-your TTS engine doesn't have to guess how to say "Dr. Smith reviewed the 14.5 mg results on
-Feb. 3rd." For podcasts and audiobooks, the **Polish** and **Vivid** modes can transform flat
-prose into something that actually sounds like it was written to be read aloud. If you're generating
-from clean, already-spoken-style text, you can skip it. If your source text comes from the web,
+your TTS engine doesn't have to guess how to say "Dr. Smith reviewed the 14.5 mg results on Feb.
+3rd." For podcasts and audiobooks, the **Polish** and **Vivid** modes can transform flat prose into
+something that actually sounds like it was written to be read aloud. If you're generating from
+clean, already-spoken-style text, you can skip it. If your source text comes from the web,
 documents, or anywhere else, AI Script Polish is worth enabling.
 
 _AI Script Polish_ is labeled **"Narration Transform"** in the UI — look for it in the accordion
@@ -179,9 +180,9 @@ inside the **📝 TEXT TO SYNTHESIZE** tab.
 For most users, the simplest path is **Ollama** (local, no API key, free, runs on your computer) or
 **LM Studio** (local, similar). These keep everything on your machine and don't require signing up
 for anything. If you want cloud quality without a subscription, **GitHub Models** offers a free tier
-that works well for light to moderate usage. Google Gemini also has a generous free tier.
-For a side-by-side comparison of all seven providers — including speed, cost, and privacy
-trade-offs — see the [Feature Matrix — LLM Provider Comparison](FEATURE_MATRIX.md#6-llm-provider-comparison).
+that works well for light to moderate usage. Google Gemini also has a generous free tier. For a
+side-by-side comparison of all seven providers — including speed, cost, and privacy trade-offs — see
+the [Feature Matrix — LLM Provider Comparison](FEATURE_MATRIX.md#6-llm-provider-comparison).
 
 ---
 
@@ -202,8 +203,8 @@ Transform time depends on three factors: the LLM provider you're using, the mode
 provider, and the length of your text. Local providers on modest hardware (especially running a 7B+
 model on CPU) can take 30–60 seconds for a paragraph. Cloud providers like GitHub Models or Gemini
 are usually faster for long texts. Smaller models run faster but may produce less polished results.
-If speed is a priority, try a smaller model on your local provider, or use a cloud provider for
-long transforms.
+If speed is a priority, try a smaller model on your local provider, or use a cloud provider for long
+transforms.
 
 ---
 
@@ -220,8 +221,8 @@ They differ in how much the AI changes your text:
 
 When in doubt: use Minimal for factual or technical content, Polish for podcasts and blogs, Vivid
 for fiction and audiobook production. See the
-[Feature Matrix — Transform Mode Comparison](FEATURE_MATRIX.md#4-transform-mode-comparison) for
-a detailed side-by-side.
+[Feature Matrix — Transform Mode Comparison](FEATURE_MATRIX.md#4-transform-mode-comparison) for a
+detailed side-by-side.
 
 ---
 
@@ -237,11 +238,11 @@ a detailed side-by-side.
 
 Volume and clarity issues usually have a quick fix. For audio that's too quiet, open the **Audio
 Effects Studio** section and increase the **🎚️ Master Gain** — start with +3 to +6 dB and listen
-again. For audio that's too loud or clipping, dial Master Gain down (try −3 to −6 dB). For
-🐟 **Fish Speech** in particular: this engine generates audio that is significantly louder than most
-others. Start your system volume at around 50% when listening to Fish Speech output for the first
-time, then adjust from there. Distortion usually means the gain is too high — reduce Master Gain
-and regenerate.
+again. For audio that's too loud or clipping, dial Master Gain down (try −3 to −6 dB). For 🐟 **Fish
+Speech** in particular: this engine generates audio that is significantly louder than most others.
+Start your system volume at around 50% when listening to Fish Speech output for the first time, then
+adjust from there. Distortion usually means the gain is too high — reduce Master Gain and
+regenerate.
 
 > ⚠️ **Fish Speech volume warning:** Fish Speech output levels can be noticeably louder than other
 > engines. Keep your speakers or headphones at a moderate volume for your first generation, then
@@ -264,8 +265,8 @@ listening volume. The step-by-step version of this workflow is in
 
 **WAV** is uncompressed audio — larger files, full quality, no artifacts. Use WAV when you're going
 to edit the audio in another tool (Audacity, DaVinci Resolve, Adobe Audition) or use it in a
-production pipeline. **MP3** is compressed — much smaller files, tiny quality trade-off. Use MP3
-for sharing, distribution, uploading to podcast platforms, or anywhere file size matters more than
+production pipeline. **MP3** is compressed — much smaller files, tiny quality trade-off. Use MP3 for
+sharing, distribution, uploading to podcast platforms, or anywhere file size matters more than
 editing flexibility. When in doubt: generate WAV, keep it as your master, and export MP3 when you
 need to share.
 
@@ -275,8 +276,8 @@ need to share.
 
 Generated audio is saved automatically to the `outputs/` folder, organized by date. Audiobook
 conversions (from the 📚 **EBOOK TO AUDIOBOOK** tab) go to the `audiobooks/` folder. You can also
-find your most recent generation in the audio player on the right side of the screen and download
-it directly from there using the download button below the player. To change where files are saved,
+find your most recent generation in the audio player on the right side of the screen and download it
+directly from there using the download button below the player. To change where files are saved,
 open the **🧭 Workspace Controls** accordion and switch from "Project Folders" to "Custom Path" mode
 to point the app at any folder on your drive.
 
@@ -316,12 +317,12 @@ significantly lower memory overhead.
 **Q: Generation is very slow — what can I do?**
 
 First, check that your NVIDIA GPU drivers are up to date — outdated drivers can cut performance
-significantly. Second, confirm the model is actually loaded and running on GPU rather than
-CPU (the Model Management panel shows load state). Third, if you have multiple models loaded, try
-unloading the ones you're not using — competing for VRAM slows everything down. For fast generation
-with good quality, 🐱 **KittenTTS** and 🗣️ **Kokoro TTS** are the speed leaders. Slow generation
-with voice cloning engines (ChatterboxTTS, Fish Speech) on a lower-end card is expected — these
-models are doing significantly more compute per second of audio.
+significantly. Second, confirm the model is actually loaded and running on GPU rather than CPU (the
+Model Management panel shows load state). Third, if you have multiple models loaded, try unloading
+the ones you're not using — competing for VRAM slows everything down. For fast generation with good
+quality, 🐱 **KittenTTS** and 🗣️ **Kokoro TTS** are the speed leaders. Slow generation with voice
+cloning engines (ChatterboxTTS, Fish Speech) on a lower-end card is expected — these models are
+doing significantly more compute per second of audio.
 
 ---
 
@@ -336,9 +337,9 @@ An out-of-memory error almost always means you've run out of VRAM. Steps to reso
    rendering software).
 3. Try again with only the one engine you need.
 
-If it still fails, the engine you're trying to use likely requires more VRAM than your card has.
-See the [Feature Matrix](FEATURE_MATRIX.md#2-engine-comparison-table) for a comparison of engine
-memory demands and find a lighter alternative.
+If it still fails, the engine you're trying to use likely requires more VRAM than your card has. See
+the [Feature Matrix](FEATURE_MATRIX.md#2-engine-comparison-table) for a comparison of engine memory
+demands and find a lighter alternative.
 
 ---
 
@@ -347,9 +348,9 @@ memory demands and find a lighter alternative.
 Open Pinokio and look at the terminal output in the **Start** log — it usually shows exactly what
 went wrong. Common culprits: a port conflict (another app is using the same port), a missing
 dependency, or a Python environment issue. If the terminal shows a port conflict, try restarting
-Pinokio and launching again. If it shows a Python or package error, try **Reset** in Pinokio
-(this reinstalls dependencies without losing your models or preset files). If you're stuck, check
-the `logs/api/latest` file in the project folder for the full error trail.
+Pinokio and launching again. If it shows a Python or package error, try **Reset** in Pinokio (this
+reinstalls dependencies without losing your models or preset files). If you're stuck, check the
+`logs/api/latest` file in the project folder for the full error trail.
 
 ---
 
@@ -374,18 +375,18 @@ entry in Model Management has its own sub-accordion. Expand it fully to find the
 
 **Q: AI Script Polish says "connection failed" — how do I fix it?**
 
-A connection failure usually means one of three things: the provider isn't running, the settings
-are wrong, or the API key is missing or incorrect. Check each in order:
+A connection failure usually means one of three things: the provider isn't running, the settings are
+wrong, or the API key is missing or incorrect. Check each in order:
 
 1. **For local providers (Ollama, LM Studio):** Make sure the app is actually running on your
    computer. Ollama and LM Studio both need to be started before the app can reach them.
 2. **For cloud providers:** Double-check your API key — copy it fresh from your provider's dashboard
    and paste it in. Keys with extra whitespace or a missing character will silently fail.
 3. **Model name:** The model name field is case-sensitive and must match exactly what your provider
-   expects. An incorrect model name is a common source of connection errors.
-<!-- screenshot: AI Script Polish (Narration Transform) accordion showing the provider settings fields and the Test Connection button -->
+expects. An incorrect model name is a common source of connection errors.
 4. Use the **🔗 Test Connection** button inside the AI Script Polish section to confirm the
    connection before running a full transform.
+<!-- screenshot: AI Script Polish (Narration Transform) accordion showing the provider settings fields and the Test Connection button -->
 
 ---
 
@@ -399,8 +400,8 @@ are wrong, or the API key is missing or incorrect. Check each in order:
 
 **Q: What is MCP and do I need it?**
 
-MCP stands for Model Context Protocol — it's a way for coding tools like GitHub Copilot, Cursor,
-or custom scripts to talk to the app programmatically. If you're a developer and want to call TTS
+MCP stands for Model Context Protocol — it's a way for coding tools like GitHub Copilot, Cursor, or
+custom scripts to talk to the app programmatically. If you're a developer and want to call TTS
 Studio from code, trigger speech generation through an AI coding assistant, or build automation
 around the app, MCP is for you. If you're a content creator using the app through the browser UI,
 you don't need MCP at all — it's a completely separate, optional install that runs alongside the
@@ -414,7 +415,8 @@ Yes. The MCP sidecar exposes 13 tools for programmatic access: listing engines, 
 transforming text, submitting synthesis jobs, checking job status, and more. You install it
 separately from within Pinokio (look for the **Install MCP** option), then connect your coding tool
 to it. The `app/README.md` contains the full API reference including example calls in Python,
-JavaScript, and cURL. See also [Workflow 8: Use TTS Studio from Your Code Editor](WORKFLOWS.md#8-use-tts-studio-from-your-code-editor)
+JavaScript, and cURL. See also
+[Workflow 8: Use TTS Studio from Your Code Editor](WORKFLOWS.md#8-use-tts-studio-from-your-code-editor)
 for a hands-on walkthrough.
 
 ---
@@ -422,10 +424,10 @@ for a hands-on walkthrough.
 **Q: How do I back up my voice presets?**
 
 Your named voice presets are stored in a single file: `app_state/presets.json`. Copy that file to
-any backup location — cloud storage, an external drive, another folder — and you're done.
-Associated voice audio files are stored in `app_state/voices/`. Back up both to fully preserve all
-your presets. To restore on a fresh installation, copy both back to the same paths before launching
-the app. To share presets with another machine, copy the same two locations and paste them in after
+any backup location — cloud storage, an external drive, another folder — and you're done. Associated
+voice audio files are stored in `app_state/voices/`. Back up both to fully preserve all your
+presets. To restore on a fresh installation, copy both back to the same paths before launching the
+app. To share presets with another machine, copy the same two locations and paste them in after
 install.
 
 ---
@@ -434,4 +436,4 @@ install.
 
 ---
 
-_Ultimate TTS Studio SUP3R Edition — Documentation Suite v1.0_
+Ultimate TTS Studio SUP3R Edition — Documentation Suite v1.0

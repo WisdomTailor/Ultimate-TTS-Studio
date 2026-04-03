@@ -2,9 +2,9 @@
 
 **Ten step-by-step recipes for the most common real-world tasks.**
 
-Each workflow here is self-contained. Jump straight to the one you need — you don't have to read
-the others first. If a step mentions a feature in depth, the [User Guide](USER_GUIDE.md) has the
-full explanation.
+Each workflow here is self-contained. Jump straight to the one you need — you don't have to read the
+others first. If a step mentions a feature in depth, the [User Guide](USER_GUIDE.md) has the full
+explanation.
 
 > 💡 **Before starting any workflow:** Open **Model Management**, find the engine you're using, and
 > click **Load**. Wait for the green status badge before you generate anything. All workflows assume
@@ -30,11 +30,11 @@ full explanation.
 ## 1. Clone My Voice and Read Text
 
 **What you'll accomplish:** Record or provide a short audio clip of any voice, and generate new
-speech in that voice reading any text you choose. This is the fastest path to a personalized,
-cloned voice.
+speech in that voice reading any text you choose. This is the fastest path to a personalized, cloned
+voice.
 
-**Best engine for this workflow:** 🎤 ChatterboxTTS — the most beginner-friendly voice cloning
-path, with automatic model download and clean results from short clips.
+**Best engine for this workflow:** 🎤 ChatterboxTTS — the most beginner-friendly voice cloning path,
+with automatic model download and clean results from short clips.
 
 **Time estimate:** 10–15 minutes on your first run; under 3 minutes on subsequent runs.
 
@@ -55,27 +55,27 @@ A phone recording in a quiet room works fine. Professional studio quality is bet
 required. The clip is used to capture the voice's unique characteristics — tone, pace, and timbre —
 so what matters most is that it's clear.
 
-> ⚠️ **Ethics reminder:** Only clone voices you have permission to use. Cloning someone else's
-> voice without consent is unethical and potentially illegal in many jurisdictions.
+> ⚠️ **Ethics reminder:** Only clone voices you have permission to use. Cloning someone else's voice
+> without consent is unethical and potentially illegal in many jurisdictions.
 
 **2. Load the engine.**
 
-In the **Model Management** accordion, find **🎤 ChatterboxTTS** and click **Load**. If this is
-your first time, the model downloads automatically — give it a minute. When the status badge turns
-green, continue.
+In the **Model Management** accordion, find **🎤 ChatterboxTTS** and click **Load**. If this is your
+first time, the model downloads automatically — give it a minute. When the status badge turns green,
+continue.
 
 **3. Select the engine.**
 
-Open the **Engine Selection** accordion. Choose **🎤 ChatterboxTTS** from the dropdown. The
-**Engine Settings** panel updates to show ChatterboxTTS controls.
+Open the **Engine Selection** accordion. Choose **🎤 ChatterboxTTS** from the dropdown. The **Engine
+Settings** panel updates to show ChatterboxTTS controls.
 
 <!-- screenshot: Engine Selection with ChatterboxTTS selected, and Engine Settings showing reference audio upload and Exaggeration/Temperature controls -->
 
 **4. Upload your reference audio.**
 
 In **Engine Settings**, find the **Reference Audio** upload field. Upload your prepared clip. You
-can also add a **Reference Text** transcription of what's spoken in the clip — this helps the
-engine calibrate the voice more accurately, but it's optional.
+can also add a **Reference Text** transcription of what's spoken in the clip — this helps the engine
+calibrate the voice more accurately, but it's optional.
 
 **5. Type your text.**
 
@@ -103,8 +103,8 @@ clean your reference audio, the closer the match.
 
 - **Quality of the reference clip matters more than its length.** A clean 10-second clip beats a
   noisy 30-second one.
-- **Exaggeration slider:** Start at the default (0.5). Move it up for a more dramatic delivery,
-  down for a flatter, more controlled read.
+- **Exaggeration slider:** Start at the default (0.5). Move it up for a more dramatic delivery, down
+  for a flatter, more controlled read.
 - **Not happy with the result?** Try a different recording of the same voice — even the same words
   recorded twice can yield notably different results.
 
@@ -135,7 +135,7 @@ needed), or 🎤 ChatterboxTTS if you want to use real cloned voices.
 Click the **🎭 CONVERSATION MODE** tab. Your script needs one line per spoken segment in
 `Speaker: Text` format:
 
-```
+```text
 Alex: So let's talk about what happened this week.
 Jordan: I've been waiting for this. Where do we even start?
 Alex: At the beginning, I suppose. The announcement caught everyone off guard.
@@ -146,8 +146,8 @@ Up to five distinct speakers are supported.
 
 > **Don't have a script in this format?** Paste your raw dialogue and click **AI Format**. The
 > connected LLM will restructure it into the correct `Speaker: Text` layout automatically. (Requires
-> an LLM provider configured in AI Script Polish — see [Section 5 of the User Guide](USER_GUIDE.md#5-ai-script-polish)
-> if you haven't set one up.)
+> an LLM provider configured in AI Script Polish — see
+> [Section 5 of the User Guide](USER_GUIDE.md#5-ai-script-polish) if you haven't set one up.)
 
 **2. Analyze the script.**
 
@@ -159,15 +159,15 @@ speaker. This is where you'll assign each host their voice.
 **3. Load your engines.**
 
 Before assigning voices, make sure the engine(s) you plan to use are loaded. Open **Model
-Management**, find your chosen engine, and click **Load**. For a two-host podcast using Kokoro:
-load Kokoro once, and both speakers can use different voices from the same engine.
+Management**, find your chosen engine, and click **Load**. For a two-host podcast using Kokoro: load
+Kokoro once, and both speakers can use different voices from the same engine.
 
 **4. Assign voices to each speaker.**
 
 In the character roster, each speaker has its own row with an engine dropdown and a voice selector:
 
-- For **🗣️ Kokoro TTS**: choose any voice from the built-in dropdown. Popular pairings for a
-  podcast feel: `am_michael` and `af_heart` for a male/female co-host setup.
+- For **🗣️ Kokoro TTS**: choose any voice from the built-in dropdown. Popular pairings for a podcast
+  feel: `am_michael` and `af_heart` for a male/female co-host setup.
 - For **🎤 ChatterboxTTS**: upload a separate reference audio clip for each speaker.
 
 Both speakers can use the same engine with different voice settings, or different engines entirely.
@@ -188,8 +188,8 @@ edit the text directly here without changing the rest of the script.
 
 **7. Generate.**
 
-Click **Generate Conversation**. The app processes each line in sequence with your configured
-voices and pauses, then combines everything into a single audio file.
+Click **Generate Conversation**. The app processes each line in sequence with your configured voices
+and pauses, then combines everything into a single audio file.
 
 <!-- screenshot: Right column showing completed conversation audio in the player with total duration visible -->
 
@@ -283,8 +283,8 @@ engine speed.
 
 **8. Access your output.**
 
-Files under 50 MB or 30 minutes play directly in the interface when complete. Larger files are
-saved to the `audiobooks/` folder and a download link appears in the right column.
+Files under 50 MB or 30 minutes play directly in the interface when complete. Larger files are saved
+to the `audiobooks/` folder and a download link appears in the right column.
 
 ### Expected Outcome
 
@@ -329,13 +329,13 @@ natural-sounding output well-suited to professional narration.
 Click the **📝 TEXT TO SYNTHESIZE** tab and paste your source material. It doesn't need to be
 polished — that's the point. Something like:
 
-> _"Updated Q3 results: revenue up 14% vs prior year. Key drivers: new product line (up 40%),
-> EMEA expansion, cost reductions. Next steps: review by CFO, finalize investor brief for Oct 15th."_
+> _"Updated Q3 results: revenue up 14% vs prior year. Key drivers: new product line (up 40%), EMEA
+> expansion, cost reductions. Next steps: review by CFO, finalize investor brief for Oct 15th."_
 
 **2. Open AI Script Polish.**
 
-In the **📝 TEXT TO SYNTHESIZE** tab, expand the **Narration Transform** accordion. This is the
-AI Script Polish panel.
+In the **📝 TEXT TO SYNTHESIZE** tab, expand the **Narration Transform** accordion. This is the AI
+Script Polish panel.
 
 > **Terminology note:** The panel label in the UI reads "Narration Transform" — throughout this
 > guide, we call it AI Script Polish to describe what it actually does.
@@ -357,14 +357,15 @@ Set **Transform Mode** to **Vivid**. For a professional narration style, set **S
 **Professional/Formal** or **Storytelling/Cinematic** depending on your content.
 
 > **Mode guide in brief:**
+>
 > - **Minimal** — expands numbers and abbreviations only. No rewrites.
 > - **Polish** — smooths phrasing, adds natural transitions.
 > - **Vivid** — adds dramatic pacing, emotional beats, breathing cues. Best for narration.
 
 **5. Apply the transform.**
 
-Click **Apply Transform**. The text area updates with your rewritten text. The raw notes from
-above might become:
+Click **Apply Transform**. The text area updates with your rewritten text. The raw notes from above
+might become:
 
 > _"Updated third-quarter results are in — and the news is strong. Revenue is up fourteen percent
 > compared to the prior year. The biggest driver? A new product line that surged forty percent above
@@ -439,6 +440,7 @@ In the **Voice Description** field, describe the voice you want. Be specific abo
 - **Any additional quality:** "Slightly husky" / "Clear and well-articulated"
 
 Example description:
+
 > _"A calm, professional male narrator in his forties. Deep, resonant voice with a measured pace.
 > Clear enunciation, no accent. Suitable for documentary narration."_
 
@@ -446,6 +448,7 @@ Example description:
 
 Click the **📝 TEXT TO SYNTHESIZE** tab and type a short passage that would let you evaluate the
 voice well. Something with varied sentence structure works better than a single flat sentence:
+
 > _"Welcome. Today, we explore something remarkable — a story told not in pictures, but in sound."_
 
 **5. Generate a sample.**
@@ -496,8 +499,8 @@ for voice actors.
 **What you'll accomplish:** Take a piece of generated audio and add post-processing effects to give
 it the polished sound of a professional studio recording.
 
-**When to use this:** After generating any audio with any engine. Effects are applied to the
-next generation — so configure them before clicking Generate, or regenerate after adjusting.
+**When to use this:** After generating any audio with any engine. Effects are applied to the next
+generation — so configure them before clicking Generate, or regenerate after adjusting.
 
 **Time estimate:** 5 minutes to configure; effects apply automatically on the next Generate.
 
@@ -507,13 +510,13 @@ next generation — so configure them before clicking Generate, or regenerate af
 
 Ultimate TTS Studio SUP3R Edition includes five effects, applied in sequence:
 
-| Effect               | What It Controls                                                | Range                   |
-| -------------------- | --------------------------------------------------------------- | ----------------------- |
-| **🎚️ Master Gain**   | Overall output volume after processing                          | -20 to +20 dB           |
-| **3-Band EQ**        | Bass, Mid, and Treble frequency balance                         | -12 to +12 dB per band  |
-| **🏛️ Reverb**        | The "room" feel: size, damping, and how much reverb mixes in    | 0.1–1.0 each            |
-| **🔊 Echo**          | Repeating delay: delay time and how quickly it fades            | 0.1–1.0 s, 0.1–0.9      |
-| **🎼 Pitch Shift**   | Raise or lower the pitch of the voice in semitones              | -12 to +12 semitones    |
+| Effect             | What It Controls                                             | Range                  |
+| ------------------ | ------------------------------------------------------------ | ---------------------- |
+| **🎚️ Master Gain** | Overall output volume after processing                       | -20 to +20 dB          |
+| **3-Band EQ**      | Bass, Mid, and Treble frequency balance                      | -12 to +12 dB per band |
+| **🏛️ Reverb**      | The "room" feel: size, damping, and how much reverb mixes in | 0.1–1.0 each           |
+| **🔊 Echo**        | Repeating delay: delay time and how quickly it fades         | 0.1–1.0 s, 0.1–0.9     |
+| **🎼 Pitch Shift** | Raise or lower the pitch of the voice in semitones           | -12 to +12 semitones   |
 
 Each effect has an enable/disable checkbox. All effects are off by default.
 
@@ -550,9 +553,9 @@ For dramatic or cinematic content:
 
 ### A/B Comparison
 
-Each effect's checkbox is its bypass toggle. Enable an effect, generate, listen; then uncheck it
-and regenerate to hear the same audio without it. This is the fastest way to judge whether an effect
-is helping or hurting.
+Each effect's checkbox is its bypass toggle. Enable an effect, generate, listen; then uncheck it and
+regenerate to hear the same audio without it. This is the fastest way to judge whether an effect is
+helping or hurting.
 
 ### Expected Outcome
 
@@ -569,8 +572,8 @@ without overprocessing.
 ### Common Mistakes to Avoid
 
 - Setting Reverb Wet Mix above 0.4 — it starts to sound like a cave rather than a room
-- Using Echo on a podcast or conversational script — it creates an unnatural doubling effect
-  that works for cinematic content but sounds wrong for dialogue
+- Using Echo on a podcast or conversational script — it creates an unnatural doubling effect that
+  works for cinematic content but sounds wrong for dialogue
 
 ---
 
@@ -579,8 +582,8 @@ without overprocessing.
 **What you'll accomplish:** Clone a voice from a reference recording and generate speech in any of
 23 supported languages — including languages different from the reference audio itself.
 
-**Engine for this workflow:** 🌍 Chatterbox Multilingual — the only engine in the suite purpose-built
-for cross-language voice cloning.
+**Engine for this workflow:** 🌍 Chatterbox Multilingual — the only engine in the suite
+purpose-built for cross-language voice cloning.
 
 **Time estimate:** 10–15 minutes.
 
@@ -606,12 +609,12 @@ Polish, Chinese, Japanese, Korean, Russian, Arabic, and more.
 
 **4. Provide reference audio.**
 
-Upload a reference audio clip (5–30 seconds of clean speech) in the **Reference Audio** field.
-The reference audio can be in any language — Chatterbox Multilingual will apply the voice
+Upload a reference audio clip (5–30 seconds of clean speech) in the **Reference Audio** field. The
+reference audio can be in any language — Chatterbox Multilingual will apply the voice
 characteristics to your target language.
 
-> 💡 **Tip:** For the best quality match, the reference audio language should ideally be the same
-> as your target language. Cross-language cloning works, but same-language reference clips produce
+> 💡 **Tip:** For the best quality match, the reference audio language should ideally be the same as
+> your target language. Cross-language cloning works, but same-language reference clips produce
 > closer results.
 
 <!-- screenshot: Engine Settings showing language dropdown set to a non-English language, and reference audio uploaded -->
@@ -643,8 +646,8 @@ speaker.
 
 - For a professional voice-over workflow across multiple languages, use the same reference audio for
   all generations — this keeps the voice character consistent across every language.
-- If the cloned voice sounds noticeably different in a particular language, try providing a reference
-  clip in that language specifically.
+- If the cloned voice sounds noticeably different in a particular language, try providing a
+  reference clip in that language specifically.
 
 ### Common Mistakes to Avoid
 
@@ -684,19 +687,19 @@ the server URL and any authentication details.
 
 **3. Verify the connection.**
 
-In Pinokio, click **Verify MCP** to confirm the sidecar is reachable. In your editor, you should
-see Ultimate TTS Studio listed as an available MCP server.
+In Pinokio, click **Verify MCP** to confirm the sidecar is reachable. In your editor, you should see
+Ultimate TTS Studio listed as an available MCP server.
 
 **4. Use the `synthesize` tool.**
 
 From your code editor's AI assistant, call the `synthesize` tool to generate speech:
 
-```
+```python
 synthesize(engine="kokoro", voice="af_heart", text="Hello from my code editor.")
 ```
 
-The audio is generated by the running TTS Studio instance and saved to the `outputs/` folder with
-a reference returned to your editor.
+The audio is generated by the running TTS Studio instance and saved to the `outputs/` folder with a
+reference returned to your editor.
 
 <!-- screenshot: VS Code or Cursor showing the MCP tools list with synthesize and other TTS tools visible -->
 
@@ -704,13 +707,13 @@ a reference returned to your editor.
 
 The MCP server exposes 13 tools in total:
 
-| Category            | Tools                                                                                  |
-| ------------------- | -------------------------------------------------------------------------------------- |
-| Engine management   | `list_engines`, `get_engine_info`, `list_voices`                                       |
-| Output management   | `list_outputs`, `get_app_version`                                                      |
-| Text processing     | `normalize_text`, `list_llm_providers`, `transform_text`, `structure_conversation`    |
-| Speech generation   | `synthesize`, `submit_synthesis_job`                                                   |
-| Job management      | `get_job_status`, `cancel_job`                                                         |
+| Category          | Tools                                                                              |
+| ----------------- | ---------------------------------------------------------------------------------- |
+| Engine management | `list_engines`, `get_engine_info`, `list_voices`                                   |
+| Output management | `list_outputs`, `get_app_version`                                                  |
+| Text processing   | `normalize_text`, `list_llm_providers`, `transform_text`, `structure_conversation` |
+| Speech generation | `synthesize`, `submit_synthesis_job`                                               |
+| Job management    | `get_job_status`, `cancel_job`                                                     |
 
 For full parameter documentation on every tool, see the `app/README.md` file.
 
@@ -723,8 +726,8 @@ MCP tool calls — without switching to the browser UI.
 
 - The MCP server and the Gradio UI run simultaneously. You can monitor generation progress in the
   browser UI while jobs are submitted from your editor.
-- Use `submit_synthesis_job` (async) for long-form content and `synthesize` (synchronous) for
-  quick short clips.
+- Use `submit_synthesis_job` (async) for long-form content and `synthesize` (synchronous) for quick
+  short clips.
 
 ### Common Mistakes to Avoid
 
@@ -736,8 +739,8 @@ MCP tool calls — without switching to the browser UI.
 
 ## 9. Save and Reuse Voice Presets
 
-**What you'll accomplish:** Save your current engine and voice configuration as a named preset,
-then reload it instantly in any future session — no re-configuring from scratch.
+**What you'll accomplish:** Save your current engine and voice configuration as a named preset, then
+reload it instantly in any future session — no re-configuring from scratch.
 
 **Time estimate:** 2 minutes to save; instant to load.
 
@@ -834,8 +837,8 @@ In **🧭 Workspace Controls**, find the autosave settings:
 1. Toggle **Autosave** on.
 2. Enter a **Project Name** — this organizes your output files into a dedicated folder.
 3. Choose your save options. **Keep structured autosave copy** stores each generation with full
-   metadata (engine name, seed, settings, source text) in addition to the audio file. This lets
-   you trace back exactly how any file was made.
+   metadata (engine name, seed, settings, source text) in addition to the audio file. This lets you
+   trace back exactly how any file was made.
 
 <!-- screenshot: Workspace Controls showing the autosave toggle enabled and a project name entered -->
 
@@ -850,8 +853,8 @@ Set your **Output Storage** mode:
 
 **4. Load your preset.**
 
-Before any generation session, load your project preset from **🧭 Workspace Controls**. This
-ensures every generation uses the exact same engine and voice.
+Before any generation session, load your project preset from **🧭 Workspace Controls**. This ensures
+every generation uses the exact same engine and voice.
 
 **5. Generate your files.**
 
@@ -867,8 +870,8 @@ file in your series consistently polished, natural-sounding narration.
 
 **6. Review the batch.**
 
-Open your project output folder using the **Open Output Folder** button in **🧭 Workspace Controls**.
-Every file is there, named and organized by project.
+Open your project output folder using the **Open Output Folder** button in **🧭 Workspace
+Controls**. Every file is there, named and organized by project.
 
 ### Expected Outcome
 
@@ -886,9 +889,9 @@ from session to session — suitable for publishing as a series.
 
 - Skipping the preset step and manually reconfiguring each session — even small differences in
   settings produce audibly inconsistent results across a series
-- Mixing Autosave off and on during a project — some files will have metadata and some won't,
-  making it harder to trace back how they were made
+- Mixing Autosave off and on during a project — some files will have metadata and some won't, making
+  it harder to trace back how they were made
 
 ---
 
-_Ultimate TTS Studio SUP3R Edition — Documentation Suite v1.0_
+Ultimate TTS Studio SUP3R Edition — Documentation Suite v1.0
