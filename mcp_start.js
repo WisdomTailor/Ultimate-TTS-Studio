@@ -23,7 +23,7 @@ module.exports = {
       method: "local.set",
       params: {
         url: "{{input.event[1]}}",
-        mcp_url: "{{input.event[1]}}/gradio_api/mcp/sse",
+        mcp_sse_url: "{{input.event[1]}}/gradio_api/mcp/sse",
       },
     },
     {
@@ -34,6 +34,12 @@ module.exports = {
       },
     },
     {
+      method: "local.set",
+      params: {
+        mcp_url: "{{local.mcp_sse_url}}?token={{input.trim()}}",
+      },
+    },
+    {
       method: "fs.write",
       params: {
         path: ".vscode/mcp.json",
@@ -41,7 +47,7 @@ module.exports = {
           servers: {
             "ultimate-tts-studio": {
               type: "sse",
-              url: "{{local.mcp_url}}",
+              url: "{{local.mcp_sse_url}}",
               headers: {
                 Authorization: "Bearer {{input.trim()}}",
               },
@@ -58,7 +64,7 @@ module.exports = {
           servers: {
             "ultimate-tts-studio": {
               type: "sse",
-              url: "{{local.mcp_url}}",
+              url: "{{local.mcp_sse_url}}",
               headers: {
                 Authorization: "Bearer {{input.trim()}}",
               },
