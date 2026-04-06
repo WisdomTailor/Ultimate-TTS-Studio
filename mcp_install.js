@@ -23,6 +23,7 @@ module.exports = {
           "conda install -y -c conda-forge sox",
           "uv pip install devicetorch",
           "uv pip install -r requirements.txt",
+          "uv pip install -r requirements_mcp_sidecar.txt",
           'uv pip install "gradio[mcp]==5.35.0"',
           "uv pip install WeTextProcessing --no-deps",
           "pip uninstall phonemizer-fork -y",
