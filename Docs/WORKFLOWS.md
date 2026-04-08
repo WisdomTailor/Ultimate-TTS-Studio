@@ -25,6 +25,17 @@ explanation.
 9. [Save and Reuse Voice Presets](#9-save-and-reuse-voice-presets)
 10. [Batch Generate with Consistent Settings](#10-batch-generate-with-consistent-settings)
 
+**Technical Diagrams**
+
+- [Single Narration Mode](#single-narration-mode-diagram)
+- [Conversation Mode — Pre-Formatted Script](#conversation-mode--pre-formatted-script)
+- [Conversation Mode — AI Format (Prose)](#conversation-mode--ai-format-prose)
+- [Speaker Profile Management](#speaker-profile-management)
+- [eBook Audiobook Mode](#ebook-audiobook-mode-diagram)
+- [MCP Server Mode](#mcp-server-mode-diagram)
+- [LLM Narration Transform Pipeline](#llm-narration-transform-pipeline)
+- [Master Mode Decision Tree](#master-mode-decision-tree)
+
 ---
 
 ## 1. Clone My Voice and Read Text
@@ -891,6 +902,381 @@ from session to session — suitable for publishing as a series.
   settings produce audibly inconsistent results across a series
 - Mixing Autosave off and on during a project — some files will have metadata and some won't, making
   it harder to trace back how they were made
+
+---
+
+---
+
+# Technical Workflow Diagrams
+
+Visual reference for developers and power users. Each diagram maps the internal data flow and
+decision points for a major operational mode.
+
+## Contents — Technical Diagrams
+
+- [Single Narration Mode](#single-narration-mode-diagram)
+- [Conversation Mode — Pre-Formatted Script](#conversation-mode--pre-formatted-script)
+- [Conversation Mode — AI Format (Prose)](#conversation-mode--ai-format-prose)
+- [Speaker Profile Management](#speaker-profile-management)
+- [eBook Audiobook Mode](#ebook-audiobook-mode-diagram)
+- [MCP Server Mode](#mcp-server-mode-diagram)
+- [LLM Narration Transform Pipeline](#llm-narration-transform-pipeline)
+
+---
+
+## Single Narration Mode Diagram
+
+```mermaid
+flowchart TD
+    A([📝 User enters text]) --> B{Preset selected?}
+    B -- Yes --> C[Load voice preset from store]
+    B -- No --> D[Use current UI settings]
+    C --> E{LLM Transform enabled?}
+    D --> E
+
+    E -- Yes --> F[apply_llm_narration_transform]
+    E -- No --> G[deterministic_normalize]
+    F --> H{API reachable?}
+    H -- Yes --> I[Transformed text returned]
+    H -- No --> G
+    G --> J[Normalized text]
+    I --> K[Engine Dispatch: generate_unified_tts]
+    J --> K
+
+    K --> L{Which engine?}
+    L --> L1[ChatterboxTTS]
+    L --> L2[Kokoro TTS]
+    L --> L3[Fish Speech]
+    L --> L4[IndexTTS2]
+    L --> L5[Other engines]
+
+    L1 --> M{Effects configured?}
+    L2 --> M
+    L3 --> M
+    L4 --> M
+    L5 --> M
+
+    M -- Yes --> N[Apply EQ / Reverb / Echo / Pitch]
+    M -- No --> O[Raw audio]
+    N --> P{Autosave ON?}
+    O --> P
+
+    P -- Yes --> Q[Save to outputs/ + metadata]
+    P -- No --> R([🔊 Audio player + status])
+    Q --> R
+
+    style A fill:#c8e6c9,stroke:#2e7d32
+    style R fill:#e1bee7,stroke:#6a1b9a
+    style F fill:#ffe0b2,stroke:#e65100
+    style K fill:#bbdefb,stroke:#1565c0
+```
+
+---
+
+## Conversation Mode — Pre-Formatted Script
+
+```mermaid
+flowchart TD
+    A([🎭 User pastes script]) --> B[Analyze Script button]
+    B --> C[parse_conversation_script]
+    C --> D[Split lines on first colon]
+    D --> E[Extract speaker names]
+
+    E --> F{Suspect names detected?}
+    F -- Yes --> G["⚠️ Warning: use AI Format for prose"]
+    F -- No --> H[Display Character Roster]
+    G --> H
+
+    H --> I[Per-speaker voice config]
+    I --> I1[Upload ref audio]
+    I --> I2[Select engine per speaker]
+    I --> I3[Set engine-specific params]
+
+    I1 --> J{Speaker profile?}
+    I2 --> J
+    I3 --> J
+    J -- Save --> K[on_save_speaker_profile]
+    J -- Load --> L[on_load_speaker_profile]
+    J -- Continue --> M[Edit lines in table editor]
+    K --> M
+    L --> I
+
+    M --> N[Generate Conversation button]
+    N --> O{Engine route}
+    O --> O1[generate_conversation_audio_simple]
+    O --> O2[generate_conversation_audio_kokoro]
+    O --> O3[generate_conversation_audio_kitten]
+    O --> O4[generate_conversation_audio_indextts2]
+
+    O1 --> P[Per-line TTS loop]
+    O2 --> P
+    O3 --> P
+    O4 --> P
+
+    P --> Q[apply_per_line_transform per line]
+    Q --> R[Generate audio segment]
+    R --> S[Insert gap / pause]
+    S --> T{More lines?}
+    T -- Yes --> Q
+    T -- No --> U[Concatenate all segments]
+    U --> V([🔊 Multi-speaker audio + metadata])
+
+    style A fill:#c8e6c9,stroke:#2e7d32
+    style V fill:#e1bee7,stroke:#6a1b9a
+    style G fill:#fff9c4,stroke:#f57f17
+    style N fill:#bbdefb,stroke:#1565c0
+```
+
+---
+
+## Conversation Mode — AI Format (Prose)
+
+```mermaid
+flowchart TD
+    A([🎭 User pastes prose text]) --> B[AI Format button]
+    B --> C[handle_ai_format_script]
+    C --> D[format_conversation_with_llm]
+    D --> E{LLM provider configured?}
+
+    E -- No --> F["❌ Error: configure LLM provider first"]
+    E -- Yes --> G[Send to LLM with system prompt]
+    G --> H[LLM extracts speakers + attributes dialogue]
+    H --> I[Return formatted Speaker: Text script]
+    I --> J[Update script textarea]
+    J --> K[Auto-trigger Analyze Script]
+    K --> L[parse_conversation_script]
+    L --> M[Display Character Roster]
+    M --> N["Continue with standard conversation flow ↑"]
+
+    style A fill:#c8e6c9,stroke:#2e7d32
+    style F fill:#ffcdd2,stroke:#c62828
+    style G fill:#ffe0b2,stroke:#e65100
+    style N fill:#e1bee7,stroke:#6a1b9a
+```
+
+---
+
+## Speaker Profile Management
+
+```mermaid
+flowchart TD
+    A([Speaker Profile Controls]) --> B{Action?}
+
+    B -- Save --> C[Enter profile name]
+    C --> D[Capture speaker_settings_state]
+    D --> E{Speakers have ref_audio?}
+    E -- Yes --> F[Copy audio to app_state/voices/]
+    E -- No --> G[Save settings only]
+    F --> G
+    G --> H[Write to speaker_profiles.json]
+    H --> I[Update dropdown choices]
+
+    B -- Load --> J[Select profile from dropdown]
+    J --> K[Read from speaker_profiles.json]
+    K --> L[Restore speaker_settings_state]
+    L --> M[Populate speaker panels 1-5]
+    M --> N[Set audio paths + ref texts]
+    N --> O([Speakers ready for generation])
+
+    B -- Delete --> P[Confirm deletion]
+    P --> Q[Remove from store]
+    Q --> R{Audio files in app_state/voices/?}
+    R -- Yes --> S[Delete orphaned audio files]
+    R -- No --> T[Update dropdown]
+    S --> T
+    T --> U([Profile removed])
+
+    style A fill:#c8e6c9,stroke:#2e7d32
+    style O fill:#e1bee7,stroke:#6a1b9a
+    style U fill:#e1bee7,stroke:#6a1b9a
+    style H fill:#bbdefb,stroke:#1565c0
+```
+
+---
+
+## eBook Audiobook Mode Diagram
+
+```mermaid
+flowchart TD
+    A([📚 Upload file]) --> B{File format?}
+    B --> B1[EPUB: extract_epub_content]
+    B --> B2[PDF: extract_pdf_content]
+    B --> B3[TXT: extract_text_content]
+    B --> B4[HTML: extract_html_content]
+
+    B1 --> C[Extracted text + chapter list]
+    B2 --> C
+    B3 --> C
+    B4 --> C
+
+    C --> D[Display chapter selection UI]
+    D --> E[User selects chapters]
+    E --> F[Configure generation params]
+    F --> F1[Chunk size: 300-800 chars]
+    F --> F2[Between-chunk pause]
+    F --> F3[Between-chapter pause]
+    F --> F4[Audio format + effects]
+
+    F1 --> G{VoxCPM engine?}
+    G -- Yes --> G1[Auto-reduce chunk to 350]
+    G -- No --> H[Keep configured chunk size]
+    G1 --> H
+
+    F2 --> H
+    F3 --> H
+    F4 --> H
+
+    H --> I[Split selected chapters into chunks]
+    I --> J[Generation Loop Start]
+
+    J --> K[Get next chunk]
+    K --> L[generate_unified_tts per chunk]
+    L --> M[Receive audio segment]
+    M --> N[Append to output list]
+    N --> O{New chapter boundary?}
+    O -- Yes --> P[Insert chapter pause]
+    O -- No --> Q[Insert chunk pause]
+    P --> R{More chunks?}
+    Q --> R
+    R -- Yes --> K
+    R -- No --> S[Concatenate all segments]
+
+    S --> T[Write to audiobooks/ directory]
+    T --> U([📖 Audiobook file + download link])
+
+    style A fill:#c8e6c9,stroke:#2e7d32
+    style U fill:#e1bee7,stroke:#6a1b9a
+    style L fill:#bbdefb,stroke:#1565c0
+```
+
+---
+
+## MCP Server Mode Diagram
+
+```mermaid
+flowchart TD
+    A([MCP Sidecar Startup]) --> B[create_mcp_server]
+    B --> C[Register 13 tools]
+    C --> D[create_http_app with FastAPI]
+    D --> E[initialize_security + token gen]
+    E --> F[uvicorn.run on host:port]
+    F --> G([Server listening via HTTP + SSE])
+
+    G --> H[Client sends tool call]
+    H --> I[Extract Bearer token]
+    I --> J{Token valid?}
+    J -- No --> K["401 Unauthorized + audit log"]
+    J -- Yes --> L{Which tool?}
+
+    L --> M1[list_engines]
+    L --> M2[get_engine_info]
+    L --> M3[list_voices]
+    L --> M4[synthesize]
+    L --> M5[submit_synthesis_job]
+    L --> M6[get_job_status]
+    L --> M7[cancel_job]
+    L --> M8[transform_text]
+    L --> M9[structure_conversation]
+    L --> M10[normalize_text]
+    L --> M11[list_llm_providers]
+    L --> M12[list_outputs]
+    L --> M13[get_app_version]
+
+    M4 --> N[generate_tts via tts_service]
+    M5 --> O[Enqueue to job_manager]
+    M8 --> P[apply_llm_narration_transform]
+    M9 --> Q[parse_conversation_script]
+
+    N --> R([JSON response to client])
+    O --> R
+    P --> R
+    Q --> R
+    M1 --> R
+    M2 --> R
+    M3 --> R
+    M6 --> R
+    M7 --> R
+    M10 --> R
+    M11 --> R
+    M12 --> R
+    M13 --> R
+
+    style A fill:#c8e6c9,stroke:#2e7d32
+    style G fill:#bbdefb,stroke:#1565c0
+    style K fill:#ffcdd2,stroke:#c62828
+    style R fill:#e1bee7,stroke:#6a1b9a
+```
+
+---
+
+## LLM Narration Transform Pipeline
+
+```mermaid
+flowchart TD
+    A([Text ready for transform]) --> B{LLM enabled?}
+    B -- No --> C[deterministic_normalize]
+    C --> D([Normalized text returned])
+
+    B -- Yes --> E[_resolve_provider]
+    E --> F[Resolve base_url + model_id]
+    F --> G[Build system prompt]
+    G --> G1["Mode: Minimal / Polish / Vivid"]
+    G --> G2["Locale + Style + Max tag density"]
+
+    G1 --> H[call_openai_compatible_chat]
+    G2 --> H
+
+    H --> I{API response?}
+    I -- Success --> J[Parse transformed text]
+    I -- Timeout --> K[Return source text + timeout warning]
+    I -- Auth error 401/403 --> L[Return source text + auth warning]
+    I -- Connection error --> M{allow_local_fallback?}
+
+    M -- Yes --> C
+    M -- No --> N[Return source text + error status]
+
+    J --> O([Transformed text for TTS engine])
+
+    style A fill:#c8e6c9,stroke:#2e7d32
+    style D fill:#e1bee7,stroke:#6a1b9a
+    style O fill:#e1bee7,stroke:#6a1b9a
+    style H fill:#ffe0b2,stroke:#e65100
+    style K fill:#fff9c4,stroke:#f57f17
+    style L fill:#ffcdd2,stroke:#c62828
+```
+
+---
+
+## Master Mode Decision Tree
+
+```mermaid
+flowchart TD
+    START([User opens Ultimate TTS Studio]) --> TAB{Which tab?}
+
+    TAB --> T1["📝 Text to Synthesize"]
+    TAB --> T2["🎭 Conversation Mode"]
+    TAB --> T3["📚 eBook to Audiobook"]
+    TAB --> T4["🔧 MCP Server"]
+
+    T1 --> S1[Single Narration Mode]
+    S1 --> S1a["Load preset → LLM transform → Engine → Effects → Output"]
+
+    T2 --> C1{Input type?}
+    C1 -- "Pre-formatted Speaker: Text" --> C2[Analyze Script → Roster → Generate]
+    C1 -- "Raw prose / story" --> C3[AI Format → LLM attribution → Analyze → Generate]
+    C2 --> C4[Save/Load speaker profile for reuse]
+    C3 --> C4
+
+    T3 --> E1[Upload → Extract → Select chapters → Chunk → Generate loop → Audiobook]
+
+    T4 --> M1[Sidecar: 13 tools via HTTP/SSE + Bearer auth]
+
+    style START fill:#c8e6c9,stroke:#2e7d32
+    style S1a fill:#e1bee7,stroke:#6a1b9a
+    style C4 fill:#e1bee7,stroke:#6a1b9a
+    style E1 fill:#e1bee7,stroke:#6a1b9a
+    style M1 fill:#e1bee7,stroke:#6a1b9a
+```
 
 ---
 
