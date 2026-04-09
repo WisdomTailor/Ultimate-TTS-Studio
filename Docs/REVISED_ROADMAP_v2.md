@@ -234,6 +234,48 @@ Code Copilot. Auth delta decision documented and accepted or escalated.
 
 ---
 
+### Lab Handover Intake (LM Studio Debug & Dev, 2026-04-10)
+
+**Source:** `WisdomTailor/my-project` commit `8d2011c` (Sprint 3 complete)  
+**Handover doc:** `Docs/HANDOVER_TTS_STUDIO.md` (external workspace)
+
+Triaged items from 3 sprints of LM Studio lab work. Items are categorized by priority and roadmap
+placement.
+
+#### Immediate (shipped with intake)
+
+| Item | Description | Status |
+|---|---|---|
+| Think-tag stripping | `strip_think_tags()` for Qwen3 model output cleanup | ✅ Shipped |
+| LLM sampling params | Lab-validated defaults (temp 0.25, top_p 0.85, repetition_penalty 1.08) | ✅ Shipped |
+
+#### Phase 4b Candidates
+
+| Item | Lab Reference | Description |
+|---|---|---|
+| batch_tts_prep | §1.2 | Automate V3 tag formatting via LLM with json_schema enforcement. Lab proved small models (Ministral-3B) can handle formatting if system prompt is precise. |
+| V3 protocol extraction | §3 | Extract "7 non-negotiable rules" and full V3 tagging protocol from lab preset audit into reusable reference doc. 6 refactoring actions identified (dedup, parameterize, strip HTML, split into composable layers). |
+| batch_writer | §1.1 | Script generation pipeline: structured inputs → LLM → stories/scripts. Lab proved batch pattern at 102 tok/s. |
+
+#### Phase 5 Candidates (gated)
+
+| Item | Lab Reference | Notes |
+|---|---|---|
+| Chained pipeline (Caption → Write → TTS) | §1.3 | Council: do NOT build monolithic pipeline. Use Agent Framework SDK with separate agent classes. |
+| Multi-Provider Smart Router | §1.4 | Local-first with cloud fallback. Premature until batch volume justifies routing complexity. |
+| Agent Framework migration | §2 | CaptionAgent / WriterAgent / TTSAgent architecture. Prerequisites: SDK install, Agent Inspector, eval datasets. |
+
+#### Performance Baselines (Reference)
+
+Lab-captured benchmarks for comparison (not roadmap items):
+
+- **Text gen (Qwen3-14B):** 30 tok/s (OpenAI SDK) → 61.3 tok/s (speculative decoding, +97%)
+- **Vision (qwen3-vl-8b):** 102 tok/s, 2.0s avg, 548 char captions
+- **VRAM rule:** 2 models loaded = optimal; 6 models = 3.2× degradation. Load/unload between stages.
+- **Sampling (TTS formatting):** temp 0.25, top_p 0.85, repeat_penalty 1.08
+
+---
+
 ## 4. Key Architectural Decisions
 
 ### Module Architecture (Current: End of Phase 4a)
