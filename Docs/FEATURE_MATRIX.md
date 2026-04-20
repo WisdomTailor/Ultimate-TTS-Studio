@@ -263,6 +263,13 @@ Storytelling/Cinematic, Podcast/Casual, Academic/Educational) further shapes the
 setting handles regional English conventions (spelling, date formats, honorifics). See
 [Section 5 of the User Guide](USER_GUIDE.md#5-ai-script-polish) for the full workflow.
 
+> **Scope note:** All three modes (Minimal, Polish, Vivid) — and all associated controls (Style,
+> Locale, Max Tag Density, System Prompt, Outcome Preset) — apply **only to single-text synthesis**.
+> Conversation Mode operations (AI Format, Cast Characters, Conversation Generate) each use isolated
+> LLM paths with hardcoded prompts or no LLM at all. See
+> [LLM-Narration-Transform-Guide.md § 6](LLM-Narration-Transform-Guide.md#61-ui-control--generation-mode-scope-matrix)
+> for the full control→mode scope matrix.
+
 ---
 
 ## 5. Audio Format Guidance

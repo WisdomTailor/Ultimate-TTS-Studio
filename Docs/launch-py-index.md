@@ -2,7 +2,7 @@
 
 This document is the required starting point for any agent or developer working on `app/launch.py`.
 
-`app/launch.py` is a 16,103-line monolith that combines runtime setup, engine orchestration,
+`app/launch.py` is a ~16,200-line monolith that combines runtime setup, engine orchestration,
 conversation generation, persistence helpers, LLM narration tooling, the full Gradio component tree,
 and all event wiring. Do not start editing by search alone. Read this index first, decide which
 layer you are changing, and then jump to the relevant symbols.
@@ -45,19 +45,18 @@ layer you are changing, and then jump to the relevant symbols.
 | Shared utilities and DSP helpers                 |   3279–3528 | Kokoro voice utilities, audio effect helpers                                                                                                                                                                     | voice list behavior, preprocessing, effect support                               | engine generation implementations and Audio Effects Studio                                           |
 | Engine generation implementations                |   3529–5088 | `generate_chatterbox_tts` at 3529·`generate_fish_speech_tts` at 3741·`generate_kokoro_tts` at 4155·`generate_indextts2_unified_tts` at 4647·`generate_f5_tts` at 4759·`get_voice_preset_choices` at 4930         | engine behavior, preset CRUD                                                     | unified dispatcher, autosave wrapper, UI controls for the engine                                     |
 | eBook to audiobook functions                     |   5089–5884 | `convert_ebook_to_audiobook`                                                                                                                                                                                     | eBook analysis, chapter selection, batch audiobook generation                    | engine selection, preset state, multi-engine path                                                    |
-| LLM narration transform (Gradio-facing plumbing) |   5885–6508 | `DEFAULT_LLM_NARRATION_SYSTEM_PROMPT` at 5885·`LLM_PROVIDER_CONFIGS` at 6109·`fetch_provider_models` at 6275·`on_llm_provider_change` at 6406 — **pure logic extracted to `narration_transform.py`**             | provider setup, model discovery, Gradio-side transform wiring                    | `narration_transform.py` for pure logic; narration transform accordion and wrapper argument ordering |
-| Unified generation and autosave wrapper          |   6509–7303 | `generate_unified_tts` at 6510·`generate_unified_tts_wrapped` at 7079·`autosave_generation_artifacts` at 6963                                                                                                    | top-level generation dispatch, autosave metadata, last-seed behavior             | generate button inputs, engine-specific parameter ordering, autosave persistence helpers             |
-| Gradio component tree                            |  7304–12344 | `create_gradio_interface` at 7305                                                                                                                                                                                | layout, labels, controls, tab structure, CSS/JS, visual UX                       | nested handlers starting at 12345 and related backend functions                                      |
-| Nested handlers and event wiring                 | 12345–16022 | `handle_load_*` from 12345·`handle_assistant_*` near 12600·`generate_btn.click(...)` at 13606                                                                                                                    | event regressions, control binding changes, handler return-shape fixes           | component declarations above and generation/storage helpers                                          |
-| Main entry point                                 | 16023–16103 | `if __name__ == "__main__":` at 16073·`demo.launch()`                                                                                                                                                            | startup and launch behavior                                                      | import/bootstrap block and `create_gradio_interface`                                                 |
+| LLM narration transform (Gradio-facing plumbing) |   6496–7135 | `DEFAULT_LLM_NARRATION_SYSTEM_PROMPT` at 6496·`LLM_PROVIDER_CONFIGS` at 6720·`fetch_provider_models` at 6901·`on_llm_provider_change` at 7032 — **pure logic extracted to `narration_transform.py`**             | provider setup, model discovery, Gradio-side transform wiring                    | `narration_transform.py` for pure logic; narration transform accordion and wrapper argument ordering |
+| Unified generation and autosave wrapper          |   7136–7930 | `generate_unified_tts` at 7136·`generate_unified_tts_wrapped` at 7705·`autosave_generation_artifacts` at ~7640                                                                                                    | top-level generation dispatch, autosave metadata, last-seed behavior             | generate button inputs, engine-specific parameter ordering, autosave persistence helpers             |
+| Gradio component tree                            |  7931–~15521 | `create_gradio_interface` at 7931                                                                                                                                                                                | layout, labels, controls, tab structure, CSS/JS, visual UX                       | nested handlers starting at ~15522 and related backend functions                                      |
+| Nested handlers and event wiring                 | ~15522–16607 | `handle_analyze_script` at 15522·`handle_ai_format_script` at 15778·`handle_cast_characters` at 15816·`handle_generate_conversation_advanced` at 15882·`generate_conversation_btn.click` at 16179                | event regressions, control binding changes, handler return-shape fixes           | component declarations above and generation/storage helpers                                          |
+| Main entry point                                 | 16608+ | `if __name__ == "__main__":` after handlers·`demo.launch()`                                                                                                                                                            | startup and launch behavior                                                      | import/bootstrap block and `create_gradio_interface`                                                 |
 
 ## UI Landmarks Inside `create_gradio_interface`
 
 Use these anchors when the change starts from a visible UI element.
 
-> **Note:** The line ranges below are approximate and have shifted since Phase 3 additions grew
-> `create_gradio_interface` significantly. Treat them as search guidance, not exact positions. All
-> landmarks are inside `create_gradio_interface` (7305–12344).
+> **Note:** The line ranges below are approximate. Treat them as search guidance, not exact positions. All
+> landmarks are inside `create_gradio_interface` (7931+).
 
 | Landmark                      | Approx. lines | Why it matters                                                           |
 | ----------------------------- | ------------: | ------------------------------------------------------------------------ |
@@ -99,11 +98,21 @@ Inspect these in order:
 
 1. `narration_transform.py` — constants, normalization helpers, provider logic, prompt assembly,
    transform functions
-2. `DEFAULT_LLM_NARRATION_SYSTEM_PROMPT` at launch.py:5885
-3. `LLM_PROVIDER_CONFIGS` at launch.py:6109
-4. `fetch_provider_models` at launch.py:6275 (delegates to `narration_transform.py`)
+2. `DEFAULT_LLM_NARRATION_SYSTEM_PROMPT` at launch.py:6496 (also mirrored in `narration_transform.py:47`)
+3. `LLM_PROVIDER_CONFIGS` at launch.py:6720
+4. `fetch_provider_models` at launch.py:6901 (delegates to `narration_transform.py`)
 5. narration transform UI controls in `create_gradio_interface`
 6. `generate_unified_tts_wrapped` input ordering
+
+> **Scope boundary:** Narration transform controls (Content Type, Transform Mode, Style, Locale,
+> System Prompt, Outcome Preset) only affect **single-text synthesis**. Conversation mode operations
+> (AI Format, Cast Characters, Conversation Generate) each have separate, isolated LLM paths —
+> see the full control→mode scope matrix in `Docs/LLM-Narration-Transform-Guide.md` § 6.
+
+> **Hidden engine addendum:** At generation time, `_build_llm_system_prompt()` in
+> `narration_transform.py:840` appends a per-engine addendum sourced from
+> `get_engine_prompt_addendum(tts_engine)` in `engine_script_profiles.py:734`. This addendum is
+> invisible in the UI and is added after the user-editable `llm_system_prompt` textbox value.
 
 ### If you are changing conversation mode
 
@@ -115,9 +124,11 @@ Inspect these in order:
 
 1. `conversation_logic.py` — parsing, speaker extraction, AI formatter, per-line transform
 2. the appropriate `generate_conversation_audio_*` function in launch.py (458–1984)
-3. `handle_analyze_script` in nested handlers (12345+)
-4. `handle_generate_conversation_advanced` at launch.py:14409
-5. `generate_conversation_btn.click(...)`
+3. `handle_analyze_script` in nested handlers (15522) — deterministic, no LLM call
+4. `handle_ai_format_script` at launch.py:15778 — uses **hardcoded** `CONVERSATION_FORMATTER_SYSTEM_PROMPT` from `conversation_logic.py:357`; not affected by the narration transform panel
+5. `handle_cast_characters` at launch.py:15816 — uses **hardcoded** `VOICE_CASTING_SYSTEM_PROMPT` from `narration_transform.py:70`; not affected by the narration transform panel
+6. `handle_generate_conversation_advanced` at launch.py:15882 — bypasses narration transform entirely; sends text directly to TTS
+7. `generate_conversation_btn.click(...)` at launch.py:16179
 
 ### If you are changing presets, autosave, or file persistence
 
