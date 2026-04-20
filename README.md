@@ -4,6 +4,25 @@ A Pinokio script for <https://github.com/SUP3RMASS1VE/Ultimate-TTS-Studio-SUP3R-
 
 ## Optional MCP Sidecar
 
+### What is the MCP Sidecar?
+
+The MCP sidecar (`mcp_sidecar.py`) is a **separate, optional** service that exposes TTS Studio's core features (generate speech, list voices/engines, narration transform, etc.) as MCP tools over an SSE endpoint. It runs in its own conda environment (`tts_mcp_env`), independent of the main app.
+
+### Who Uses It?
+
+| Consumer | How |
+|---|---|
+| **VS Code Copilot Chat** | Connects via `.vscode/mcp.json` so Copilot can call TTS functions directly from the editor |
+| **Other MCP-compatible AI agents** | Any agent that speaks MCP protocol can connect to the SSE endpoint |
+| **The MCP Sidecar UI** | Its own Gradio dashboard for testing MCP tools |
+
+### Do I Need It?
+
+- **If you're just using the TTS Studio web UI** (generating audio, using the assistant, narration transform, etc.) → **you don't need MCP at all.** The main `Start` button launches everything you need.
+- **If you want AI coding agents (like Copilot) to trigger TTS generation programmatically** → install and start MCP.
+
+> **TL;DR** — Just click **Start** in Pinokio. Skip the MCP buttons unless you're using Copilot or external AI tools to drive TTS generation.
+
 The default `Install` and `Start` flow now keeps MCP dependencies out of the main `app/tts_env`
 environment.
 
