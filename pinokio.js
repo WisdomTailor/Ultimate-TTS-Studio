@@ -103,7 +103,10 @@ module.exports = {
             items.push({
               icon: "fa-solid fa-shield-halved",
               text: "Verify MCP",
-              href: "mcp_verify.js?url={{encodeURIComponent(mcpLocal.url)}}",
+              href: "mcp_verify.js",
+              params: {
+                url: mcpLocal.url,
+              },
             });
           }
         } else if (mcpInstalled) {
@@ -161,7 +164,10 @@ module.exports = {
           items.push({
             icon: "fa-solid fa-shield-halved",
             text: "Verify MCP",
-            href: "mcp_verify.js?url={{encodeURIComponent(local.url)}}",
+            href: "mcp_verify.js",
+            params: {
+              url: local.url,
+            },
           });
         }
 

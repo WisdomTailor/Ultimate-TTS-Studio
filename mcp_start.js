@@ -36,7 +36,13 @@ module.exports = {
     {
       method: "local.set",
       params: {
-        mcp_url: "{{local.mcp_sse_url}}?token={{input.trim()}}",
+        mcp_token: "{{input.trim()}}",
+      },
+    },
+    {
+      method: "local.set",
+      params: {
+        mcp_url: "{{local.mcp_sse_url}}?token={{local.mcp_token}}",
       },
     },
     {
@@ -49,7 +55,7 @@ module.exports = {
               type: "sse",
               url: "{{local.mcp_sse_url}}",
               headers: {
-                Authorization: "Bearer {{input.trim()}}",
+                Authorization: "Bearer {{local.mcp_token}}",
               },
             },
           },
@@ -66,7 +72,7 @@ module.exports = {
               type: "sse",
               url: "{{local.mcp_sse_url}}",
               headers: {
-                Authorization: "Bearer {{input.trim()}}",
+                Authorization: "Bearer {{local.mcp_token}}",
               },
             },
           },
