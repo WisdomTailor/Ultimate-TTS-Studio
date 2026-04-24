@@ -229,6 +229,12 @@ Code Copilot. Auth delta decision documented and accepted or escalated.
 - Subtitle alignment
 - CI/CD pipeline integration
 - Asset manifests
+- **System-Wide Read Aloud Replacement** — hotkey + clipboard + fast-path engine integration.
+  Strategic review complete (2026-04-24). See
+  [`Docs/Read-Aloud-Strategic-Review.md`](./Read-Aloud-Strategic-Review.md) for full scope,
+  revised work items (WI-RA1..4), risk register, and implementation plan. Original brief at
+  `Docs/TTS Studio — System‑Wide Read Aloud Replacement.md` is preserved for traceability but
+  must not be implemented as-written. Estimated effort: 11–17 days across WI-RA1..3.
 
 **Without the entry criteria being met, Phase 5 items are NOT committed to.**
 
@@ -244,26 +250,26 @@ placement.
 
 #### Immediate (shipped with intake)
 
-| Item | Description | Status |
-|---|---|---|
-| Think-tag stripping | `strip_think_tags()` for Qwen3 model output cleanup | ✅ Shipped |
+| Item                | Description                                                             | Status     |
+| ------------------- | ----------------------------------------------------------------------- | ---------- |
+| Think-tag stripping | `strip_think_tags()` for Qwen3 model output cleanup                     | ✅ Shipped |
 | LLM sampling params | Lab-validated defaults (temp 0.25, top_p 0.85, repetition_penalty 1.08) | ✅ Shipped |
 
 #### Phase 4b Candidates
 
-| Item | Lab Reference | Description |
-|---|---|---|
-| batch_tts_prep | §1.2 | Automate V3 tag formatting via LLM with json_schema enforcement. Lab proved small models (Ministral-3B) can handle formatting if system prompt is precise. |
-| V3 protocol extraction | §3 | Extract "7 non-negotiable rules" and full V3 tagging protocol from lab preset audit into reusable reference doc. 6 refactoring actions identified (dedup, parameterize, strip HTML, split into composable layers). |
-| batch_writer | §1.1 | Script generation pipeline: structured inputs → LLM → stories/scripts. Lab proved batch pattern at 102 tok/s. |
+| Item                   | Lab Reference | Description                                                                                                                                                                                                        |
+| ---------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| batch_tts_prep         | §1.2          | Automate V3 tag formatting via LLM with json_schema enforcement. Lab proved small models (Ministral-3B) can handle formatting if system prompt is precise.                                                         |
+| V3 protocol extraction | §3            | Extract "7 non-negotiable rules" and full V3 tagging protocol from lab preset audit into reusable reference doc. 6 refactoring actions identified (dedup, parameterize, strip HTML, split into composable layers). |
+| batch_writer           | §1.1          | Script generation pipeline: structured inputs → LLM → stories/scripts. Lab proved batch pattern at 102 tok/s.                                                                                                      |
 
 #### Phase 5 Candidates (gated)
 
-| Item | Lab Reference | Notes |
-|---|---|---|
-| Chained pipeline (Caption → Write → TTS) | §1.3 | Council: do NOT build monolithic pipeline. Use Agent Framework SDK with separate agent classes. |
-| Multi-Provider Smart Router | §1.4 | Local-first with cloud fallback. Premature until batch volume justifies routing complexity. |
-| Agent Framework migration | §2 | CaptionAgent / WriterAgent / TTSAgent architecture. Prerequisites: SDK install, Agent Inspector, eval datasets. |
+| Item                                     | Lab Reference | Notes                                                                                                           |
+| ---------------------------------------- | ------------- | --------------------------------------------------------------------------------------------------------------- |
+| Chained pipeline (Caption → Write → TTS) | §1.3          | Council: do NOT build monolithic pipeline. Use Agent Framework SDK with separate agent classes.                 |
+| Multi-Provider Smart Router              | §1.4          | Local-first with cloud fallback. Premature until batch volume justifies routing complexity.                     |
+| Agent Framework migration                | §2            | CaptionAgent / WriterAgent / TTSAgent architecture. Prerequisites: SDK install, Agent Inspector, eval datasets. |
 
 #### Performance Baselines (Reference)
 
