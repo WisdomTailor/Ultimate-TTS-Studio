@@ -1,0 +1,32 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Validate agent frontmatter",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        ".github/scripts/validate_agent_frontmatter.py"
+      ],
+      "windows": {
+        "command": "python",
+        "args": [
+          ".github/scripts/validate_agent_frontmatter.py"
+        ]
+      },
+      "linux": {
+        "command": "python3",
+        "args": [
+          ".github/scripts/validate_agent_frontmatter.py"
+        ]
+      },
+      "osx": {
+        "command": "python3",
+        "args": [
+          ".github/scripts/validate_agent_frontmatter.py"
+        ]
+      },
+      "problemMatcher": []
+    }
+  ]
+}

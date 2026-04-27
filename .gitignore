@@ -36,6 +36,7 @@ VENV/
 .vscode/*
 !.vscode/mcp.json
 !.vscode/mcp.sample.json
+!.vscode/tasks.json
 .idea/
 *.swp
 *.swo

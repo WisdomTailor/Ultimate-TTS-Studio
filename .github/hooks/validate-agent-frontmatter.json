@@ -1,0 +1,13 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "type": "command",
+        "windows": "python .github/scripts/validate_agent_frontmatter.py --quiet",
+        "linux": "python3 .github/scripts/validate_agent_frontmatter.py --quiet",
+        "osx": "python3 .github/scripts/validate_agent_frontmatter.py --quiet",
+        "timeout": 20
+      }
+    ]
+  }
+}

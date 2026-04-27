@@ -14,7 +14,7 @@ tools:
   - web
   - browser
 
-agents: [*]
+agents: ["*"]
 ---
 
 # Global Agent Manager
