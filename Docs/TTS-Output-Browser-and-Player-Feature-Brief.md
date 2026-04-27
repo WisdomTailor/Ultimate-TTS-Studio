@@ -1,10 +1,9 @@
 # TTS Output Browser and Player Feature Brief
 
-**Date:** 2026-04-27
-**Compiled by:** Agent 08 (GitHub Copilot, GPT-5.4)
-**Source:** User-supplied chat transcript fragments
-**Status:** Consolidated planning brief, not yet implementation-approved
-**Scope:** Index historical Ultimate TTS Studio outputs, browse them in the UI, stream playback, and support job reload for reruns and future editing workflows.
+**Date:** 2026-04-27 **Compiled by:** Agent 08 (GitHub Copilot, GPT-5.4) **Source:** User-supplied
+chat transcript fragments **Status:** Consolidated planning brief, not yet implementation-approved
+**Scope:** Index historical Ultimate TTS Studio outputs, browse them in the UI, stream playback, and
+support job reload for reruns and future editing workflows.
 
 ---
 
@@ -42,6 +41,10 @@ the user changes direction:
 6. The system should support a browse-and-play workflow in the UI.
 7. A `.job.json` artifact should exist for each reloadable job.
 8. The indexer, not the UI, should generate `.job.json` automatically if it is missing.
+9. The overall storage root for this feature is `F:/TTS Output Files`.
+10. The canonical root for project output bundles is `F:/TTS Output Files/app_state_outputs/<project>`.
+11. The `default` project folder is the fallback location for jobs where the user did not explicitly
+  name a project in the UI.
 
 ---
 
@@ -127,10 +130,18 @@ These should be considered part of the current intended model if reload support 
 
 ## 7. Filesystem Model
 
-The transcript's improved target layout was:
+With the later user clarification applied, the intended storage structure is:
+
+- overall storage root: `F:/TTS Output Files`
+- output bundle root: `F:/TTS Output Files/app_state_outputs/<project>`
+- fallback project bucket for unnamed jobs: `F:/TTS Output Files/app_state_outputs/default`
+
+The bundle layout under each project is:
 
 ```text
 F:/TTS Output Files/
+├── outputs.db                       # proposed DB location
+├── ...                              # other future index/support files
 └── app_state_outputs/
     └── <project>/
         ├── audio/
@@ -147,6 +158,13 @@ F:/TTS Output Files/
 
 The stated design intent is that one generation becomes one bundle, and one bundle becomes one
 reloadable record.
+
+In practical terms, this means:
+
+- the parent root `F:/TTS Output Files` is the feature storage root for the database and related
+  support files
+- the per-project output content being indexed lives under `app_state_outputs/`
+- `default/` is not a special schema exception; it is simply the project bucket for unnamed UI jobs
 
 ### 7.1 Job Bundle Intent
 
@@ -289,6 +307,12 @@ The transcript proposed these commands:
 - `--force-rescan`
 - `--threads`
 
+With the clarified storage layout, the most likely interpretation is:
+
+- `--root` should point at `F:/TTS Output Files/app_state_outputs`
+- `--db` should point at a database path under `F:/TTS Output Files`, such as
+  `F:/TTS Output Files/outputs.db`
+
 ### 10.3 Operational Constraints
 
 - Python 3.10+
@@ -346,8 +370,8 @@ Returns streamed audio with the correct `Content-Type`.
 ### 12.1 MVP Components
 
 - search bar with filters
-- results list with columns for timestamp, project, preset, engine, seed, speaker, chunks, and
-  quick play
+- results list with columns for timestamp, project, preset, engine, seed, speaker, chunks, and quick
+  play
 - detail panel showing metadata, script previews, and quick actions
 - inline player with play, pause, seek, and volume
 - rescan action or last-indexed indicator
@@ -484,14 +508,16 @@ The architecture section says `.job.json` should live under a sibling `jobs/` di
 The later assistant-generated Python example instead writes the file beside the metadata file using
 the metadata stem with a `.job.json` suffix. Those are two different storage models.
 
-### 16.4 Root Path Example Conflicts
+### 16.4 Root Layout Clarified
 
-The transcript uses both of these as the scan root:
+This ambiguity has now been clarified by the user:
 
-- `F:/TTS Output Files`
-- `F:/TTS Output Files/app_state_outputs`
+- storage root for DB and related feature files: `F:/TTS Output Files`
+- root for indexed project outputs: `F:/TTS Output Files/app_state_outputs/<project>`
+- fallback unnamed-project location: `F:/TTS Output Files/app_state_outputs/default`
 
-The actual intended root for scanning needs to be made explicit.
+This should no longer be treated as an open question unless implementation reveals a different
+runtime contract.
 
 ### 16.5 Optional `serve` Mode vs Required Streaming Acceptance Test
 
@@ -524,9 +550,9 @@ defined.
 
 ### 16.10 Existing App Integration Boundary Is Unspecified
 
-The transcript defines an indexer, database, API, and UI wireframe, but it does not say where in
-the current Gradio app these features should live, how state should be persisted inside the repo,
-or whether the browser should be part of `app/launch.py`, a sidecar service, or another UI surface.
+The transcript defines an indexer, database, API, and UI wireframe, but it does not say where in the
+current Gradio app these features should live, how state should be persisted inside the repo, or
+whether the browser should be part of `app/launch.py`, a sidecar service, or another UI surface.
 
 ### 16.11 Sample Filenames May Not Be Exhaustive
 
@@ -538,11 +564,11 @@ chunked summary, so additional filename variants may exist outside this compiled
 
 ## 17. Recommended Next Step
 
-Before implementation, resolve the ambiguity list above and lock these four decisions explicitly:
+Before implementation, resolve the remaining ambiguity list above and lock these decisions
+explicitly:
 
-1. canonical scan root
-2. canonical `.job.json` storage location
-3. whether playback is direct local file access or mandatory API proxy
-4. where the feature lives in the current Ultimate TTS Studio architecture
+1. canonical `.job.json` storage location
+2. whether playback is direct local file access or mandatory API proxy
+3. where the feature lives in the current Ultimate TTS Studio architecture
 
 Once those are fixed, this brief can be used as the implementation handoff document.
