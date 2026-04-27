@@ -47,7 +47,7 @@ the user changes direction:
 11. The `default` project folder is the fallback location for jobs where the user did not explicitly
     name a project in the UI.
 12. When a file can be resolved during indexing, path fields should be stored as full normalized
-  forward-slash paths.
+    forward-slash paths.
 
 ---
 
@@ -525,6 +525,8 @@ The architecture section says `.job.json` should live under a sibling `jobs/` di
 The later assistant-generated Python example instead writes the file beside the metadata file using
 the metadata stem with a `.job.json` suffix. Those are two different storage models.
 
+Recommended default: use the sibling `jobs/` directory described in Section 17.
+
 ### 16.4 Root Layout Clarified
 
 This ambiguity has now been clarified by the user:
@@ -541,6 +543,9 @@ runtime contract.
 The transcript describes `serve` as optional, but also makes streaming playback endpoint behavior a
 hard acceptance criterion. If streaming is required for acceptance, `serve` is functionally part of
 the MVP unless the UI will read local files directly.
+
+Recommended default: implement a local backend playback proxy as part of the MVP, as described in
+Section 17.
 
 ### 16.6 Manual Audio Path Representation
 
@@ -577,6 +582,9 @@ The transcript defines an indexer, database, API, and UI wireframe, but it does 
 current Gradio app these features should live, how state should be persisted inside the repo, or
 whether the browser should be part of `app/launch.py`, a sidecar service, or another UI surface.
 
+Recommended default: attach the feature to the main Gradio app in `app/launch.py` and keep the
+indexer/storage logic in helper modules, as described in Section 17.
+
 ### 16.11 Sample Filenames May Not Be Exhaustive
 
 The original transcript reference says the user would supply the full chat transcript as the
@@ -585,13 +593,104 @@ chunked summary, so additional filename variants may exist outside this compiled
 
 ---
 
-## 17. Recommended Next Step
+## 17. Recommended Implementation Defaults
 
-Before implementation, resolve the remaining ambiguity list above and lock these decisions
-explicitly:
+The current repository already has three important anchors:
 
-1. canonical `.job.json` storage location
-2. whether playback is direct local file access or mandatory API proxy
-3. where the feature lives in the current Ultimate TTS Studio architecture
+- `app/launch.py` owns output storage settings, autosave flow, the main Gradio UI, and event wiring
+- `autosave_generation_artifacts` already sits on the main generation path
+- the existing `Jobs` tab covers runtime queue state, which is adjacent in concept but distinct from
+  historical output browsing
 
-Once those are fixed, this brief can be used as the implementation handoff document.
+Given that structure, the recommended defaults for implementation are:
+
+### 17.1 Canonical `.job.json` Location
+
+Use the sibling `jobs/` directory inside each project bundle:
+
+```text
+F:/TTS Output Files/app_state_outputs/<project>/jobs/<project>_<preset>_<timestamp>.job.json
+```
+
+Rationale:
+
+- it matches the bundle layout already captured in this brief
+- it keeps reload state separate from authoritative generation metadata in `meta/`
+- it gives the feature room to grow into edit history, UI state snapshots, and rerun parameters
+  without overloading the autosave metadata schema
+- it avoids coupling reload semantics to the metadata file naming or placement rules
+
+Working contract:
+
+- `meta/*.json` remains the authoritative record of what was generated
+- `jobs/*.job.json` becomes the authoritative reload envelope for the UI
+- if `jobs/*.job.json` is missing, the indexer should generate it from metadata plus discovered
+  script and audio paths
+
+### 17.2 Playback Strategy for MVP
+
+Use a local backend playback proxy endpoint for MVP rather than direct file access.
+
+Rationale:
+
+- the current product is a browser-based Gradio UI, so direct `file://` access is brittle and not a
+  good baseline
+- a proxy endpoint keeps path validation server-side and avoids exposing arbitrary raw filesystem
+  paths to the browser
+- it aligns with the existing transcript acceptance test requiring HTTP 200 streaming behavior
+- it preserves a clean path to future auth or policy checks without changing the UI contract later
+
+Working contract:
+
+- playback should be local-only by default
+- the endpoint should only serve files under `F:/TTS Output Files/app_state_outputs`
+- the UI should bind to record IDs or validated server paths, not naked browser filesystem paths
+
+### 17.3 Feature Attachment Point in the Current App
+
+Attach the browser/player UI to the main Gradio application in `app/launch.py` and keep the indexing
+and storage logic in helper modules under `app/`.
+
+Rationale:
+
+- `app/launch.py` already owns output storage settings and autosave behavior
+- the current UI already has a `Jobs` tab and right-rail output surface, so historical output
+  browsing belongs with the main app rather than in the MCP sidecar
+- the MCP sidecar is the wrong abstraction for this MVP because this feature is primarily a local UI
+  and storage workflow, not an external tool surface
+- extracting indexing/query logic into helper modules keeps `launch.py` from taking on another large
+  storage implementation directly
+
+Recommended shape:
+
+- add a new history-oriented UI surface in the main app, preferably a dedicated `History` or
+  `Library` tab adjacent to `Jobs`
+- keep runtime queue state in `Jobs` and persisted output browsing in the new history surface
+- put scan, query, and bundle-building helpers in new `app/` modules rather than embedding them
+  deeply inside `launch.py`
+
+### 17.4 Practical File Split
+
+If implementation starts in this repository as it exists today, the most pragmatic split is:
+
+- UI/event wiring: `app/launch.py`
+- index/query logic: new helper module under `app/`
+- schema or migration asset: either under `app/` or `Docs/`-adjacent implementation folders,
+  depending on how the coding task is finally scoped
+- playback proxy: local route attached to the main app surface, not the MCP sidecar
+
+---
+
+## 18. Recommended Next Step
+
+This brief now has recommended defaults for the three largest unresolved decisions.
+
+The next useful implementation step is to turn those defaults into a task-scoped build brief with:
+
+1. an explicit file plan for the repo as it exists today
+2. a minimal schema draft aligned to the `jobs/` decision
+3. a small API contract for the local playback proxy
+4. a UI placement decision such as `History` tab vs right-rail panel
+
+At that point, the feature can move from planning into implementation without reopening the main
+architecture questions.
