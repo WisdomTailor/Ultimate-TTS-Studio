@@ -42,9 +42,12 @@ the user changes direction:
 7. A `.job.json` artifact should exist for each reloadable job.
 8. The indexer, not the UI, should generate `.job.json` automatically if it is missing.
 9. The overall storage root for this feature is `F:/TTS Output Files`.
-10. The canonical root for project output bundles is `F:/TTS Output Files/app_state_outputs/<project>`.
+10. The canonical root for project output bundles is
+    `F:/TTS Output Files/app_state_outputs/<project>`.
 11. The `default` project folder is the fallback location for jobs where the user did not explicitly
-  name a project in the UI.
+    name a project in the UI.
+12. When a file can be resolved during indexing, path fields should be stored as full normalized
+  forward-slash paths.
 
 ---
 
@@ -126,6 +129,10 @@ The later architecture discussion added two more fields:
 
 These should be considered part of the current intended model if reload support is implemented.
 
+Implementation default for this brief: path-bearing fields should use full normalized paths when the
+indexer can resolve the actual file location. Basename-only transcript examples are useful for
+historical reference, but they should not override the normalized storage convention.
+
 ---
 
 ## 7. Filesystem Model
@@ -165,6 +172,10 @@ In practical terms, this means:
   support files
 - the per-project output content being indexed lives under `app_state_outputs/`
 - `default/` is not a special schema exception; it is simply the project bucket for unnamed UI jobs
+
+The current folder snapshot also shows sibling folders such as `audiobooks/` and `outputs/` under
+`F:/TTS Output Files`. Those may matter later, but this brief should treat `app_state_outputs/` as
+the current indexing scope unless the feature is explicitly expanded.
 
 ### 7.1 Job Bundle Intent
 
@@ -212,6 +223,9 @@ Intended behavior:
 - keep the file path as `manual_audio_path`
 - infer engine only if it is safely derivable
 - prefer metadata JSON over filename heuristics when both exist
+
+If the file is discoverable at scan time, the preferred DB representation for `manual_audio_path` is
+the full normalized path rather than a basename-only string.
 
 #### Autosave Bundle Root
 
@@ -307,7 +321,7 @@ The transcript proposed these commands:
 - `--force-rescan`
 - `--threads`
 
-With the clarified storage layout, the most likely interpretation is:
+With the clarified storage layout, the implementation defaults for this brief are:
 
 - `--root` should point at `F:/TTS Output Files/app_state_outputs`
 - `--db` should point at a database path under `F:/TTS Output Files`, such as
@@ -432,7 +446,7 @@ The transcript also proposed a future workflow, not MVP, for:
 The transcript gave these explicit acceptance targets:
 
 1. A sample record should exist with `timestamp = "20260425_042128"`.
-2. That sample should have `manual_audio_path = "fish_speech_output_20260425_042121.wav"`.
+2. That sample should resolve to the manual audio file `fish_speech_output_20260425_042121.wav`.
 3. Query by `seed` should return the expected row.
 4. Playback endpoint should return HTTP 200 and stream the audio file.
 
@@ -468,6 +482,9 @@ The transcript's sample verification row was:
 
 This example is preserved verbatim from the transcript for verification reference.
 
+Implementation note: for the actual DB representation, `manual_audio_path` should be stored as a
+full normalized path when the file location is known.
+
 ---
 
 ## 15. Transcript-Suggested Timeline
@@ -480,7 +497,7 @@ The transcript suggested this rough implementation sequence:
 
 ---
 
-## 16. Areas of Confusion or Clarification Needed
+## 16. Areas of Confusion, Clarification, or Implementation Notes
 
 The transcript contains several ambiguities and internal conflicts that should be resolved before
 implementation starts.
@@ -525,10 +542,16 @@ The transcript describes `serve` as optional, but also makes streaming playback 
 hard acceptance criterion. If streaming is required for acceptance, `serve` is functionally part of
 the MVP unless the UI will read local files directly.
 
-### 16.6 Manual Audio Path Format Is Inconsistent
+### 16.6 Manual Audio Path Representation
 
-The sample row stores `manual_audio_path` as a bare filename while autosave paths are stored as full
-absolute normalized paths. It is unclear whether manual paths should also be stored as full paths.
+The transcript sample row stores `manual_audio_path` as a bare filename while autosave paths are
+stored as full absolute normalized paths.
+
+Recommended implementation default for this brief:
+
+- if the indexer can resolve the actual file location, store `manual_audio_path` as a full
+  normalized path
+- treat basename-only transcript values as historical shorthand, not as the preferred DB encoding
 
 ### 16.7 Engine Inference Rule Is Ambiguous
 
