@@ -39,6 +39,11 @@ Produce a publication-quality documentation suite that makes every user feel:
 3. **"I know what to try next."** — Clear next steps, never a dead end.
 4. **"This was made for me."** — Warm, human tone, not a technical manual.
 
+## Missing Capability Rule
+
+- If the task requires a capability or tool outside your assigned bundle, stop, state the blocker,
+  and hand the task back to Agent 08 with the missing capability named explicitly.
+
 ## Chain of Command
 
 ```

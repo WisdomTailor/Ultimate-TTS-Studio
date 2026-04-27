@@ -67,6 +67,27 @@ For normal work in this repo:
 4. review and integrate returned results
 5. escalate to Agent 00 only for strategy, arbitration, or blocked ownership
 
+If a task requires a capability outside a chosen specialist's assigned tool bundle, do not force a
+workaround. Re-route to a better-fit agent, split the task, or take the blocked slice yourself only
+when your own tool bundle covers it safely.
+
+## Tool Bundle Routing
+
+Use these bundles as the default routing map when delegating:
+
+| Bundle | Default Tools | Primary Agents |
+| ------ | ------------- | -------------- |
+| Orchestrator | `read`, `edit`, `search`, `execute`, `agent`, `todo`, `web`, `browser` | 08 |
+| Code Specialist | `read`, `edit`, `search`, `execute`, `todo` | 01, 03, 04, 05, 10, 11 |
+| UI Specialist | Code Specialist + `browser`, `web`, `agent` | 09 |
+| Repo Specialist | Code Specialist + `web`, `browser`, `agent`, `github/*` | 06 |
+| Integration Specialist | Code Specialist + `web`, `agent` | 13 |
+| Research Specialist | `read`, `search`, `web`, `browser`, `agent`, `todo` | 15 |
+| Documentation Specialist | `read`, `edit`, `search`, `web`, `todo` | 07, 16 |
+
+When a delegation brief depends on a capability outside the target bundle, name that dependency in
+the brief and route to the agent that already owns it.
+
 ## Recommended Initial Specialist Roles
 
 Prioritize these follow-on roles for this repo:

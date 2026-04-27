@@ -2,44 +2,62 @@
 description:
   "Global Chief Project Manager — universal authority over project strategy, architecture,
   prioritisation, quality signoff, and agent governance for ANY workspace. Discovers project context
-  dynamically, bootstraps agent fleets with Agent 08, and runs projects end-to-end. Model:  if available Kimi-K2.6 or MoonshotAI: Kimi K2.6 when not. Use when: new project setup, strategic decisions, architecture reviews, multi-sprint
+  dynamically, bootstraps agent fleets with Agent 08, and runs projects end-to-end. Model: Kimi-K2.6 with GPT-5.4 fallback. Use when: new project setup, strategic decisions, architecture reviews, multi-sprint
   planning, risk assessment, cross-domain signoff, escalated blockers, roadmap changes, or any
   decision requiring highest judgment."
-model: "MoonshotAI: Kimi K2.6" or "Kimi-K2.6" "gpt-5.4" if Kimi-K2.6 unavailable
+model:
+  - "Kimi-K2.6"
+  - "GPT-5.4"
 
 tools:
-  vscode, execute, read, agent, edit, search, web, browser, 'github/*', 'microsoft/markitdown/*',
-  'azure-mcp/*', 'gitkraken/*', 'pylance-mcp-server/*',
-  vscode.mermaid-chat-features/renderMermaidDiagram, github.vscode-pull-request-github/issue_fetch,
-  github.vscode-pull-request-github/labels_fetch,
-  github.vscode-pull-request-github/notification_fetch, github.vscode-pull-request-github/doSearch,
-  github.vscode-pull-request-github/activePullRequest,
-  github.vscode-pull-request-github/pullRequestStatusChecks,
-  github.vscode-pull-request-github/openPullRequest,
-  ms-azuretools.vscode-azureresourcegroups/azureActivityLog,
-  ms-python.python/getPythonEnvironmentInfo, ms-python.python/getPythonExecutableCommand,
-  ms-python.python/installPythonPackage, ms-python.python/configurePythonEnvironment,
-  ms-windows-ai-studio.windows-ai-studio/aitk_get_agent_code_gen_best_practices,
-  ms-windows-ai-studio.windows-ai-studio/aitk_get_ai_model_guidance,
-  ms-windows-ai-studio.windows-ai-studio/aitk_get_agent_model_code_sample,
-  ms-windows-ai-studio.windows-ai-studio/aitk_get_tracing_code_gen_best_practices,
-  ms-windows-ai-studio.windows-ai-studio/aitk_get_evaluation_code_gen_best_practices,
-  ms-windows-ai-studio.windows-ai-studio/aitk_convert_declarative_agent_to_code,
-  ms-windows-ai-studio.windows-ai-studio/aitk_evaluation_agent_runner_best_practices,
-  ms-windows-ai-studio.windows-ai-studio/aitk_evaluation_planner,
-  ms-windows-ai-studio.windows-ai-studio/aitk_get_custom_evaluator_guidance,
-  ms-windows-ai-studio.windows-ai-studio/check_panel_open,
-  ms-windows-ai-studio.windows-ai-studio/get_table_schema,
-  ms-windows-ai-studio.windows-ai-studio/data_analysis_best_practice,
-  ms-windows-ai-studio.windows-ai-studio/read_rows,
-  ms-windows-ai-studio.windows-ai-studio/read_cell,
-  ms-windows-ai-studio.windows-ai-studio/export_panel_data,
-  ms-windows-ai-studio.windows-ai-studio/get_trend_data,
-  ms-windows-ai-studio.windows-ai-studio/aitk_list_foundry_models,
-  ms-windows-ai-studio.windows-ai-studio/aitk_agent_as_server,
-  ms-windows-ai-studio.windows-ai-studio/aitk_add_agent_debug,
-  ms-windows-ai-studio.windows-ai-studio/aitk_usage_guidance,
-  ms-windows-ai-studio.windows-ai-studio/aitk_gen_windows_ml_web_demo, todo
+  - vscode
+  - execute
+  - read
+  - agent
+  - edit
+  - search
+  - web
+  - browser
+  - "github/*"
+  - "microsoft/markitdown/*"
+  - "azure-mcp/*"
+  - "gitkraken/*"
+  - "pylance-mcp-server/*"
+  - vscode.mermaid-chat-features/renderMermaidDiagram
+  - github.vscode-pull-request-github/issue_fetch
+  - github.vscode-pull-request-github/labels_fetch
+  - github.vscode-pull-request-github/notification_fetch
+  - github.vscode-pull-request-github/doSearch
+  - github.vscode-pull-request-github/activePullRequest
+  - github.vscode-pull-request-github/pullRequestStatusChecks
+  - github.vscode-pull-request-github/openPullRequest
+  - ms-azuretools.vscode-azureresourcegroups/azureActivityLog
+  - ms-python.python/getPythonEnvironmentInfo
+  - ms-python.python/getPythonExecutableCommand
+  - ms-python.python/installPythonPackage
+  - ms-python.python/configurePythonEnvironment
+  - ms-windows-ai-studio.windows-ai-studio/aitk_get_agent_code_gen_best_practices
+  - ms-windows-ai-studio.windows-ai-studio/aitk_get_ai_model_guidance
+  - ms-windows-ai-studio.windows-ai-studio/aitk_get_agent_model_code_sample
+  - ms-windows-ai-studio.windows-ai-studio/aitk_get_tracing_code_gen_best_practices
+  - ms-windows-ai-studio.windows-ai-studio/aitk_get_evaluation_code_gen_best_practices
+  - ms-windows-ai-studio.windows-ai-studio/aitk_convert_declarative_agent_to_code
+  - ms-windows-ai-studio.windows-ai-studio/aitk_evaluation_agent_runner_best_practices
+  - ms-windows-ai-studio.windows-ai-studio/aitk_evaluation_planner
+  - ms-windows-ai-studio.windows-ai-studio/aitk_get_custom_evaluator_guidance
+  - ms-windows-ai-studio.windows-ai-studio/check_panel_open
+  - ms-windows-ai-studio.windows-ai-studio/get_table_schema
+  - ms-windows-ai-studio.windows-ai-studio/data_analysis_best_practice
+  - ms-windows-ai-studio.windows-ai-studio/read_rows
+  - ms-windows-ai-studio.windows-ai-studio/read_cell
+  - ms-windows-ai-studio.windows-ai-studio/export_panel_data
+  - ms-windows-ai-studio.windows-ai-studio/get_trend_data
+  - ms-windows-ai-studio.windows-ai-studio/aitk_list_foundry_models
+  - ms-windows-ai-studio.windows-ai-studio/aitk_agent_as_server
+  - ms-windows-ai-studio.windows-ai-studio/aitk_add_agent_debug
+  - ms-windows-ai-studio.windows-ai-studio/aitk_usage_guidance
+  - ms-windows-ai-studio.windows-ai-studio/aitk_gen_windows_ml_web_demo
+  - todo
 
 agents:
   - 08-head-of-agents

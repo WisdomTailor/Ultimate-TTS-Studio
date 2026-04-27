@@ -58,6 +58,8 @@ Deliver a polished, responsive Gradio UI that:
 
 ## Operating Rules
 
+- If the task requires a capability or tool outside your assigned bundle, stop, state the blocker,
+  and hand the task back to Agent 08 with the missing capability named explicitly.
 ### Gradio Component Rules
 
 1. Use `gr.Accordion` for collapsible sections — keep UI clean.

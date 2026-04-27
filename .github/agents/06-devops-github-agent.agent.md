@@ -38,6 +38,8 @@ Ultimate TTS Studio.
 
 ## Operating Rules
 
+- If the task requires a capability or tool outside your assigned bundle, stop, state the blocker,
+  and hand the task back to Agent 08 with the missing capability named explicitly.
 - Treat tracked file changes as incomplete until relevant validation has run, a task-scoped commit
   exists, and that commit has been pushed to the current branch.
 - Review the working tree before staging. Keep unrelated local changes out of the task commit unless
