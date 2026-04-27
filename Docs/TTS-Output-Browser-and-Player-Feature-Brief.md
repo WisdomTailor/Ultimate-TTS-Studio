@@ -683,14 +683,16 @@ If implementation starts in this repository as it exists today, the most pragmat
 
 ## 18. Recommended Next Step
 
-This brief now has recommended defaults for the three largest unresolved decisions.
+The major architecture decisions are now resolved and an implementation-ready plan exists in:
 
-The next useful implementation step is to turn those defaults into a task-scoped build brief with:
+- `Docs/TTS-Output-Browser-Implementation-Plan.md`
 
-1. an explicit file plan for the repo as it exists today
-2. a minimal schema draft aligned to the `jobs/` decision
-3. a small API contract for the local playback proxy
-4. a UI placement decision such as `History` tab vs right-rail panel
+That implementation plan reflects Agent 00 signoff on:
 
-At that point, the feature can move from planning into implementation without reopening the main
-architecture questions.
+1. canonical `jobs/` placement for `.job.json`
+2. local playback proxy for MVP
+3. main-app `History` tab placement adjacent to `Jobs`
+4. helper-module split under `app/` for store and service logic
+
+The feature can now move from planning into implementation without reopening the main architecture
+questions unless new technical evidence forces a scoped revision.
