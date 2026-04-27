@@ -53,7 +53,7 @@ creative workflow state, and export packaging.
 When activated in this repo:
 
 1. Read `README.md`, `AGENTS.md`, and the docs in `Docs/`.
-2. Create or update the specialist agent fleet under `.github/agents/agents/`.
+2. Create or update the specialist agent fleet under `.github/agents/`.
 3. Keep scope aligned to Ultimate TTS Studio as an orchestration product.
 4. Report the fleet summary back to Agent 00.
 
@@ -75,18 +75,47 @@ when your own tool bundle covers it safely.
 
 Use these bundles as the default routing map when delegating:
 
-| Bundle | Default Tools | Primary Agents |
-| ------ | ------------- | -------------- |
-| Orchestrator | `read`, `edit`, `search`, `execute`, `agent`, `todo`, `web`, `browser` | 08 |
-| Code Specialist | `read`, `edit`, `search`, `execute`, `todo` | 01, 03, 04, 05, 10, 11 |
-| UI Specialist | Code Specialist + `browser`, `web`, `agent` | 09 |
-| Repo Specialist | Code Specialist + `web`, `browser`, `agent`, `github/*` | 06 |
-| Integration Specialist | Code Specialist + `web`, `agent` | 13 |
-| Research Specialist | `read`, `search`, `web`, `browser`, `agent`, `todo` | 15 |
-| Documentation Specialist | `read`, `edit`, `search`, `web`, `todo` | 07, 16 |
+| Bundle                   | Default Tools                                                          | Primary Agents         |
+| ------------------------ | ---------------------------------------------------------------------- | ---------------------- |
+| Orchestrator             | `read`, `edit`, `search`, `execute`, `agent`, `todo`, `web`, `browser` | 08                     |
+| Code Specialist          | `read`, `edit`, `search`, `execute`, `todo`                            | 01, 03, 04, 05, 10, 11 |
+| UI Specialist            | Code Specialist + `browser`, `web`, `agent`                            | 09                     |
+| Repo Specialist          | Code Specialist + `web`, `browser`, `agent`, `github/*`                | 06                     |
+| Integration Specialist   | Code Specialist + `web`, `agent`                                       | 13                     |
+| Research Specialist      | `read`, `search`, `web`, `browser`, `agent`, `todo`                    | 15                     |
+| Documentation Specialist | `read`, `edit`, `search`, `web`, `todo`                                | 07, 16                 |
 
 When a delegation brief depends on a capability outside the target bundle, name that dependency in
 the brief and route to the agent that already owns it.
+
+## Enterprise Baseline For New Repos
+
+For new user-owned repos, use this as the default starting point unless repo-local facts require a
+different model:
+
+- Agent 08 owns the routing matrix, tool-bundle map, and capability registry.
+- Agent 08 is the default authority for assigning or changing specialist bundles.
+- Specialists receive the minimum tool surface needed for their domain.
+- Missing capability is resolved by rerouting, splitting work, temporarily absorbing the blocked
+  slice, or proposing a bundle update or new specialist.
+- Repo-local constraints override enterprise defaults when they conflict.
+
+This is a reusable policy baseline, not a requirement to copy this repo's exact role taxonomy into
+every new project.
+
+### Capability-Gap Handling
+
+- Do not force workarounds when a specialist lacks a needed capability.
+- Prefer rerouting to an existing better-fit agent before widening a specialist bundle.
+- If repeated tasks bounce for the same missing capability, update the routing map or propose a new
+  specialist instead of normalizing the bounce-back.
+- Escalate structural routing or ownership gaps to Agent 00, but keep routine routing disputes at
+  Agent 08.
+
+### Light-Mode Exception
+
+- Small repos do not need the full orchestration tax; a lighter Agent 08-centric setup is allowed
+  when specialist overhead exceeds the work.
 
 ## Recommended Initial Specialist Roles
 
