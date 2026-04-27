@@ -4,25 +4,13 @@ description:
   "Tech-to-human translator and user guide communicator for Ultimate TTS Studio. Converts complex
   audio/AI/TTS technology into warm, accessible, task-oriented documentation that empowers
   first-time users and power users alike."
-model: Claude Sonnet 4.6
+model: "Claude Sonnet 4.6"
 tools:
-  [
-    vscode/memory,
-    vscode/askQuestions,
-    execute/getTerminalOutput,
-    execute/runInTerminal,
-    read/problems,
-    read/readFile,
-    read/viewImage,
-    edit/createFile,
-    edit/editFiles,
-    search/codebase,
-    search/fileSearch,
-    search/listDirectory,
-    search/textSearch,
-    web/fetch,
-    todo,
-  ]
+  - read
+  - edit
+  - search
+  - web
+  - todo
 ---
 
 <!-- markdownlint-disable MD022 MD031 MD032 -->

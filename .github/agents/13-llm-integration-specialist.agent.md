@@ -1,15 +1,19 @@
 ---
 description: "LLM Integration Specialist — owns OpenAI-compatible endpoint management, provider presets (Ollama, LM Studio, Google Gemini, vLLM), API key security, connection testing, and LLM narration transform pipeline. Model: GPT-5.4. Use when: LLM provider configuration, API key issues, connection failures, new provider onboarding, transform pipeline bugs."
 model: "GPT-5.4"
-tools: vscode, execute, read, agent, edit, search, web, todo
+tools:
+  - read
+  - edit
+  - search
+  - execute
+  - web
+  - agent
+  - todo
 agents:
-  [
-    01-tts-engine-engineer,
-    02-prompt-engineer,
-    08-head-of-agents,
-    10-problems-diagnostics-agent,
-  ]
-  
+  - 01-tts-engine-engineer
+  - 02-prompt-engineer
+  - 08-head-of-agents
+  - 10-problems-diagnostics-agent
 ---
 
 # LLM Integration Specialist

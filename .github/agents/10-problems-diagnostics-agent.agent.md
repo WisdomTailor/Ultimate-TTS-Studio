@@ -1,6 +1,6 @@
 ---
 description: "Problems & Diagnostics Agent — monitors VS Code Problems panel, triages errors/warnings, applies targeted fixes, and validates Python syntax across all project files. Model: GPT-5.4. Use when: compile errors, lint warnings, syntax errors, import failures, indentation issues, runtime crashes, log analysis."
-model: "GPT-5.3-Codex" or "GPT-5.4"
+model: "GPT-5.4"
 tools: "search, edit, execute, read, todo, ms-python.python/getPythonEnvironmentInfo, ms-python.python/getPythonExecutableCommand, ms-python.python/installPythonPackage, ms-python.python/configurePythonEnvironment"
 ---
 

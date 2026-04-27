@@ -6,13 +6,15 @@ description:
   hygiene, branch or release tasks, CI workflow updates, Pinokio launcher maintenance."
 model: "GPT-5.4"
 tools:
-  vscode, execute, read, edit, search, web, browser, azure-mcp/search, 'github/*',
-  'microsoft/markitdown/*', 'gitkraken/*', 'pylance-mcp-server/*',
-  github.vscode-pull-request-github/issue_fetch, github.vscode-pull-request-github/labels_fetch,
-  github.vscode-pull-request-github/notification_fetch, github.vscode-pull-request-github/doSearch,
-  github.vscode-pull-request-github/activePullRequest,
-  github.vscode-pull-request-github/pullRequestStatusChecks,
-  github.vscode-pull-request-github/openPullRequest
+  - read
+  - edit
+  - search
+  - execute
+  - web
+  - browser
+  - agent
+  - todo
+  - "github/*"
 ---
 
 # DevOps / GitHub Agent

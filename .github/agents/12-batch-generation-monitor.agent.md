@@ -1,17 +1,18 @@
 ---
 description: "Batch Generation Monitor — monitors long-running TTS generation jobs (eBook audiobooks, batch conversation), tracks progress, detects failures, and provides status reporting. Model: GPT-5.4. Use when: eBook generation monitoring, batch progress tracking, failure detection, resource monitoring during long generations."
 model: "GPT-5.4"
-tools: vscode, execute, read, agent, edit, search, todo, ms-python.python/getPythonEnvironmentInfo, ms-python.python/getPythonExecutableCommand
+tools:
+  - read
+  - execute
+  - search
+  - agent
+  - todo
 agents:
-  [
-    08-head-of-agents,
-    09-gradio-ui-specialist,
-    08-head-of-agents,
-    09-gradio-ui-specialist,
-    10-problems-diagnostics-agent,
-    01-tts-engine-engineer,
-    07-documentation-agent,
-  ]
+  - 08-head-of-agents
+  - 09-gradio-ui-specialist
+  - 10-problems-diagnostics-agent
+  - 01-tts-engine-engineer
+  - 07-documentation-agent
 ---
 
 # Batch Generation Monitor

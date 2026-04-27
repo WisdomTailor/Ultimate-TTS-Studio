@@ -1,7 +1,13 @@
 ---
 description: "Documentation Steward — owns all documentation lifecycle: README, guides, API docs, roadmap, agent file consistency, and user-facing help content for Ultimate TTS Studio. Model: Claude Haiku 4.5. Use when: README updates, docs audit, guide writing, API documentation, broken links, documentation restructuring."
-model: "Claude Sonnet 4.6" or "Claude Haiku 4.5"
-tools: vscode, execute, read, edit, search, todo, microsoft/markitdown/convert_to_markdown
+model: "Claude Haiku 4.5"
+tools:
+  - read
+  - edit
+  - search
+  - web
+  - todo
+  - microsoft/markitdown/convert_to_markdown
 ---
 
 # Documentation Steward

@@ -7,19 +7,12 @@ description:
   sources and a defensible recommendation."
 model: "GPT-5.4"
 tools:
-  [
-    vscode,
-    read,
-    search,
-    web,
-    browser,
-    agent,
-    edit,
-    todo,
-    azure-mcp/search,
-    "github/*",
-    "microsoft/markitdown/*",
-  ]
+  - read
+  - search
+  - web
+  - browser
+  - agent
+  - todo
 argument-hint:
   "Provide the research task, project context, decision to make, constraints, and expected
   deliverable format."

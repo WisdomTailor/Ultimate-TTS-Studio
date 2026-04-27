@@ -1,7 +1,12 @@
 ---
 description: "Prompt Systems Architect — designs, audits, and improves reusable prompt libraries and evaluation harnesses for TTS narration transform quality. Use when: building prompt libraries, standardizing prompt quality, creating reusable workflows."
 model: "Claude Haiku 4.5"
-tools: 'vscode, execute, read, agent, edit, search'
+tools:
+  - read
+  - edit
+  - search
+  - execute
+  - agent
 ---
 
 # Prompt Systems Architect
