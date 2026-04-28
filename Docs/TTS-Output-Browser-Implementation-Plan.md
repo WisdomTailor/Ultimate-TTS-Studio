@@ -20,9 +20,8 @@ This plan was reviewed against the current implementation in:
 
 ### 0.1 Completed In Code
 
-- Helper-module split is in place: SQLite storage lives in `app/output_history_store.py`, and
-  bundle parsing / `.job.json` repair / reload payload logic lives in
-  `app/output_history_service.py`.
+- Helper-module split is in place: SQLite storage lives in `app/output_history_store.py`, and bundle
+  parsing / `.job.json` repair / reload payload logic lives in `app/output_history_service.py`.
 - The main app owns the feature: `app/launch.py` adds a top-level `History` tab adjacent to `Jobs`.
 - SQLite identity follows the approved rule: `job_json_path` is unique, while `seed` remains
   nullable metadata plus a filterable index.
@@ -33,12 +32,15 @@ This plan was reviewed against the current implementation in:
 - Successful autosave attempts a history upsert, and history-index failures degrade to a warning
   instead of failing the TTS generation path.
 - Manual reindex support is implemented.
+- Same-process local playback proxy is implemented in the main app startup path. History preview now
+  resolves a validated record under the active autosave root and serves audio through
+  `/api/history/audio/{record_id}` rather than returning direct filesystem paths to Gradio.
+- Runtime-path verification is in place for this release baseline: the active custom autosave root
+  (`F:/TTS Output Files/app_state_outputs`) is populated and indexed, so proxy playback targets the
+  same live folders users currently save into.
 
 ### 0.2 Still Needs Fixing Before Calling The Feature Solid
 
-- The approved local playback proxy was not implemented. Current playback returns validated local
-  filesystem paths directly to Gradio audio components and depends on `allowed_paths`, which is a
-  material plan deviation.
 - The UI only exposes free-text search plus manual `History Record ID` entry. Explicit
   project/preset/seed/speaker/date filters from the approved MVP were not wired into the History
   tab.
@@ -54,19 +56,16 @@ This plan was reviewed against the current implementation in:
 ### 0.3 Review-Coverage Gaps
 
 - Current tests do not cover bundle-name collision handling.
-- Current tests do not cover the missing playback proxy behavior because no proxy route exists.
 - Current tests do not cover UI-level History interactions such as row selection, filter controls,
   or the custom-base-path restart limitation.
 - Current tests do not verify search against stored script text content.
 
 ### 0.4 Recommended Next Improvements
 
-1. Implement the planned same-process playback proxy and bind History preview to validated record
-   IDs or proxy URLs instead of raw filesystem paths.
-2. Add first-class History filters for project, preset, seed, speaker, and date range.
-3. Add collision-safe bundle naming or suffixing so `.job.json` identity is unique before the DB
+1. Add first-class History filters for project, preset, seed, speaker, and date range.
+2. Add collision-safe bundle naming or suffixing so `.job.json` identity is unique before the DB
    ever sees the record.
-4. Add script/meta preview actions and tests that exercise real History browse-and-reload flows.
+3. Add script/meta preview actions and tests that exercise real History browse-and-reload flows.
 
 This section is intentionally additive. The original plan below remains the design baseline, while
 this review block records what is complete versus what still deviates in the current code.
