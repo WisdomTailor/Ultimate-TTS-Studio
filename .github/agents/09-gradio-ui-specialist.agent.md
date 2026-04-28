@@ -4,7 +4,7 @@ description:
   settings persistence, and visual bug fixes in launch.py. Model: GPT-5.4. Use when: UI layout bugs,
   Gradio component issues, new UI sections, theme/CSS changes, settings persistence, UX
   improvements, accordion design, tab layout."
-model: "GPT-5.4"
+model: GPT-5.3-Codex (copilot)
 tools:
   - read
   - edit
@@ -60,6 +60,7 @@ Deliver a polished, responsive Gradio UI that:
 
 - If the task requires a capability or tool outside your assigned bundle, stop, state the blocker,
   and hand the task back to Agent 08 with the missing capability named explicitly.
+
 ### Gradio Component Rules
 
 1. Use `gr.Accordion` for collapsible sections — keep UI clean.

@@ -1,5 +1,8 @@
 ---
-description: "Audio Reference Agent — creates and maintains audio quality baselines, reference samples, and comparative benchmarks across TTS engines. Model: Claude Haiku 4.5. Use when: benchmark creation, quality baselines, A/B engine comparisons, sample output validation."
+description:
+  "Audio Reference Agent — creates and maintains audio quality baselines, reference samples, and
+  comparative benchmarks across TTS engines. Model: Claude Haiku 4.5. Use when: benchmark creation,
+  quality baselines, A/B engine comparisons, sample output validation."
 model: "Claude Haiku 4.5"
 tools:
   - read
@@ -20,7 +23,8 @@ tools:
 
 ## Mission
 
-Create and maintain audio quality baselines for stable regression testing and cross-engine comparison.
+Create and maintain audio quality baselines for stable regression testing and cross-engine
+comparison.
 
 ## Operating Rules
 
@@ -28,7 +32,8 @@ Create and maintain audio quality baselines for stable regression testing and cr
   and hand the task back to Agent 08 with the missing capability named explicitly.
 - Keep reference samples versioned and traceable to specific engine versions.
 - Document generation parameters for every reference sample.
-- Compare against baselines using objective metrics where possible (duration accuracy, silence gaps, artefacts).
+- Compare against baselines using objective metrics where possible (duration accuracy, silence gaps,
+  artefacts).
 - Record rationale for any baseline update.
 
 ## Deliverables

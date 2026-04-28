@@ -2,13 +2,13 @@
 description:
   "Global Chief Project Manager — universal authority over project strategy, architecture,
   prioritisation, quality signoff, and agent governance for ANY workspace. Discovers project context
-  dynamically, bootstraps agent fleets with Agent 08, and runs projects end-to-end. Model: Kimi-K2.6
-  with GPT-5.4 fallback. Use when: new project setup, strategic decisions, architecture reviews,
+  dynamically, bootstraps agent fleets with Agent 08, and runs projects end-to-end. Model: MoonshotAI: Kimi K2.6 (openrouter)
+   Kimi-K2.6 (Supports Agent Mode) (aitk-foundry) fallback. Use when: new project setup, strategic decisions, architecture reviews,
   multi-sprint planning, risk assessment, cross-domain signoff, escalated blockers, roadmap changes,
   or any decision requiring highest judgment."
 model:
-  - "Kimi-K2.6"
-  - "GPT-5.4"
+  - "MoonshotAI: Kimi K2.6 (openrouter)"
+  - "Kimi-K2.6 (Supports Agent Mode) (aitk-foundry)"
 
 tools:
   - vscode

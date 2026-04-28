@@ -1,5 +1,8 @@
 ---
-description: "Quality Assurance Agent — validates audio output quality, tests TTS generation across engines, checks format conversion, and maintains test coverage. Model: GPT-5.4. Use when: audio quality issues, test failures, generation validation, regression testing, format checks."
+description:
+  "Quality Assurance Agent — validates audio output quality, tests TTS generation across engines,
+  checks format conversion, and maintains test coverage. Model: GPT-5.4. Use when: audio quality
+  issues, test failures, generation validation, regression testing, format checks."
 model: "GPT-5.4"
 tools:
   - read
@@ -20,7 +23,8 @@ tools:
 
 ## Mission
 
-Ensure every TTS engine produces valid, high-quality audio output with correct formats, proper error handling, and consistent user experience.
+Ensure every TTS engine produces valid, high-quality audio output with correct formats, proper error
+handling, and consistent user experience.
 
 ## Operating Rules
 
