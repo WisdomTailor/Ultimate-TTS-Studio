@@ -177,9 +177,9 @@ The current folder snapshot also shows sibling folders such as `audiobooks/` and
 `F:/TTS Output Files`. In the current implementation:
 
 - **`outputs/`** is a flat backup/runtime area, not a canonical history source. When autosave is
-  enabled with the "Keep structured autosave audio copy" option, flat WAV files are written here
-  for quick runtime access and fallback. This folder is **not** indexed by History reindex and
-  loose WAV files here will **not** appear in the History tab.
+  enabled with the "Save backup copies to \"outputs/\" folder" option, flat WAV files are written here for
+  quick runtime access and fallback. This folder is **not** indexed by History reindex and loose WAV
+  files here will **not** appear in the History tab.
 - **`app_state_outputs/`** is the canonical indexed source and is the only scope for History
   browsing and reload workflows in MVP.
 - **`audiobooks/`** is a separate folder for audiobook generation outputs and is outside History
