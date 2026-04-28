@@ -1128,28 +1128,28 @@ produced it.
 - **Save backup copies to "outputs/" folder** — Also writes a flat copy to the `outputs/` folder.
   Optional convenience for direct file access.
 
-Both options are enabled by default. If disk space is a concern, you can disable the backup copy
-and rely on the structured autosave alone — it carries more information and takes the same space.
-The structured autosave is what feeds the **🕘 HISTORY** tab; disabling it means past generations
-won't appear there.
+Both options are enabled by default. If disk space is a concern, you can disable the backup copy and
+rely on the structured autosave alone — it carries more information and takes the same space. The
+structured autosave is what feeds the **🕘 HISTORY** tab; disabling it means past generations won't
+appear there.
 
 ### Output Storage
 
 - **📦 Generated Output Storage** — Choose **Project Folders (default)** to keep audio organized
   under named project subfolders, or **Custom Path** to redirect backup copies to any folder on your
   system (useful for writing directly to an external drive or a network share).
-- **Path to "outputs/" folder** — When Custom Path mode is active, enter the full path to the
-  folder where backup copies should land.
+- **Path to "outputs/" folder** — When Custom Path mode is active, enter the full path to the folder
+  where backup copies should land.
 
 Click **💾 Apply Storage** to save your choice. Use **📂 Open Output Folder** and **🗂️ Open Autosave
 Folder** to jump directly to your files in Windows Explorer without hunting through drive folders.
 
-> 💡 **How the two storage locations relate:**
-> Every generation with autosave enabled saves a structured bundle to `app_state_outputs/<project>/`.
-> That bundle — with audio, text, settings, and seed — is what the **🕘 HISTORY** tab indexes and
-> reloads from. The **Save backup copies to "outputs/" folder** checkbox writes an additional flat
-> copy to `outputs/` for easy direct access. Loose WAV files placed manually in `outputs/` do not
-> appear in History — only structured autosave bundles are indexed.
+> 💡 **How the two storage locations relate:** Every generation with autosave enabled saves a
+> structured bundle to `app_state_outputs/<project>/`. That bundle — with audio, text, settings, and
+> seed — is what the **🕘 HISTORY** tab indexes and reloads from. The **Save backup copies to
+> "outputs/" folder** checkbox writes an additional flat copy to `outputs/` for easy direct access.
+> Loose WAV files placed manually in `outputs/` do not appear in History — only structured autosave
+> bundles are indexed.
 
 ---
 
@@ -1291,25 +1291,27 @@ and reload any of them back into the **📝 TEXT TO SYNTHESIZE** tab with one cl
 
 Each row in the **Persisted Output Bundles** table represents one saved generation:
 
-| Column               | What It Shows                                                     |
-| -------------------- | ----------------------------------------------------------------- |
-| **ID**               | Numeric record — enter this in the Record ID field to select it   |
-| **Project**          | The project name set at generation time                           |
-| **Preset**           | The voice preset active when the generation ran                   |
-| **Timestamp**        | When the clip was created                                         |
-| **Engine**           | Which TTS engine produced the audio                               |
-| **Voice / Narrator** | The speaker name or voice identifier                              |
-| **Audio Length**     | Duration of the generated clip                                    |
-| **Seed**             | The seed used — reuse this to reproduce the exact same result     |
+| Column               | What It Shows                                                   |
+| -------------------- | --------------------------------------------------------------- |
+| **ID**               | Numeric record — enter this in the Record ID field to select it |
+| **Project**          | The project name set at generation time                         |
+| **Preset**           | The voice preset active when the generation ran                 |
+| **Timestamp**        | When the clip was created                                       |
+| **Engine**           | Which TTS engine produced the audio                             |
+| **Voice / Narrator** | The speaker name or voice identifier                            |
+| **Audio Length**     | Duration of the generated clip                                  |
+| **Seed**             | The seed used — reuse this to reproduce the exact same result   |
 
 ### Controls
 
-- **Search History** — Filter rows by project, preset, engine, voice, or timestamp. Press Enter to apply.
+- **Search History** — Filter rows by project, preset, engine, voice, or timestamp. Press Enter to
+  apply.
 - **🔄 Refresh** — Reloads the table from the index. Use after generating new clips.
 - **🧭 Reindex Autosaves** — Scans `app_state_outputs/` and adds any bundles not yet in the index.
   Useful after restoring files from backup.
 - **History Record ID** — Type a numeric ID from the table to select a specific record.
-- **↩ Reload Into Text Tab** — Restores the selected bundle's full settings into the **📝 TEXT TO SYNTHESIZE** tab.
+- **↩ Reload Into Text Tab** — Restores the selected bundle's full settings into the **📝 TEXT TO
+  SYNTHESIZE** tab.
 
 <!-- screenshot: 🕘 HISTORY tab with a record selected, the detail panel visible, and the audio preview active -->
 

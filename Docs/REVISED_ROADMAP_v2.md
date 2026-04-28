@@ -231,10 +231,10 @@ Code Copilot. Auth delta decision documented and accepted or escalated.
 - Asset manifests
 - **System-Wide Read Aloud Replacement** — hotkey + clipboard + fast-path engine integration.
   Strategic review complete (2026-04-24). See
-  [`Docs/Read-Aloud-Strategic-Review.md`](./Read-Aloud-Strategic-Review.md) for full scope,
-  revised work items (WI-RA1..4), risk register, and implementation plan. Original brief at
-  `Docs/TTS Studio — System‑Wide Read Aloud Replacement.md` is preserved for traceability but
-  must not be implemented as-written. Estimated effort: 11–17 days across WI-RA1..3.
+  [`Docs/Read-Aloud-Strategic-Review.md`](./Read-Aloud-Strategic-Review.md) for full scope, revised
+  work items (WI-RA1..4), risk register, and implementation plan. Original brief at
+  `Docs/TTS Studio — System‑Wide Read Aloud Replacement.md` is preserved for traceability but must
+  not be implemented as-written. Estimated effort: 11–17 days across WI-RA1..3.
 
 **Without the entry criteria being met, Phase 5 items are NOT committed to.**
 

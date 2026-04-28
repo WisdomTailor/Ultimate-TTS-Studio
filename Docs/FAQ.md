@@ -277,15 +277,16 @@ need to share.
 With autosave enabled (the default), every generation is saved as a structured bundle in
 `app_state_outputs/<project>/` — that's the storage the **🕘 HISTORY** tab indexes and reads from.
 If **Save backup copies to "outputs/" folder** is also checked (also on by default), a flat copy
-landed in `outputs/` as well, organized by date. Audiobook conversions (from the 📚
-**EBOOK TO AUDIOBOOK** tab) always go to the `audiobooks/` folder. You can also grab the most
-recent generation from the audio player on the right side of the screen using the download button.
+landed in `outputs/` as well, organized by date. Audiobook conversions (from the 📚 **EBOOK TO
+AUDIOBOOK** tab) always go to the `audiobooks/` folder. You can also grab the most recent generation
+from the audio player on the right side of the screen using the download button.
 
 To change where backup copies are stored, open the **🧭 Workspace Controls** accordion and switch
 from "Project Folders" to "Custom Path" mode.
 
 > 💡 **Only structured autosave bundles appear in History.** Moving a loose WAV file into `outputs/`
-> won't make it show up in the History tab — the index tracks bundles with metadata, not loose files.
+> won't make it show up in the History tab — the index tracks bundles with metadata, not loose
+> files.
 
 ---
 
@@ -296,7 +297,8 @@ the project name, preset, timestamp, engine, voice, audio length, and seed. To r
 generation:
 
 1. Click the **🕘 HISTORY** tab.
-2. Find your generation in the **Persisted Output Bundles** table (or use **Search History** to filter).
+2. Find your generation in the **Persisted Output Bundles** table (or use **Search History** to
+   filter).
 3. Note the **ID** in the left column.
 4. Type that ID into the **History Record ID** field below the table.
 5. Click **↩ Reload Into Text Tab**.
@@ -407,9 +409,9 @@ wrong, or the API key is missing or incorrect. Check each in order:
 2. **For cloud providers:** Double-check your API key — copy it fresh from your provider's dashboard
    and paste it in. Keys with extra whitespace or a missing character will silently fail.
 3. **Model name:** The model name field is case-sensitive and must match exactly what your provider
-expects. An incorrect model name is a common source of connection errors.
+   expects. An incorrect model name is a common source of connection errors.
 4. Use the **🔗 Test Connection** button inside the AI Script Polish section to confirm the
-   connection before running a full transform.
+connection before running a full transform.
 <!-- screenshot: AI Script Polish (Narration Transform) accordion showing the provider settings fields and the Test Connection button -->
 
 ---

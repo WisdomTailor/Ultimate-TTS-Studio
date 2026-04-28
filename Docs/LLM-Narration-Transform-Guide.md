@@ -428,7 +428,7 @@ behaves. For example, you could:
 
 **Persistence:** Your custom system prompt is saved to settings and persists across sessions.
 
-> **Note — Hidden engine addendum:** The system prompt you see is the *base* prompt. At generation
+> **Note — Hidden engine addendum:** The system prompt you see is the _base_ prompt. At generation
 > time, an engine-specific addendum (e.g., ElevenLabs v3 tag syntax guidance, Kokoro length hints)
 > is automatically appended by the system. This addendum is invisible in the UI and varies by the
 > selected TTS engine. See § 6.3 for full details.
@@ -575,37 +575,38 @@ Text goes straight to TTS without any polishing. This is a gap that the enhanced
 Not all narration transform panel controls affect every generation mode. This matrix documents
 exactly which controls take effect in each context.
 
-| UI Control | Single-text Synthesis | Conversation: AI Format | Conversation: Cast Characters | Conversation: Generate |
-|---|:---:|:---:|:---:|:---:|
-| LLM Provider / Model / Base URL / API Key / Timeout | ✅ | ✅ | ✅ | ✅ |
-| Content Type dropdown | ✅ replaces system prompt | ❌ | ❌ | ❌ |
-| Transform Mode (Minimal / Polish / Vivid) | ✅ shapes user-prompt | ❌ | ❌ | ❌ |
-| Locale | ✅ shapes user-prompt | ❌ | ❌ | ❌ |
-| Style | ✅ shapes user-prompt | ❌ | ❌ | ❌ |
-| Max Tag Density | ✅ Vivid mode only | ❌ | ❌ | ❌ |
-| LLM System Prompt (textbox) | ✅ base system prompt | ❌ | ❌ | ❌ |
-| Outcome Preset | ✅ temp/top_p/tokens only | ❌ | ❌ | ❌ |
-| Allow Local Fallback toggle | ✅ | ❌ | ❌ | ❌ |
-| Apply Transform button | Preview only | — | — | — |
-| Reset Default Prompt button | ✅ resets prompt + type | — | — | — |
-| TTS Engine (indirect) | ✅ engine addendum appended | ❌ | ❌ | ❌ |
+| UI Control                                          |    Single-text Synthesis    | Conversation: AI Format | Conversation: Cast Characters | Conversation: Generate |
+| --------------------------------------------------- | :-------------------------: | :---------------------: | :---------------------------: | :--------------------: |
+| LLM Provider / Model / Base URL / API Key / Timeout |             ✅              |           ✅            |              ✅               |           ✅           |
+| Content Type dropdown                               |  ✅ replaces system prompt  |           ❌            |              ❌               |           ❌           |
+| Transform Mode (Minimal / Polish / Vivid)           |    ✅ shapes user-prompt    |           ❌            |              ❌               |           ❌           |
+| Locale                                              |    ✅ shapes user-prompt    |           ❌            |              ❌               |           ❌           |
+| Style                                               |    ✅ shapes user-prompt    |           ❌            |              ❌               |           ❌           |
+| Max Tag Density                                     |     ✅ Vivid mode only      |           ❌            |              ❌               |           ❌           |
+| LLM System Prompt (textbox)                         |    ✅ base system prompt    |           ❌            |              ❌               |           ❌           |
+| Outcome Preset                                      |  ✅ temp/top_p/tokens only  |           ❌            |              ❌               |           ❌           |
+| Allow Local Fallback toggle                         |             ✅              |           ❌            |              ❌               |           ❌           |
+| Apply Transform button                              |        Preview only         |            —            |               —               |           —            |
+| Reset Default Prompt button                         |   ✅ resets prompt + type   |            —            |               —               |           —            |
+| TTS Engine (indirect)                               | ✅ engine addendum appended |           ❌            |              ❌               |           ❌           |
 
 **Legend:**
+
 - ✅ — control is active and affects this generation path
 - ❌ — control has no effect on this generation path
 - — — button is not available in this context
 
 ### 6.2 Conversation Mode: Hardcoded System Prompts
 
-When using Conversation Mode, the **AI Format** and **Cast Characters** operations call the LLM
-with **hardcoded system prompts** that are not exposed in the UI panel. The narration transform
-settings (Content Type, Transform Mode, Style, Locale, System Prompt textbox) do not apply.
+When using Conversation Mode, the **AI Format** and **Cast Characters** operations call the LLM with
+**hardcoded system prompts** that are not exposed in the UI panel. The narration transform settings
+(Content Type, Transform Mode, Style, Locale, System Prompt textbox) do not apply.
 
-| Operation | Handler | Hardcoded Prompt Location |
-|---|---|---|
-| AI Format Script | `handle_ai_format_script` (launch.py:15778) | `CONVERSATION_FORMATTER_SYSTEM_PROMPT` — `conversation_logic.py:357` |
-| Cast Characters | `handle_cast_characters` (launch.py:15816) | `VOICE_CASTING_SYSTEM_PROMPT` — `narration_transform.py:70` |
-| Conversation Generate | `handle_generate_conversation_advanced` (launch.py:15882) | No LLM call — text sent directly to TTS |
+| Operation             | Handler                                                   | Hardcoded Prompt Location                                            |
+| --------------------- | --------------------------------------------------------- | -------------------------------------------------------------------- |
+| AI Format Script      | `handle_ai_format_script` (launch.py:15778)               | `CONVERSATION_FORMATTER_SYSTEM_PROMPT` — `conversation_logic.py:357` |
+| Cast Characters       | `handle_cast_characters` (launch.py:15816)                | `VOICE_CASTING_SYSTEM_PROMPT` — `narration_transform.py:70`          |
+| Conversation Generate | `handle_generate_conversation_advanced` (launch.py:15882) | No LLM call — text sent directly to TTS                              |
 
 Only the **LLM provider connection settings** (provider, model, base URL, API key, timeout) are
 shared with conversation mode operations; all prompt-shaping controls are ignored.
@@ -618,8 +619,10 @@ value shown in the System Prompt textbox. At generation time, `_build_llm_system
 `get_engine_prompt_addendum(tts_engine)` in `engine_script_profiles.py:734`.
 
 **What this means:**
-- The textbox shows the *base* system prompt — the addendum is appended silently.
-- Different TTS engines produce different effective system prompts even with identical textbox values.
+
+- The textbox shows the _base_ system prompt — the addendum is appended silently.
+- Different TTS engines produce different effective system prompts even with identical textbox
+  values.
 - The addendum is engine-specific guidance (e.g., ElevenLabs v3 tag syntax, Kokoro length guidance).
 - This behavior does **not** apply to conversation mode operations.
 

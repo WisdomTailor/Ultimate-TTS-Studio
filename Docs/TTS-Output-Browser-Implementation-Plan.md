@@ -44,8 +44,10 @@ Contract:
 
 **Implemented behavior:** `outputs.db` is always stored at the **parent** of the autosave root:
 
-- If autosave root is `app_state_outputs/` (local default), db is at `app_state_outputs/../outputs.db`
-- If autosave root is `custom_base/app_state_outputs/` (custom path), db is at `custom_base/outputs.db`
+- If autosave root is `app_state_outputs/` (local default), db is at
+  `app_state_outputs/../outputs.db`
+- If autosave root is `custom_base/app_state_outputs/` (custom path), db is at
+  `custom_base/outputs.db`
 - This ensures the database persists at the feature storage root and is shared across all projects
   under that root, eliminating per-project database fragmentation.
 
@@ -63,18 +65,19 @@ Contract:
 
 ### 1.3.1 Storage Hierarchy and Flat Backup Area
 
-**Implemented behavior:** The app maintains two distinct output storage areas when autosave is enabled:
+**Implemented behavior:** The app maintains two distinct output storage areas when autosave is
+enabled:
 
 - **Canonical indexed source:** `app_state_outputs/<project>/` stores structured autosave bundles
   (audio/, scripts/, meta/, jobs/) that are scanned and indexed by History
-- **Flat backup/runtime area:** `outputs/` stores legacy flat WAV files when a user enables
-  "Save backup copies to \"outputs/\" folder." This is a flat, unstructured folder used for quick
-  runtime access and fallback; it is **not** the canonical history source and is **not** indexed
-  by reindex operations
+- **Flat backup/runtime area:** `outputs/` stores legacy flat WAV files when a user enables "Save
+  backup copies to \"outputs/\" folder." This is a flat, unstructured folder used for quick runtime
+  access and fallback; it is **not** the canonical history source and is **not** indexed by reindex
+  operations
 - **Database location:** `outputs.db` resides at the autosave root's parent (see 1.2.1)
 
-Loose WAV files (e.g., in `outputs/`) that are not part of a structured `app_state_outputs`
-bundle are **not** indexed by current reindex behavior and will not appear in History.
+Loose WAV files (e.g., in `outputs/`) that are not part of a structured `app_state_outputs` bundle
+are **not** indexed by current reindex behavior and will not appear in History.
 
 ### 1.4 Feature Attachment Point
 
@@ -109,8 +112,8 @@ Keep outside `app/launch.py`:
 
 **Implemented behavior:**
 
-- History preview requires Gradio `allowed_paths` configuration to serve files from autosave
-  bundles and legacy local roots
+- History preview requires Gradio `allowed_paths` configuration to serve files from autosave bundles
+  and legacy local roots
 - Allowed paths are computed at launch from active settings (`compute_gradio_allowed_paths()`) and
   include the autosave root, app_state output directories, and custom base paths
 - **Limitation:** Changing to a brand new custom base path mid-session requires an **app restart**
@@ -188,8 +191,8 @@ grows:
 6. Produce reload payloads for the generation form with richer single-text state restore and
    exclusions for API keys and transient uploads.
 7. Validate playback targets under the autosave root.
-8. Implement preset-backed reference-audio fallback for the active engine when original upload
-   paths are unavailable during reload.
+8. Implement preset-backed reference-audio fallback for the active engine when original upload paths
+   are unavailable during reload.
 
 ### Phase 3: Write-Path Integration
 
