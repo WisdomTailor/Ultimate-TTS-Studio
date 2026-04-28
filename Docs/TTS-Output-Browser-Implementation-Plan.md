@@ -1,12 +1,10 @@
 # TTS Output Browser Implementation Plan
 
-**Date:** 2026-04-27
-**Planning Owner:** Agent 08 (GitHub Copilot, GPT-5.4)
-**Architecture Signoff:** Agent 00 (Chief Project Manager)
-**Source Brief:** `Docs/TTS-Output-Browser-and-Player-Feature-Brief.md`
-**Status:** Approved for implementation planning
-**Scope:** Main-app local history browser for persisted TTS output bundles, with reload support and
-validated local playback.
+**Date:** 2026-04-27 **Planning Owner:** Agent 08 (GitHub Copilot, GPT-5.4) **Architecture
+Signoff:** Agent 00 (Chief Project Manager) **Source Brief:**
+`Docs/TTS-Output-Browser-and-Player-Feature-Brief.md` **Status:** Approved for implementation
+planning **Scope:** Main-app local history browser for persisted TTS output bundles, with reload
+support and validated local playback.
 
 ---
 
@@ -42,6 +40,15 @@ Contract:
 - if `jobs/*.job.json` is missing, the indexer repairs or creates it from metadata plus discovered
   script and audio paths
 
+### 1.2.1 Database Location Derivation
+
+**Implemented behavior:** `outputs.db` is always stored at the **parent** of the autosave root:
+
+- If autosave root is `app_state_outputs/` (local default), db is at `app_state_outputs/../outputs.db`
+- If autosave root is `custom_base/app_state_outputs/` (custom path), db is at `custom_base/outputs.db`
+- This ensures the database persists at the feature storage root and is shared across all projects
+  under that root, eliminating per-project database fragmentation.
+
 ### 1.3 MVP Playback Strategy
 
 Playback for the browser/player feature should use a same-process local backend proxy endpoint, not
@@ -53,6 +60,21 @@ Contract:
 - only serve files under the configured autosave root
 - validate requested paths server-side before streaming
 - bind the UI to record IDs or validated server paths, not raw filesystem paths
+
+### 1.3.1 Storage Hierarchy and Flat Backup Area
+
+**Implemented behavior:** The app maintains two distinct output storage areas when autosave is enabled:
+
+- **Canonical indexed source:** `app_state_outputs/<project>/` stores structured autosave bundles
+  (audio/, scripts/, meta/, jobs/) that are scanned and indexed by History
+- **Flat backup/runtime area:** `outputs/` stores legacy flat WAV files when a user enables
+  "Save backup copies to \"outputs/\" folder." This is a flat, unstructured folder used for quick
+  runtime access and fallback; it is **not** the canonical history source and is **not** indexed
+  by reindex operations
+- **Database location:** `outputs.db` resides at the autosave root's parent (see 1.2.1)
+
+Loose WAV files (e.g., in `outputs/`) that are not part of a structured `app_state_outputs`
+bundle are **not** indexed by current reindex behavior and will not appear in History.
 
 ### 1.4 Feature Attachment Point
 
@@ -74,6 +96,7 @@ Keep inside `app/launch.py`:
 - event wiring
 - thin calls into helper modules
 - same-process playback route registration
+- `compute_gradio_allowed_paths()` to populate Gradio File component allowed paths
 
 Keep outside `app/launch.py`:
 
@@ -81,6 +104,18 @@ Keep outside `app/launch.py`:
 - bundle discovery and scan logic
 - `.job.json` repair/build logic
 - playback path validation helpers
+
+### 1.5.1 Gradio Preview Serving and Allowed Paths
+
+**Implemented behavior:**
+
+- History preview requires Gradio `allowed_paths` configuration to serve files from autosave
+  bundles and legacy local roots
+- Allowed paths are computed at launch from active settings (`compute_gradio_allowed_paths()`) and
+  include the autosave root, app_state output directories, and custom base paths
+- **Limitation:** Changing to a brand new custom base path mid-session requires an **app restart**
+  for Gradio preview serving to recognize the new paths; the setting will persist but preview links
+  will fail until restart
 
 ---
 
@@ -101,41 +136,36 @@ This plan is approved because it matches the repository as it exists today:
 
 ### 3.1 Files to Modify
 
-- `app/launch.py`
-  Purpose: integrate the History tab, call the history service after autosave, and register a
-  local playback proxy route.
+- `app/launch.py` Purpose: integrate the History tab, call the history service after autosave, and
+  register a local playback proxy route.
 
-- `Docs/TTS-Output-Browser-and-Player-Feature-Brief.md`
-  Purpose: retain as the source planning brief and reference this implementation plan.
+- `Docs/TTS-Output-Browser-and-Player-Feature-Brief.md` Purpose: retain as the source planning brief
+  and reference this implementation plan.
 
 ### 3.2 Files to Add
 
-- `app/output_history_store.py`
-  Purpose: SQLite schema initialization, migration guard, upsert logic, list/query functions,
-  lookup by ID, and indexing strategy.
+- `app/output_history_store.py` Purpose: SQLite schema initialization, migration guard, upsert
+  logic, list/query functions, lookup by ID, and indexing strategy.
 
-- `app/output_history_service.py`
-  Purpose: bundle scanning, path normalization, metadata parsing, `.job.json` repair/build,
-  playback target validation, and reload payload generation.
+- `app/output_history_service.py` Purpose: bundle scanning, path normalization, metadata parsing,
+  `.job.json` repair/build, playback target validation, and reload payload generation.
 
-- `app/tests/test_output_history_store.py`
-  Purpose: verify schema creation, idempotent upsert, null-seed behavior, and uniqueness by job
-  bundle path.
+- `app/tests/test_output_history_store.py` Purpose: verify schema creation, idempotent upsert,
+  null-seed behavior, and uniqueness by job bundle path.
 
-- `app/tests/test_output_history_service.py`
-  Purpose: verify bundle discovery, `.job.json` creation/repair, normalized path handling,
-  playback validation, and reload payload generation.
+- `app/tests/test_output_history_service.py` Purpose: verify bundle discovery, `.job.json`
+  creation/repair, normalized path handling, playback validation, and reload payload generation.
 
 ### 3.3 Optional Later Files
 
 These are not required for the first implementation slice, but may be added later if the feature
 grows:
 
-- `app/output_history_models.py`
-  Purpose: typed record or payload models if the store/service modules become large.
+- `app/output_history_models.py` Purpose: typed record or payload models if the store/service
+  modules become large.
 
-- `app/tests/fixtures/output_history/`
-  Purpose: realistic fixture bundles for integration-style tests.
+- `app/tests/fixtures/output_history/` Purpose: realistic fixture bundles for integration-style
+  tests.
 
 ---
 
@@ -154,9 +184,12 @@ grows:
 2. Scan `F:/TTS Output Files/app_state_outputs` or the configured equivalent root.
 3. Parse autosave metadata and discover audio/script files.
 4. Create or repair `jobs/*.job.json` when missing.
-5. Produce list/detail payloads for the UI.
-6. Produce reload payloads for the generation form.
+5. Produce list/detail payloads for the UI (including Audio Length when derivable from WAV headers).
+6. Produce reload payloads for the generation form with richer single-text state restore and
+   exclusions for API keys and transient uploads.
 7. Validate playback targets under the autosave root.
+8. Implement preset-backed reference-audio fallback for the active engine when original upload
+   paths are unavailable during reload.
 
 ### Phase 3: Write-Path Integration
 
@@ -218,6 +251,7 @@ The MVP History tab should include:
 - date/timestamp display
 - engine and speaker metadata
 - seed display and filter
+- audio duration display (when captured in metadata)
 - quick playback
 - metadata detail panel
 - script file links/previews
@@ -252,6 +286,9 @@ The MVP should not include:
 - do not block successful generation on history indexing failure
 - keep parsing/store logic in helper modules under `app/`
 - keep the History tab separate from Jobs
+- do not index loose WAV files outside structured `app_state_outputs` bundles
+- do warn (but do not fail) if Gradio allowed_paths cannot be set at launch time
+- document the mid-session custom base path restart requirement as a known limitation
 
 ---
 
@@ -271,6 +308,6 @@ refactoring.
 
 ## 9. Signoff
 
-Agent 00 approved this direction for implementation because it is local-first, Gradio-first,
-aligned with the existing autosave architecture, and low-risk for incremental delivery. This plan is
-the agreed implementation baseline unless later implementation evidence forces a scoped revision.
+Agent 00 approved this direction for implementation because it is local-first, Gradio-first, aligned
+with the existing autosave architecture, and low-risk for incremental delivery. This plan is the
+agreed implementation baseline unless later implementation evidence forces a scoped revision.

@@ -6,22 +6,28 @@ A Pinokio script for <https://github.com/SUP3RMASS1VE/Ultimate-TTS-Studio-SUP3R-
 
 ### What is the MCP Sidecar?
 
-The MCP sidecar (`mcp_sidecar.py`) is a **separate, optional** service that exposes TTS Studio's core features (generate speech, list voices/engines, narration transform, etc.) as MCP tools over an SSE endpoint. It runs in its own conda environment (`tts_mcp_env`), independent of the main app.
+The MCP sidecar (`mcp_sidecar.py`) is a **separate, optional** service that exposes TTS Studio's
+core features (generate speech, list voices/engines, narration transform, etc.) as MCP tools over an
+SSE endpoint. It runs in its own conda environment (`tts_mcp_env`), independent of the main app.
 
 ### Who Uses It?
 
-| Consumer | How |
-|---|---|
-| **VS Code Copilot Chat** | Connects via `.vscode/mcp.json` so Copilot can call TTS functions directly from the editor |
-| **Other MCP-compatible AI agents** | Any agent that speaks MCP protocol can connect to the SSE endpoint |
-| **The MCP Sidecar UI** | Its own Gradio dashboard for testing MCP tools |
+| Consumer                           | How                                                                                        |
+| ---------------------------------- | ------------------------------------------------------------------------------------------ |
+| **VS Code Copilot Chat**           | Connects via `.vscode/mcp.json` so Copilot can call TTS functions directly from the editor |
+| **Other MCP-compatible AI agents** | Any agent that speaks MCP protocol can connect to the SSE endpoint                         |
+| **The MCP Sidecar UI**             | Its own Gradio dashboard for testing MCP tools                                             |
 
 ### Do I Need It?
 
-- **If you're just using the TTS Studio web UI** (generating audio, using the assistant, narration transform, etc.) → **you don't need MCP at all.** The main `Start` button launches everything you need.
-- **If you want AI coding agents (like Copilot) to trigger TTS generation programmatically** → install and start MCP.
+- **If you're just using the TTS Studio web UI** (generating audio, using the assistant, narration
+  transform, etc.) → **you don't need MCP at all.** The main `Start` button launches everything you
+  need.
+- **If you want AI coding agents (like Copilot) to trigger TTS generation programmatically** →
+  install and start MCP.
 
-> **TL;DR** — Just click **Start** in Pinokio. Skip the MCP buttons unless you're using Copilot or external AI tools to drive TTS generation.
+> **TL;DR** — Just click **Start** in Pinokio. Skip the MCP buttons unless you're using Copilot or
+> external AI tools to drive TTS generation.
 
 The default `Install` and `Start` flow now keeps MCP dependencies out of the main `app/tts_env`
 environment.
@@ -159,6 +165,53 @@ Autosave writes:
   included)
 
 Reference design and checklists are in `app/docs/`.
+
+## History Tab: Browse and Reload Past Generations
+
+The app includes a **History** tab (🕘 HISTORY) for browsing, searching, and reloading past TTS
+generations. This feature indexes structured autosave bundles and provides a searchable record of
+all prior jobs.
+
+### How History Works
+
+- **Canonical source:** `app_state_outputs/<project>/` stores structured bundles (audio/, scripts/,
+  meta/, jobs/) that are scanned and indexed
+- **Database:** `outputs.db` stored at the autosave root's parent provides fast search and filtering
+- **Indexing:** Runs automatically after autosave and can be manually triggered via **Reindex**
+- **Reload:** Enter a record ID from the History table and reload its full context (script, engine,
+  preset, seed, speaker) back into the main generation form
+
+### Storage Architecture
+
+When autosave is enabled:
+
+- **`app_state_outputs/<project>/`** — canonical indexed source for History (structured project
+  bundles with metadata)
+- **`outputs/`** — optional flat backup/runtime area; loose WAV files here are **not** indexed and
+  will not appear in History
+- **`outputs.db`** — SQLite index shared across all projects at the autosave root's parent
+
+### History Features
+
+- **Project/preset filters** — organize by generation metadata
+- **Search** — find records by text content or metadata
+- **Audio duration** — duration is displayed when captured in metadata
+- **Quick playback** — inline browser player for generated audio
+- **Metadata inspection** — view engine, seed, speaker, transform flags, and timestamps
+- **Script viewing** — access original, transformed, and final scripts
+- **Reload workflow** — load a prior job with full state restoration (excluding API keys and
+  transient file paths)
+- **Refresh/Reindex** — scan for new bundles and rebuild index
+
+### Known Limitations
+
+- **Loose files:** WAV files in the flat `outputs/` folder are not indexed; only structured
+  `app_state_outputs` bundles are included in History
+- **Custom base path restart:** If you change the custom output base path mid-session, an **app
+  restart** is required for file preview to work; the setting persists but preview links will fail
+  until restart
+- **Preset audio fallback:** When original reference-audio upload paths are unavailable, the reload
+  workflow will use a preset-backed voice if available
 
 ## LLM Text-to-Script Crafter Status
 

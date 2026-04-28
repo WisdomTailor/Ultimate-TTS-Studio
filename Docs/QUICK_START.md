@@ -115,8 +115,9 @@ Look for the **Generate** button at the bottom of the left column. Click it.
 The right column will show a progress indicator while the audio is being created. When it's done, an
 audio player appears. Click play and listen.
 
-Your generated audio plays directly in the browser. Files are saved to the `outputs/` folder,
-organized by date.
+Your generated audio plays directly in the browser. With autosave on (the default), the generation
+is also saved as a bundle you can browse and reload from the **🕘 HISTORY** tab. A flat backup copy
+also lands in the `outputs/` folder when that option is checked (on by default).
 
 **What you're hearing:** The exact text you typed, spoken by the voice you selected, using the TTS
 engine you loaded.

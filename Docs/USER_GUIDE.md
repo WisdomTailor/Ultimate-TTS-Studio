@@ -5,7 +5,7 @@
 Everything you need to go from first launch to professional-quality audio production — all in one
 place. If you're just getting started, check the [Quick Start Guide](QUICK_START.md) first. If you
 want a quick engine comparison, jump to [Feature Matrix](FEATURE_MATRIX.md). For step-by-step
-workflow recipes, see [Workflows](WORKFLOWS.md). (See [Glossary](#18-glossary) for TTS terms.)
+workflow recipes, see [Workflows](WORKFLOWS.md). (See [Glossary](#19-glossary) for TTS terms.)
 
 ---
 
@@ -24,11 +24,12 @@ workflow recipes, see [Workflows](WORKFLOWS.md). (See [Glossary](#18-glossary) f
 11. Workspace Controls _(Part 2)_
 12. Model Manager _(Part 2)_
 13. Assistant _(Part 2)_
-14. Jobs _(Part 2)_
-15. MCP Integration _(Part 2)_
-16. Troubleshooting _(Part 2)_
-17. Keyboard Shortcuts & Tips _(Part 2)_
-18. Glossary _(Part 2)_
+14. History _(Part 2)_
+15. Jobs _(Part 2)_
+16. MCP Integration _(Part 2)_
+17. Troubleshooting _(Part 2)_
+18. Keyboard Shortcuts & Tips _(Part 2)_
+19. Glossary _(Part 2)_
 
 ---
 
@@ -138,6 +139,7 @@ time.
 | **📚 EBOOK TO AUDIOBOOK** | Convert book files into narrated audiobooks                |
 | **🎙️ VIBEVOICE**          | Podcast-style multi-speaker generation with its own models |
 | **🤖 ASSISTANT**          | AI chatbot for in-app help and guidance                    |
+| **🕘 HISTORY**            | Browse and reload past generations from autosave bundles   |
 | **📋 JOBS**               | Background job queue for large or API-triggered tasks      |
 
 ### The Persistent Panels
@@ -1118,26 +1120,36 @@ With autosave enabled, every generation is automatically saved to disk along wit
 settings, and seed — so you never lose a good take even if you forget to write down what settings
 produced it.
 
-| Control                                    | What It Does                                                                                  |
-| ------------------------------------------ | --------------------------------------------------------------------------------------------- |
-| **💾 Autosave project files**              | Toggle autosave on or off for this session                                                    |
-| **📚 Project Name**                        | Organizes saved files into named subfolders. Update this when you switch projects or chapters |
-| **🧬 Keep structured autosave audio copy** | Saves a structured copy with full metadata: engine, seed, text hash                           |
-| **📦 Keep legacy output copy**             | Keeps the simpler date-organized copy in the outputs folder                                   |
+- **💾 Autosave project files** — Toggle autosave on or off for this session.
+- **📚 Project Name** — Organizes saved files into named subfolders. Update this when you switch
+  projects or chapters.
+- **🧬 Keep structured autosave audio copy** — Saves a structured copy with full metadata: engine,
+  seed, text hash. These bundles power the **🕘 HISTORY** tab.
+- **Save backup copies to "outputs/" folder** — Also writes a flat copy to the `outputs/` folder.
+  Optional convenience for direct file access.
 
-Both copies are on by default. If disk space is a concern, you can disable the legacy copy and rely
-on the structured autosave alone — it carries more information and takes the same space.
+Both options are enabled by default. If disk space is a concern, you can disable the backup copy
+and rely on the structured autosave alone — it carries more information and takes the same space.
+The structured autosave is what feeds the **🕘 HISTORY** tab; disabling it means past generations
+won't appear there.
 
 ### Output Storage
 
 - **📦 Generated Output Storage** — Choose **Project Folders (default)** to keep audio organized
-  under named project subfolders, or **Custom Path** to redirect output to any folder on your system
-  (useful for writing directly to an external drive or a network share).
-- **🛣️ Custom Output Base Path** — Enter the full path to your preferred output folder when using
-  Custom Path mode.
+  under named project subfolders, or **Custom Path** to redirect backup copies to any folder on your
+  system (useful for writing directly to an external drive or a network share).
+- **Path to "outputs/" folder** — When Custom Path mode is active, enter the full path to the
+  folder where backup copies should land.
 
 Click **💾 Apply Storage** to save your choice. Use **📂 Open Output Folder** and **🗂️ Open Autosave
 Folder** to jump directly to your files in Windows Explorer without hunting through drive folders.
+
+> 💡 **How the two storage locations relate:**
+> Every generation with autosave enabled saves a structured bundle to `app_state_outputs/<project>/`.
+> That bundle — with audio, text, settings, and seed — is what the **🕘 HISTORY** tab indexes and
+> reloads from. The **Save backup copies to "outputs/" folder** checkbox writes an additional flat
+> copy to `outputs/` for easy direct access. Loose WAV files placed manually in `outputs/` do not
+> appear in History — only structured autosave bundles are indexed.
 
 ---
 
@@ -1261,7 +1273,69 @@ Click **💾 Save Settings** to persist the provider, base URL, and model choice
 
 ---
 
-## 14. Jobs
+## 14. History
+
+### What the History Tab Is For
+
+The **🕘 HISTORY** tab is a searchable log of every generation saved through autosave. Instead of
+hunting through file folders, you can browse past clips by project, engine, voice, or timestamp —
+and reload any of them back into the **📝 TEXT TO SYNTHESIZE** tab with one click.
+
+> 💡 **History only tracks autosave bundles.** A bundle is created each time you generate with
+> **Autosave** enabled in **🧭 Workspace Controls**. Loose audio files placed manually in `outputs/`
+> are not indexed here.
+
+<!-- screenshot: 🕘 HISTORY tab showing the Persisted Output Bundles table and search box -->
+
+### Reading the History Table
+
+Each row in the **Persisted Output Bundles** table represents one saved generation:
+
+| Column               | What It Shows                                                     |
+| -------------------- | ----------------------------------------------------------------- |
+| **ID**               | Numeric record — enter this in the Record ID field to select it   |
+| **Project**          | The project name set at generation time                           |
+| **Preset**           | The voice preset active when the generation ran                   |
+| **Timestamp**        | When the clip was created                                         |
+| **Engine**           | Which TTS engine produced the audio                               |
+| **Voice / Narrator** | The speaker name or voice identifier                              |
+| **Audio Length**     | Duration of the generated clip                                    |
+| **Seed**             | The seed used — reuse this to reproduce the exact same result     |
+
+### Controls
+
+- **Search History** — Filter rows by project, preset, engine, voice, or timestamp. Press Enter to apply.
+- **🔄 Refresh** — Reloads the table from the index. Use after generating new clips.
+- **🧭 Reindex Autosaves** — Scans `app_state_outputs/` and adds any bundles not yet in the index.
+  Useful after restoring files from backup.
+- **History Record ID** — Type a numeric ID from the table to select a specific record.
+- **↩ Reload Into Text Tab** — Restores the selected bundle's full settings into the **📝 TEXT TO SYNTHESIZE** tab.
+
+<!-- screenshot: 🕘 HISTORY tab with a record selected, the detail panel visible, and the audio preview active -->
+
+### What Reloading Restores
+
+Reloading a history record fills the Text tab with a complete production snapshot:
+
+- The original source **text**
+- **Engine** selection and **audio format**
+- All **engine control settings** (voice, sliders, modes)
+- **AI Script Polish** settings (transform mode, style, provider, model — but not API keys)
+- **Audio Effects Studio** settings
+- **Speaker label**, **preset**, **project name**, and autosave options
+- The **last seed**
+
+If the original reference audio file no longer exists at its saved path, the app automatically falls
+back to the reference audio stored in the associated voice preset — so voice cloning sessions can
+often resume correctly even when project files have moved.
+
+> ⚠️ **Audio preview with custom output paths:** If you changed to a brand-new custom output folder
+> mid-session, previewing clips from the old location requires restarting the app. After a restart,
+> the new path is registered and previews work normally.
+
+---
+
+## 15. Jobs
 
 ### What This Tab Is For
 
@@ -1300,10 +1374,10 @@ The **🔄 Active & Recent Jobs** table shows submitted jobs with six columns:
 
 ---
 
-## 15. MCP Integration
+## 16. MCP Integration
 
 > **This section is for developers.** If you're using Ultimate TTS Studio through the browser
-> interface, you don't need MCP — skip ahead to [Troubleshooting](#16-troubleshooting). Everything
+> interface, you don't need MCP — skip ahead to [Troubleshooting](#17-troubleshooting). Everything
 > you need for normal use is already covered in the sections above.
 
 ### What MCP Is
@@ -1335,7 +1409,7 @@ request/response formats — see [app/README.md](../app/README.md).
 
 ---
 
-## 16. Troubleshooting
+## 17. Troubleshooting
 
 Most problems in Ultimate TTS Studio fall into a small set of categories. Start here before diving
 deeper.
@@ -1387,7 +1461,7 @@ fastest path to understanding an obscure problem.
 
 ---
 
-## 17. Keyboard Shortcuts & Tips
+## 18. Keyboard Shortcuts & Tips
 
 ### Quick Generation Workflow
 
@@ -1444,7 +1518,7 @@ Want to hear how two different engines handle the same text?
 
 ---
 
-## 18. Glossary
+## 19. Glossary
 
 **TTS (Text-to-Speech)** The technology that converts written text into spoken audio. Ultimate TTS
 Studio uses 14 different TTS systems, each with distinct strengths, voice characteristics, and
@@ -1495,7 +1569,7 @@ future sessions. Managed in the **🧭 Workspace Controls** accordion.
 **MCP (Model Context Protocol)** An open standard that allows AI coding agents and automation tools
 to discover and call tools programmatically. TTS Studio's MCP integration lets developer tools like
 GitHub Copilot or custom scripts trigger speech generation without using the browser interface. See
-[Section 15](#15-mcp-integration).
+[Section 16](#16-mcp-integration).
 
 **Conversation Mode** The multi-speaker generation mode in the **🎭 CONVERSATION MODE** tab. Paste a
 dialogue script, assign a different voice to each character, and generate the whole scene as a

@@ -174,8 +174,16 @@ In practical terms, this means:
 - `default/` is not a special schema exception; it is simply the project bucket for unnamed UI jobs
 
 The current folder snapshot also shows sibling folders such as `audiobooks/` and `outputs/` under
-`F:/TTS Output Files`. Those may matter later, but this brief should treat `app_state_outputs/` as
-the current indexing scope unless the feature is explicitly expanded.
+`F:/TTS Output Files`. In the current implementation:
+
+- **`outputs/`** is a flat backup/runtime area, not a canonical history source. When autosave is
+  enabled with the "Keep structured autosave audio copy" option, flat WAV files are written here
+  for quick runtime access and fallback. This folder is **not** indexed by History reindex and
+  loose WAV files here will **not** appear in the History tab.
+- **`app_state_outputs/`** is the canonical indexed source and is the only scope for History
+  browsing and reload workflows in MVP.
+- **`audiobooks/`** is a separate folder for audiobook generation outputs and is outside History
+  scope.
 
 ### 7.1 Job Bundle Intent
 
@@ -196,6 +204,31 @@ the UI, including:
 - future edit history if needed
 
 The transcript described `.job.json` as the single source of truth for reload.
+
+### 7.2 Reload Capabilities and Restrictions
+
+**Implemented behavior:**
+
+- Reload supports richer single-text state restore: when a user reloads a prior job, the UI
+  restores the full job context including original script, transformed script, voice preset,
+  engine settings, seed, and speaker
+- **Exclusions:** API keys and transient upload paths are excluded from reload snapshots to prevent
+  stale credentials and unresolvable file references from being reloaded automatically
+- **Preset-backed reference audio fallback:** When original reference-audio upload paths are
+  unavailable (e.g., the uploaded file was deleted), the system falls back to a preset-backed
+  reference voice for the active engine if available during reload
+
+### 7.3 Preview Serving and Gradio Allowed Paths
+
+**Implemented behavior:**
+
+- History preview requires Gradio `allowed_paths` configuration to serve files from autosave
+  bundles and legacy local roots
+- Allowed paths are computed at app startup from active settings (via `compute_gradio_allowed_paths()`)
+  and include the autosave root, app_state output directories, and custom base paths
+- **Known limitation:** Changing to a brand new custom base path mid-session requires an **app restart**
+  for Gradio preview serving to recognize the new paths. The setting will persist in `app_state/settings.json`,
+  but preview links will fail until the app is restarted.
 
 ---
 

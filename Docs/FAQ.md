@@ -274,12 +274,36 @@ need to share.
 
 **Q: Where are my generated files saved?**
 
-Generated audio is saved automatically to the `outputs/` folder, organized by date. Audiobook
-conversions (from the 📚 **EBOOK TO AUDIOBOOK** tab) go to the `audiobooks/` folder. You can also
-find your most recent generation in the audio player on the right side of the screen and download it
-directly from there using the download button below the player. To change where files are saved,
-open the **🧭 Workspace Controls** accordion and switch from "Project Folders" to "Custom Path" mode
-to point the app at any folder on your drive.
+With autosave enabled (the default), every generation is saved as a structured bundle in
+`app_state_outputs/<project>/` — that's the storage the **🕘 HISTORY** tab indexes and reads from.
+If **Save backup copies to "outputs/" folder** is also checked (also on by default), a flat copy
+landed in `outputs/` as well, organized by date. Audiobook conversions (from the 📚
+**EBOOK TO AUDIOBOOK** tab) always go to the `audiobooks/` folder. You can also grab the most
+recent generation from the audio player on the right side of the screen using the download button.
+
+To change where backup copies are stored, open the **🧭 Workspace Controls** accordion and switch
+from "Project Folders" to "Custom Path" mode.
+
+> 💡 **Only structured autosave bundles appear in History.** Moving a loose WAV file into `outputs/`
+> won't make it show up in the History tab — the index tracks bundles with metadata, not loose files.
+
+---
+
+**Q: What is the History tab and how do I use it?**
+
+The **🕘 HISTORY** tab shows a table of every generation saved through autosave. Each row includes
+the project name, preset, timestamp, engine, voice, audio length, and seed. To revisit a past
+generation:
+
+1. Click the **🕘 HISTORY** tab.
+2. Find your generation in the **Persisted Output Bundles** table (or use **Search History** to filter).
+3. Note the **ID** in the left column.
+4. Type that ID into the **History Record ID** field below the table.
+5. Click **↩ Reload Into Text Tab**.
+
+The app restores the original text, engine, all settings, AI Script Polish options, audio effects,
+and the last seed into the **📝 TEXT TO SYNTHESIZE** tab — ready to regenerate or continue from
+where you left off. API keys are not restored (re-enter them if needed).
 
 ---
 
@@ -405,7 +429,7 @@ custom scripts to talk to the app programmatically. If you're a developer and wa
 Studio from code, trigger speech generation through an AI coding assistant, or build automation
 around the app, MCP is for you. If you're a content creator using the app through the browser UI,
 you don't need MCP at all — it's a completely separate, optional install that runs alongside the
-main app. Full details are in the [User Guide — Section 15: MCP Integration](USER_GUIDE.md).
+main app. Full details are in the [User Guide — Section 16: MCP Integration](USER_GUIDE.md).
 
 ---
 
