@@ -32,15 +32,19 @@ This plan was reviewed against the current implementation in:
 - Successful autosave attempts a history upsert, and history-index failures degrade to a warning
   instead of failing the TTS generation path.
 - Manual reindex support is implemented.
+- Legacy-output migration is implemented: the History tab now exposes `Import Legacy Outputs`,
+  which scans the active runtime `outputs/` root, converts loose `.wav` / `.mp3` files into
+  canonical `app_state_outputs/default` bundles, reuses matching legacy `.json` / `.txt` sidecars
+  when present, and synthesizes minimal metadata/script artifacts when they are missing so imported
+  records become indexable.
 - Same-process local playback proxy is implemented in the main app startup path. History preview now
   resolves a validated record under the active autosave root and serves audio through
   `/api/history/audio/{record_id}` rather than returning direct filesystem paths to Gradio.
 - Runtime-path verification is in place for this release baseline: the active custom autosave root
   (`F:/TTS Output Files/app_state_outputs`) is populated and indexed, so proxy playback targets the
   same live folders users currently save into.
-- First-class History filters are now wired in the main app for project, preset, seed, speaker,
-  and from/to timestamp bounds while preserving the existing free-text query and current table
-  columns.
+- First-class History filters are now wired in the main app for project, preset, seed, speaker, and
+  from/to timestamp bounds while preserving the existing free-text query and current table columns.
 
 ### 0.2 Still Needs Fixing Before Calling The Feature Solid
 
@@ -64,10 +68,14 @@ This plan was reviewed against the current implementation in:
 
 ### 0.4 Recommended Next Improvements
 
-1. Add collision-safe bundle naming or suffixing so `.job.json` identity is unique before the DB
-   ever sees the record.
+1. Add collision-safe bundle naming or suffixing to the native autosave path so `.job.json`
+  identity is unique before the DB ever sees same-second generations.
 2. Add script/meta preview actions and tests that exercise real History browse-and-reload flows.
-3. Add UI-level History interaction coverage for filter controls and row/detail selection.
+3. Add UI-level History interaction coverage for filter controls, import/reindex actions, and
+  row/detail selection.
+
+Legacy migration is no longer the main blocker for History adoption; remaining priority is making
+the native autosave path collision-safe and deepening browse/reload coverage.
 
 This section is intentionally additive. The original plan below remains the design baseline, while
 this review block records what is complete versus what still deviates in the current code.
