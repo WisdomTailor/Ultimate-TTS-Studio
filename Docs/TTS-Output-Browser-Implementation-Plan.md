@@ -8,7 +8,7 @@ support and validated local playback.
 
 ---
 
-## 0. Review Status (2026-04-28)
+## 0. Review Status (2026-04-29)
 
 This plan was reviewed against the current implementation in:
 
@@ -38,12 +38,12 @@ This plan was reviewed against the current implementation in:
 - Runtime-path verification is in place for this release baseline: the active custom autosave root
   (`F:/TTS Output Files/app_state_outputs`) is populated and indexed, so proxy playback targets the
   same live folders users currently save into.
+- First-class History filters are now wired in the main app for project, preset, seed, speaker,
+  and from/to timestamp bounds while preserving the existing free-text query and current table
+  columns.
 
 ### 0.2 Still Needs Fixing Before Calling The Feature Solid
 
-- The UI only exposes free-text search plus manual `History Record ID` entry. Explicit
-  project/preset/seed/speaker/date filters from the approved MVP were not wired into the History
-  tab.
 - History detail currently shows path strings and summary text, but not the fuller metadata/script
   browsing workflow described in the approved MVP (`script` previews/links, metadata inspection,
   quick actions such as open-folder / copy-path).
@@ -59,13 +59,15 @@ This plan was reviewed against the current implementation in:
 - Current tests do not cover UI-level History interactions such as row selection, filter controls,
   or the custom-base-path restart limitation.
 - Current tests do not verify search against stored script text content.
+- Current tests only cover the store-level filter/query contract; nested Gradio handler wiring in
+  `app/launch.py` remains unexercised by direct tests.
 
 ### 0.4 Recommended Next Improvements
 
-1. Add first-class History filters for project, preset, seed, speaker, and date range.
-2. Add collision-safe bundle naming or suffixing so `.job.json` identity is unique before the DB
+1. Add collision-safe bundle naming or suffixing so `.job.json` identity is unique before the DB
    ever sees the record.
-3. Add script/meta preview actions and tests that exercise real History browse-and-reload flows.
+2. Add script/meta preview actions and tests that exercise real History browse-and-reload flows.
+3. Add UI-level History interaction coverage for filter controls and row/detail selection.
 
 This section is intentionally additive. The original plan below remains the design baseline, while
 this review block records what is complete versus what still deviates in the current code.
