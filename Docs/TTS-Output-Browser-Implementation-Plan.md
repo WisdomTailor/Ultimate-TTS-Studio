@@ -32,10 +32,10 @@ This plan was reviewed against the current implementation in:
 - Successful autosave attempts a history upsert, and history-index failures degrade to a warning
   instead of failing the TTS generation path.
 - Manual reindex support is implemented.
-- Legacy-output migration is implemented: the History tab now exposes `Import Legacy Outputs`,
-  which scans the active runtime `outputs/` root, converts loose `.wav` / `.mp3` files into
-  canonical `app_state_outputs/default` bundles, reuses matching legacy `.json` / `.txt` sidecars
-  when present, and synthesizes minimal metadata/script artifacts when they are missing so imported
+- Legacy-output migration is implemented: the History tab now exposes `Import Legacy Outputs`, which
+  scans the active runtime `outputs/` root, converts loose `.wav` / `.mp3` files into canonical
+  `app_state_outputs/default` bundles, reuses matching legacy `.json` / `.txt` sidecars when
+  present, and synthesizes minimal metadata/script artifacts when they are missing so imported
   records become indexable.
 - Same-process local playback proxy is implemented in the main app startup path. History preview now
   resolves a validated record under the active autosave root and serves audio through
@@ -45,37 +45,48 @@ This plan was reviewed against the current implementation in:
   same live folders users currently save into.
 - First-class History filters are now wired in the main app for project, preset, seed, speaker, and
   from/to timestamp bounds while preserving the existing free-text query and current table columns.
+- Native autosave bundle naming is now collision-safe across same-second generations. Canonical
+  bundle artifacts keep second-resolution timestamps, and deterministic `_01`, `_02`, ... suffixes
+  are inserted before the timestamp when a project/preset bucket already owns that run base.
+- Legacy importer allocation now uses the same collision-safe bundle naming strategy, so separate
+  same-second imports do not clobber canonical audio/meta/scripts/jobs while repeated imports of the
+  same source audio remain idempotent.
+- History detail actions now include direct `Preview Script` and `Preview Metadata` actions backed
+  by autosave-root validation before reading the saved script or metadata JSON.
+- History table interaction now supports row selection to populate the active record ID and refresh
+  detail/audio state without manual ID re-entry.
+- Targeted UI-level History tests now cover refresh/filter behavior, row selection, and preview
+  actions via callable helper logic, closing the prior store-only coverage gap for the main
+  interaction flow.
 
 ### 0.2 Still Needs Fixing Before Calling The Feature Solid
 
-- History detail currently shows path strings and summary text, but not the fuller metadata/script
-  browsing workflow described in the approved MVP (`script` previews/links, metadata inspection,
-  quick actions such as open-folder / copy-path).
-- Autosave bundle naming still uses second-resolution timestamps in the run base with no collision
-  disambiguation. Two generations in the same project/preset bucket within the same second can
-  overwrite bundle files, including the canonical `.job.json`.
 - History indexing is non-fatal, but it still runs inline on the generation success path. It is not
   asynchronous or otherwise non-blocking in the stricter sense.
+- History detail/preview now covers current script and metadata JSON, but secondary convenience
+  actions from the broader MVP note (for example open-folder or copy-path affordances) are still not
+  surfaced as dedicated controls.
 
 ### 0.3 Review-Coverage Gaps
 
-- Current tests do not cover bundle-name collision handling.
-- Current tests do not cover UI-level History interactions such as row selection, filter controls,
-  or the custom-base-path restart limitation.
-- Current tests do not verify search against stored script text content.
-- Current tests only cover the store-level filter/query contract; nested Gradio handler wiring in
-  `app/launch.py` remains unexercised by direct tests.
+- Current tests still do not verify search against stored script text content.
+- Current tests cover callable History UI flows, but not a full browser-driven Gradio interaction
+  harness.
+- Current tests do not directly exercise the custom-base-path restart limitation for Gradio allowed
+  paths.
 
 ### 0.4 Recommended Next Improvements
 
-1. Add collision-safe bundle naming or suffixing to the native autosave path so `.job.json`
-  identity is unique before the DB ever sees same-second generations.
-2. Add script/meta preview actions and tests that exercise real History browse-and-reload flows.
-3. Add UI-level History interaction coverage for filter controls, import/reindex actions, and
-  row/detail selection.
+1. Move History index updates off the synchronous generation success path so large reindex/upsert
+  work cannot elongate successful TTS completion.
+2. Add secondary History convenience actions if still desired for MVP polish, such as open-folder or
+  copy-path affordances on the selected bundle.
+3. Extend coverage into one browser-driven Gradio smoke test or an equivalent harness once the team
+  wants end-to-end validation beyond callable-handler coverage.
 
-Legacy migration is no longer the main blocker for History adoption; remaining priority is making
-the native autosave path collision-safe and deepening browse/reload coverage.
+Legacy migration is no longer the main blocker for History adoption; remaining priority is reducing
+inline indexing cost and deciding how much additional browse polish is worth adding beyond the now-
+shipped preview and interaction baseline.
 
 This section is intentionally additive. The original plan below remains the design baseline, while
 this review block records what is complete versus what still deviates in the current code.
