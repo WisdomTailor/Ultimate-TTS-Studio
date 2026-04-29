@@ -40,6 +40,9 @@ This plan was reviewed against the current implementation in:
 - Same-process local playback proxy is implemented in the main app startup path. History preview now
   resolves a validated record under the active autosave root and serves audio through
   `/api/history/audio/{record_id}` rather than returning direct filesystem paths to Gradio.
+- History playback now renders through an in-tab browser audio player backed by that validated
+  playback proxy, which avoids the prior Gradio output-postprocessing failure when loading a
+  selected history record by ID.
 - Runtime-path verification is in place for this release baseline: the active custom autosave root
   (`F:/TTS Output Files/app_state_outputs`) is populated and indexed, so proxy playback targets the
   same live folders users currently save into.
@@ -55,6 +58,9 @@ This plan was reviewed against the current implementation in:
   by autosave-root validation before reading the saved script or metadata JSON.
 - History table interaction now supports row selection to populate the active record ID and refresh
   detail/audio state without manual ID re-entry.
+- History search flow is now more explicit in the UI: the tab exposes a dedicated `Search` action
+  for filters plus a `Search / Load Record` action for a selected record ID, with helper copy that
+  explains where audio preview appears and how reload behaves.
 - Targeted UI-level History tests now cover refresh/filter behavior, row selection, and preview
   actions via callable helper logic, closing the prior store-only coverage gap for the main
   interaction flow.
@@ -78,11 +84,14 @@ This plan was reviewed against the current implementation in:
 ### 0.4 Recommended Next Improvements
 
 1. Move History index updates off the synchronous generation success path so large reindex/upsert
-  work cannot elongate successful TTS completion.
+   work cannot elongate successful TTS completion.
 2. Add secondary History convenience actions if still desired for MVP polish, such as open-folder or
-  copy-path affordances on the selected bundle.
+   copy-path affordances on the selected bundle.
 3. Extend coverage into one browser-driven Gradio smoke test or an equivalent harness once the team
-  wants end-to-end validation beyond callable-handler coverage.
+   wants end-to-end validation beyond callable-handler coverage.
+4. Consider replacing some free-text History filters with dropdowns or suggestions once the team has
+   enough stored projects/presets/engines to make constrained selection materially faster than text
+   entry.
 
 Legacy migration is no longer the main blocker for History adoption; remaining priority is reducing
 inline indexing cost and deciding how much additional browse polish is worth adding beyond the now-
