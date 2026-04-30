@@ -67,10 +67,10 @@ This plan was reviewed against the current implementation in:
 
 ### 0.2 Still Needs Fixing Before Calling The Feature Solid
 
-- ~~History indexing is non-fatal, but it still runs inline on the generation success path. It is not
-  asynchronous or otherwise non-blocking in the stricter sense.~~ **Fixed 2026-04-30:** replaced inline
-  `upsert_meta_file` calls with `_HistoryIndexScheduler`, a daemon-thread queue that processes
-  meta-path submissions off the main generation path.
+- ~~History indexing is non-fatal, but it still runs inline on the generation success path. It is
+  not asynchronous or otherwise non-blocking in the stricter sense.~~ **Fixed 2026-04-30:** replaced
+  inline `upsert_meta_file` calls with `_HistoryIndexScheduler`, a daemon-thread queue that
+  processes meta-path submissions off the main generation path.
 - ~~History detail/preview now covers current script and metadata JSON, but secondary convenience
   actions from the broader MVP note (for example open-folder or copy-path affordances) are still not
   surfaced as dedicated controls.~~ **Fixed 2026-04-30:** added **Open Folder** and **Copy Path**
@@ -84,21 +84,21 @@ This plan was reviewed against the current implementation in:
   harness.
 - Current tests do not directly exercise the custom-base-path restart limitation for Gradio allowed
   paths.
-- Current tests do not exercise the background `_HistoryIndexScheduler` thread behavior.
+- Current tests do not exercise the background `_HistoryIndexScheduler` thread behavior.~~ **Fixed 2026-04-30:** extracted `_HistoryIndexScheduler` into `app/history_index_scheduler.py` as `HistoryIndexScheduler` and added targeted tests for queue accumulation, auto-start, silent failure handling, and shutdown signaling.
 
 ### 0.4 Recommended Next Improvements
 
 1. ~~Move History index updates off the synchronous generation success path so large reindex/upsert
    work cannot elongate successful TTS completion.~~ **Done 2026-04-30.**
-2. ~~Add secondary History convenience actions if still desired for MVP polish, such as open-folder or
-   copy-path affordances on the selected bundle.~~ **Done 2026-04-30.**
+2. ~~Add secondary History convenience actions if still desired for MVP polish, such as open-folder
+   or copy-path affordances on the selected bundle.~~ **Done 2026-04-30.**
 3. Extend coverage into one browser-driven Gradio smoke test or an equivalent harness once the team
    wants end-to-end validation beyond callable-handler coverage.
 4. Consider replacing some free-text History filters with dropdowns or suggestions once the team has
    enough stored projects/presets/engines to make constrained selection materially faster than text
    entry.
-5. Add targeted tests for the `_HistoryIndexScheduler` background thread behavior, including
-   queue accumulation, auto-start, and silent failure handling.
+5. Add targeted tests for the `_HistoryIndexScheduler` background thread behavior, including queue
+   accumulation, auto-start, and silent failure handling.
 
 Legacy migration is no longer the main blocker for History adoption; remaining priority is reducing
 inline indexing cost and deciding how much additional browse polish is worth adding beyond the now-
