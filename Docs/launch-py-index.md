@@ -2,7 +2,7 @@
 
 This document is the required starting point for any agent or developer working on `app/launch.py`.
 
-`app/launch.py` is a ~16,200-line monolith that combines runtime setup, engine orchestration,
+`app/launch.py` is a ~23,000-line monolith that combines runtime setup, engine orchestration,
 conversation generation, persistence helpers, LLM narration tooling, the full Gradio component tree,
 and all event wiring. Do not start editing by search alone. Read this index first, decide which
 layer you are changing, and then jump to the relevant symbols.
@@ -47,9 +47,9 @@ layer you are changing, and then jump to the relevant symbols.
 | eBook to audiobook functions                     |    5089–5884 | `convert_ebook_to_audiobook`                                                                                                                                                                                     | eBook analysis, chapter selection, batch audiobook generation                    | engine selection, preset state, multi-engine path                                                    |
 | LLM narration transform (Gradio-facing plumbing) |    6496–7135 | `DEFAULT_LLM_NARRATION_SYSTEM_PROMPT` at 6496·`LLM_PROVIDER_CONFIGS` at 6720·`fetch_provider_models` at 6901·`on_llm_provider_change` at 7032 — **pure logic extracted to `narration_transform.py`**             | provider setup, model discovery, Gradio-side transform wiring                    | `narration_transform.py` for pure logic; narration transform accordion and wrapper argument ordering |
 | Unified generation and autosave wrapper          |    7136–7930 | `generate_unified_tts` at 7136·`generate_unified_tts_wrapped` at 7705·`autosave_generation_artifacts` at ~7640                                                                                                   | top-level generation dispatch, autosave metadata, last-seed behavior             | generate button inputs, engine-specific parameter ordering, autosave persistence helpers             |
-| Gradio component tree                            |  7931–~15521 | `create_gradio_interface` at 7931                                                                                                                                                                                | layout, labels, controls, tab structure, CSS/JS, visual UX                       | nested handlers starting at ~15522 and related backend functions                                     |
-| Nested handlers and event wiring                 | ~15522–16607 | `handle_analyze_script` at 15522·`handle_ai_format_script` at 15778·`handle_cast_characters` at 15816·`handle_generate_conversation_advanced` at 15882·`generate_conversation_btn.click` at 16179                | event regressions, control binding changes, handler return-shape fixes           | component declarations above and generation/storage helpers                                          |
-| Main entry point                                 |       16608+ | `if __name__ == "__main__":` after handlers·`demo.launch()`                                                                                                                                                      | startup and launch behavior                                                      | import/bootstrap block and `create_gradio_interface`                                                 |
+| Gradio component tree                            |  9225–~19700 | `create_gradio_interface` at 9225                                                                                                                                                                                | layout, labels, controls, tab structure, CSS/JS, visual UX                       | nested handlers starting at ~19700 and related backend functions                                     |
+| Nested handlers and event wiring                 | ~19700–23025 | `handle_analyze_script` at ~19702·`handle_ai_format_script` at ~19978·`handle_cast_characters` at ~20016·`handle_generate_conversation_advanced` at ~20192·`generate_conversation_btn.click` at ~20563                | event regressions, control binding changes, handler return-shape fixes           | component declarations above and generation/storage helpers                                          |
+| Main entry point                                 |       23026+ | `if __name__ == "__main__":` after handlers·`demo.launch()`                                                                                                                                                      | startup and launch behavior                                                      | import/bootstrap block and `create_gradio_interface`                                                 |
 
 ## UI Landmarks Inside `create_gradio_interface`
 
@@ -64,7 +64,7 @@ Use these anchors when the change starts from a visible UI element.
 | Assistant status bar          |    ~9098–9104 | Compact top-row connection indicator above the main workspace            |
 | Text to Synthesize tab        |    ~9490–9700 | Main single-speaker input path                                           |
 | Narration Transform accordion |    ~9510–9680 | Provider settings, connection test, transform apply flow                 |
-| Conversation Mode tab         |   ~9700–10600 | Character roster, script Dataframe, line editor, conversation generation |
+| Conversation Mode tab         |   ~11800–13200 | Character roster, script Dataframe, line editor, conversation generation |
 | eBook to Audiobook tab        |  ~10600–10900 | File analysis, chapter selection, batch audiobook generation             |
 | VibeVoice tab                 |  ~10900–11300 | Podcast workflow, model management, speaker voice assignment             |
 | Assistant tab                 |  ~11300–11450 | Chatbot UI, assistant LLM settings, connection test, provider changes    |
@@ -108,12 +108,11 @@ Inspect these in order:
 > **Scope boundary:** Narration transform controls (Content Type, Transform Mode, Style, Locale,
 > System Prompt, Outcome Preset) only affect **single-text synthesis**. Conversation mode operations
 > (AI Format, Cast Characters, Conversation Generate) each have separate, isolated LLM paths — see
-> the full control→mode scope matrix in `Docs/LLM-Narration-Transform-Guide.md` § 6.
-
-> **Hidden engine addendum:** At generation time, `_build_llm_system_prompt()` in
-> `narration_transform.py:840` appends a per-engine addendum sourced from
-> `get_engine_prompt_addendum(tts_engine)` in `engine_script_profiles.py:734`. This addendum is
-> invisible in the UI and is added after the user-editable `llm_system_prompt` textbox value.
+> the full control→mode scope matrix in `Docs/LLM-Narration-Transform-Guide.md` § 6. **Hidden engine
+> addendum:** At generation time, `_build_llm_system_prompt()` in `narration_transform.py:840`
+> appends a per-engine addendum sourced from `get_engine_prompt_addendum(tts_engine)` in
+> `engine_script_profiles.py:734`. This addendum is invisible in the UI and is added after the
+> user-editable `llm_system_prompt` textbox value.
 
 ### If you are changing conversation mode
 

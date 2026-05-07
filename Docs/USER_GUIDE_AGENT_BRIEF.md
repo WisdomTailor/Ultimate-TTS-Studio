@@ -150,7 +150,7 @@ Multi-speaker dialogue generation with character management and script editing.
 1. Paste a dialogue script (or write one)
 2. Click "Analyze Script" to auto-detect characters
 3. (Optional) Click "AI Format" to have an LLM restructure the dialogue
-4. Assign voice, engine, and style per character in the character roster (up to 5 speakers)
+4. Assign voice, engine, and style per character in the character roster (up to 10 speakers)
 5. Use the line editor to refine individual lines
 6. (Optional) Apply per-line AI Script Polish for individual lines
 7. Set timing controls (speaker change pause, same speaker pause)

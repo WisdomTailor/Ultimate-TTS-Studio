@@ -126,13 +126,13 @@ conversion should be expressible as a valid `NarrationScript`:
 
 ### 2.3 UI Constraint
 
-The Conversation Mode UI accepts **a maximum of 5 distinct speakers** in a single script. Scripts
-with more than 5 speakers must be consolidated before synthesis (see
+The Conversation Mode UI accepts **a maximum of 10 distinct speakers** in a single script. Scripts
+with more than 10 speakers must be consolidated before synthesis (see
 [§ 7](#7-speaker-consolidation-strategy)).
 
 `Narrator` and `Stage Direction` count toward this limit. Typical budgets:
 
-- Fiction: 1 Narrator + 4 characters
+- Fiction: 1 Narrator + 9 characters
 - Interview: 1 Interviewer + 4 guests
 - Podcast: 2–3 hosts + 1–2 guest speakers
 
@@ -601,7 +601,7 @@ explicit source information when choosing names or noting cues.
 
 ## 7. Speaker Consolidation Strategy
 
-When the source text has more than 5 distinct speakers, apply this strategy before or during
+When the source text has more than 10 distinct speakers, apply this strategy before or during
 conversion.
 
 ### 7.1 Rank by Line Count
@@ -1097,9 +1097,9 @@ Right:  Alice: Yes.
         Alice: Maybe.
 ```
 
-### ❌ Exceeding 5 Speakers Without Consolidation
+### ❌ Exceeding 10 Speakers Without Consolidation
 
-Any script with 6+ distinct speaker names will fail to load in Conversation Mode. Always apply
+Any script with 11+ distinct speaker names will fail to load in Conversation Mode. Always apply
 consolidation (§ 7) before the script is considered complete.
 
 ---
