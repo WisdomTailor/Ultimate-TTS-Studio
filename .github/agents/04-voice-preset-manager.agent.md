@@ -1,9 +1,9 @@
 ---
 description:
   "Voice & Preset Manager — manages voice catalog, custom voice files, presets, reference audio, and
-  voice cloning workflows. Model: Claude Haiku 4.5. Use when: voice file management, preset
+  voice cloning workflows. Model: openrouter/owl-alpha. Use when: voice file management, preset
   creation, custom voice issues, reference audio curation, voice cloning configuration."
-model: "Claude Haiku 4.5"
+model: openrouter/owl-alpha
 tools:
   - read
   - edit
