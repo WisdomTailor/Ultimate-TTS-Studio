@@ -158,6 +158,10 @@ intent, and ask the user to confirm. For example a URL may point to
 
 5. There can be other cases, but try to guess.
 
+## Codebase Semantic Index
+
+C:\pinokio\api\Ultimate-TTS-Studio.git\CODEBASE_SEMANTIC_INDEX.md contains a semantic index of the codebase to help you quickly find relevant files and sections when working on the project. Always refer to this index when trying to find where to make changes or where to find relevant code.
+
 ## Project Structure
 
 Pinokio projects normally follow a standardized structure with app logic separated from launcher
