@@ -16,7 +16,7 @@
 4. [How Transform Mode Works](#4--how-transform-mode-works)
 5. [How Style Influences Output](#5--how-style-influences-output)
 6. [Single Speaker vs Conversation Mode](#6--single-speaker-vs-conversation-mode)
-7. [Conversation Mode — Enhanced Workflow Plan](#7--conversation-mode--enhanced-workflow-plan)
+7. [Conversation Mode — AI Format Workflow](#7--conversation-mode--ai-format-workflow)
 8. [In-App Assistant Plan](#8--in-app-assistant-plan)
 9. [Tools, MCPs, and Skills](#9--tools-mcps-and-skills)
 10. [Implementation Priority Roadmap](#10--implementation-priority-roadmap)
@@ -596,20 +596,24 @@ exactly which controls take effect in each context.
 - ❌ — control has no effect on this generation path
 - — — button is not available in this context
 
-### 6.2 Conversation Mode: Hardcoded System Prompts
+### 6.2 Conversation Mode: Dedicated Prompt Paths
 
-When using Conversation Mode, the **AI Format** and **Cast Characters** operations call the LLM with
-**hardcoded system prompts** that are not exposed in the UI panel. The narration transform settings
-(Content Type, Transform Mode, Style, Locale, System Prompt textbox) do not apply.
+When using Conversation Mode, **AI Format** uses the visible **Prompt Library** and **Conversation
+AI Prompt** controls in the UI. **Cast Characters** continues to use its own built-in casting
+prompt. The narration transform settings (Content Type, Transform Mode, Style, Locale, System Prompt
+textbox) do not apply.
 
-| Operation             | Handler                                                   | Hardcoded Prompt Location                                            |
-| --------------------- | --------------------------------------------------------- | -------------------------------------------------------------------- |
-| AI Format Script      | `handle_ai_format_script` (launch.py:15778)               | `CONVERSATION_FORMATTER_SYSTEM_PROMPT` — `conversation_logic.py:357` |
-| Cast Characters       | `handle_cast_characters` (launch.py:15816)                | `VOICE_CASTING_SYSTEM_PROMPT` — `narration_transform.py:70`          |
-| Conversation Generate | `handle_generate_conversation_advanced` (launch.py:15882) | No LLM call — text sent directly to TTS                              |
+The key paths are:
+
+- AI Format Script: `handle_ai_format_script` (launch.py:15778) using the Conversation AI Prompt and
+  Prompt Library controls in Conversation Mode
+- Cast Characters: `handle_cast_characters` (launch.py:15816) using `VOICE_CASTING_SYSTEM_PROMPT` —
+  `narration_transform.py:70`
+- Conversation Generate: `handle_generate_conversation_advanced` (launch.py:15882), which sends text
+  directly to TTS with no LLM call
 
 Only the **LLM provider connection settings** (provider, model, base URL, API key, timeout) are
-shared with conversation mode operations; all prompt-shaping controls are ignored.
+shared with conversation mode operations.
 
 ### 6.3 Hidden Engine Addendum Behavior
 
@@ -628,43 +632,28 @@ value shown in the System Prompt textbox. At generation time, `_build_llm_system
 
 ---
 
-## 7. 🚀 Conversation Mode — Enhanced Workflow Plan
+## 7. 🚀 Conversation Mode — AI Format Workflow
 
-### The Problem Today
+### Current Workflow
 
-Users must manually format text as "Speaker: Text" — but real content rarely comes in that format.
-Novel excerpts, screenplays, and stories have dialogue mixed with narration, varied formatting, and
-complex attribution.
-
-### The Planned Solution: AI-Powered Script Preparation
+Conversation Mode now includes an AI-powered formatting pass for raw prose, dialogue, and mixed
+story text.
 
 #### Step 1: Paste Any Text
 
-Users will be able to paste text in any format:
+Paste your story, dialogue, or mixed prose into the **Conversation Script** box in Conversation
+Mode.
 
-- Novel excerpts with quoted dialogue
-- Screenplay format
-- Plain dialogue
-- Mixed narration and speech
+#### Step 2: Click AI Format
 
-#### Step 2: AI Identifies Speakers
+The app sends the current text to the configured LLM using the visible Conversation AI prompt,
+automatically chunks long stories when needed, and rewrites the result into `Speaker: Text` lines.
 
-A dedicated AI pass reads the text and:
+#### Step 3: Review the Same Box
 
-- Identifies who is speaking
-- Labels narration as "Narrator"
-- Handles stage directions and emotional cues
-- Returns a structured breakdown
-
-#### Step 3: Review the Formatted Script
-
-The AI output populates the conversation text field in the correct "Speaker: Text" format. The user
-reviews and can:
-
-- Rename speakers if the AI guessed wrong
-- Merge or split lines
-- Remove unwanted narrator lines
-- Adjust attribution
+The formatted output replaces the text in the same Conversation Script box. You can review it,
+adjust speaker names if needed, then continue with **Analyze Script** and the rest of the normal
+Conversation Mode flow.
 
 #### Step 4: Optional Per-Line Polish
 

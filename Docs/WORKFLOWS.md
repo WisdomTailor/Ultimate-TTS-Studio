@@ -1,6 +1,6 @@
 # Workflow Recipes — Ultimate TTS Studio SUP3R Edition
 
-**Ten step-by-step recipes for the most common real-world tasks.**
+> **Ten step-by-step recipes for the most common real-world tasks.**
 
 Each workflow here is self-contained. Jump straight to the one you need — you don't have to read the
 others first. If a step mentions a feature in depth, the [User Guide](USER_GUIDE.md) has the full
@@ -25,7 +25,7 @@ explanation.
 9. [Save and Reuse Voice Presets](#9-save-and-reuse-voice-presets)
 10. [Batch Generate with Consistent Settings](#10-batch-generate-with-consistent-settings)
 
-**Technical Diagrams**
+> **Technical Diagrams**
 
 - [Single Narration Mode](#single-narration-mode-diagram)
 - [Conversation Mode — Pre-Formatted Script](#conversation-mode--pre-formatted-script)
@@ -155,9 +155,10 @@ Jordan: Completely. Nobody saw it coming.
 
 Up to five distinct speakers are supported.
 
-> **Don't have a script in this format?** Paste your raw dialogue and click **AI Format**. The
-> connected LLM will restructure it into the correct `Speaker: Text` layout automatically. (Requires
-> an LLM provider configured in AI Script Polish — see
+> **Don't have a script in this format?** Paste your raw prose or story into the Conversation Script
+> box and click **AI Format**. The app sends that text to the configured LLM in chunks when needed,
+> then writes the formatted `Speaker: Text` result back into the same box. (Requires an LLM provider
+> configured in AI Script Polish — see
 > [Section 5 of the User Guide](USER_GUIDE.md#5-ai-script-polish) if you haven't set one up.)
 
 **2. Analyze the script.**
@@ -1033,26 +1034,30 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    A([🎭 User pastes prose text]) --> B[AI Format button]
+  A([🎭 User pastes prose text into Conversation Script]) --> B[AI Format button]
     B --> C[handle_ai_format_script]
-    C --> D[format_conversation_with_llm]
-    D --> E{LLM provider configured?}
+  C --> D{LLM provider configured?}
 
-    E -- No --> F["❌ Error: configure LLM provider first"]
-    E -- Yes --> G[Send to LLM with system prompt]
-    G --> H[LLM extracts speakers + attributes dialogue]
-    H --> I[Return formatted Speaker: Text script]
-    I --> J[Update script textarea]
-    J --> K[Auto-trigger Analyze Script]
-    K --> L[parse_conversation_script]
-    L --> M[Display Character Roster]
-    M --> N["Continue with standard conversation flow ↑"]
+  D -- No --> E["❌ Error: configure LLM provider first"]
+  D -- Yes --> F[Chunk long text automatically]
+  F --> G[Send chunks to LLM with conversation prompt]
+  G --> H[LLM extracts speakers + attributes dialogue]
+  H --> I[Stitch chunk results together]
+  I --> J[Update script textarea in place]
+  J --> K[Auto-trigger Analyze Script]
+  K --> L[parse_conversation_script]
+  L --> M[Display Character Roster]
+  M --> N["Continue with standard conversation flow ↑"]
 
     style A fill:#c8e6c9,stroke:#2e7d32
-    style F fill:#ffcdd2,stroke:#c62828
-    style G fill:#ffe0b2,stroke:#e65100
+  style E fill:#ffcdd2,stroke:#c62828
+  style F fill:#ffe0b2,stroke:#e65100
+  style G fill:#fff3e0,stroke:#ef6c00
     style N fill:#e1bee7,stroke:#6a1b9a
 ```
+
+AI Format does not require you to move text between boxes. Paste your story into the Conversation
+Script field, click **AI Format**, and keep working in the same field after the model finishes.
 
 ---
 

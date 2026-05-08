@@ -412,13 +412,17 @@ supports up to five distinct speakers in a single conversation.
 
 ### Step 1 — Paste Your Script
 
-Click the **🎭 CONVERSATION MODE** tab and paste your dialogue into the script input area.
+Click the **🎭 CONVERSATION MODE** tab and paste your dialogue or story into the main script input
+area.
 
-> **Don't have a script yet?** You can write free-form dialogue and let the **AI Format** button
-> restructure it into the `Speaker: Text` format automatically. Just paste your raw dialogue and
-> click **AI Format** — the connected LLM will parse speakers and reformat everything. (AI Format
-> requires an LLM connection from the AI Script Polish setup. If you haven't connected one, see
-> [Section 5](#5-ai-script-polish) first.)
+> **Don't have a script yet?** You can paste raw prose into this same box and let the **AI Format**
+> button restructure it into `Speaker: Text` automatically. Click **AI Format** once your LLM
+> provider is configured. The app sends the current text to the configured LLM, processes long
+> stories in chunks, and writes the formatted result back into the same textbox. You do not need to
+> copy text out to another app.
+
+The **Prompt Library** and **Conversation AI Prompt** controls above the script box determine how AI
+Format interprets the text.
 
 ### Step 2 — Analyze Script
 

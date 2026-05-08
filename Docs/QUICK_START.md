@@ -226,8 +226,13 @@ spoken.
 
 ### Step 3: Switch to Conversation Mode
 
-Click the **🎭 CONVERSATION MODE** tab. Paste your polished script into the script text area. The
-script must follow this format — one line per spoken segment:
+Click the **🎭 CONVERSATION MODE** tab. Paste your story or polished script into the script text
+area. If the text is still prose, click **AI Format** after you configure the Conversation AI
+provider and prompt above this box. The app will format the same text area in place, so you do not
+need to copy text out to another app.
+
+If you're already working with a formatted script, it should look like this — one line per spoken
+segment:
 
 ```text
 Narrator: The forest was quiet except for the crunch of leaves.
