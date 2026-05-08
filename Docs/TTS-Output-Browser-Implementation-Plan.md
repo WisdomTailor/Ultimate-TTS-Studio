@@ -84,7 +84,10 @@ This plan was reviewed against the current implementation in:
   harness.
 - Current tests do not directly exercise the custom-base-path restart limitation for Gradio allowed
   paths.
-- Current tests do not exercise the background `_HistoryIndexScheduler` thread behavior.~~ **Fixed 2026-04-30:** extracted `_HistoryIndexScheduler` into `app/history_index_scheduler.py` as `HistoryIndexScheduler` and added targeted tests for queue accumulation, auto-start, silent failure handling, and shutdown signaling.
+- Current tests do not exercise the background `_HistoryIndexScheduler` thread behavior.~~ **Fixed
+  2026-04-30:** extracted `_HistoryIndexScheduler` into `app/history_index_scheduler.py` as
+  `HistoryIndexScheduler` and added targeted tests for queue accumulation, auto-start, silent
+  failure handling, and shutdown signaling.
 
 ### 0.4 Recommended Next Improvements
 

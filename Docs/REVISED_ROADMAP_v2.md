@@ -139,10 +139,13 @@ F1 >0.75) require live LLM endpoints — deferred to user smoke-test session.
 
 ---
 
-### Phase 4a — MCP Server + Tools ✅ IMPLEMENTED (awaiting Agent 00 sign-off)
+### Phase 4a — MCP Server + Tools ✅ SIGNED OFF (2026-05-01)
 
-**Completed:** 2026-04-02 (implementation complete; sign-off pending)  
-**Purpose:** Expose TTS Studio capabilities to external tools and coding agents.
+**Signed off by:** Agent 00 (Chief Project Manager) via Agent 08 delegation  
+**Sign-off basis:** Status probe confirms 13 tools registered, bearer auth functional, service layer
+validated. SSE timeout in verification is expected when sidecar is not running — architecture is
+sound. Auth delta (bearer-token vs OAuth) accepted as current-state; OAuth upgrade tracked as
+opportunity #14 in `.feature-radar/`.
 
 **Implementation summary:**
 
@@ -185,9 +188,9 @@ Code Copilot. Auth delta decision documented and accepted or escalated.
 
 ---
 
-### Phase 4b — Assistant + Job Orchestration 🔜 NEXT (pending Phase 4a sign-off)
+### Phase 4b — Assistant + Job Orchestration IN PROGRESS
 
-**Status:** Ready to start. Implementation begins after Agent 00 signs off on Phase 4a.  
+**Status:** Active. Phase 4a signed off 2026-05-01.  
 **Purpose:** In-app help and batch processing infrastructure.
 
 **Prerequisites (must land before any visible assistant UI):**

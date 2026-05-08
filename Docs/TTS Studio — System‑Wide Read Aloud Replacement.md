@@ -1,6 +1,6 @@
 # **TTS Studio — System‑Wide Read Aloud Replacement**
 
-**Agent Handover Brief**
+## Agent Handover Brief
 
 ---
 
