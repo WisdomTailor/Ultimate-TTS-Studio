@@ -49,6 +49,13 @@ Thumbs.db
 *.log
 *.diff
 
+# Feature radar tracking (internal prioritization data)
+.feature-radar/
+
+# Local agent/tooling workspaces
+.kilo/
+node_modules/
+
 # LLM narration-transform generated artifacts
 app/tools/llm_narration_transform/runs/
 app/tools/llm_narration_transform/data/train.jsonl
