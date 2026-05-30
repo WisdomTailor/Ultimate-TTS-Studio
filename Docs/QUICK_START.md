@@ -144,9 +144,19 @@ adding natural pacing cues.
    - **Vivid** — Adds dramatic pacing and emotional beats. Best for audiobooks and storytelling.
 3. Select an **LLM Provider**. If you have LM Studio or Ollama installed locally, choose one of
    those — no API key needed. Otherwise choose **GitHub Models** (free, requires a GitHub account
-   and token) or **Google Gemini API**.
+   and token), **Google Gemini API**, or **OpenRouter (OpenAI-compatible)**.
 4. Configure the provider (enter an API key if required, pick a model), then click **🔗 Test
    Connection** to confirm it's working.
+   For **OpenRouter**, keep the default Base URL and either paste the key into the **API Key**
+   field then click **Save LLM Settings**, or set `OPENROUTER_API_KEY` in Windows
+   PowerShell for persistent setup:
+
+   ```powershell
+   [System.Environment]::SetEnvironmentVariable("OPENROUTER_API_KEY", "YOUR_OPENROUTER_KEY", "User")
+   ```
+
+   After changing a persistent environment variable, fully close and reopen VS Code before
+   relaunching Ultimate TTS Studio.
 5. Click **Apply Transform**. The text box updates with the polished version.
 6. Review the result, then click **Generate** as before.
 

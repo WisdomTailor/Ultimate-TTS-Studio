@@ -305,7 +305,8 @@ generation:
 
 The app restores the original text, engine, all settings, AI Script Polish options, audio effects,
 and the last seed into the **📝 TEXT TO SYNTHESIZE** tab — ready to regenerate or continue from
-where you left off. API keys are not restored (re-enter them if needed).
+where you left off. History reload does not copy API keys back into the text tab, but the app can
+still use keys already saved in the UI settings or provided through provider environment variables.
 
 ---
 
@@ -413,6 +414,26 @@ wrong, or the API key is missing or incorrect. Check each in order:
 4. Use the **🔗 Test Connection** button inside the AI Script Polish section to confirm the
 connection before running a full transform.
 <!-- screenshot: AI Script Polish (Narration Transform) accordion showing the provider settings fields and the Test Connection button -->
+
+---
+
+**Q: How do I keep my OpenRouter API key between sessions on Windows?**
+
+Use either of these two supported paths:
+
+1. **Save it in the app UI:** paste the key into the **API Key** field and click **Save LLM
+   Settings** (or **💾 Save Settings** in the Assistant tab).
+2. **Use a Windows environment variable:** run this in PowerShell:
+
+   ```powershell
+   [System.Environment]::SetEnvironmentVariable("OPENROUTER_API_KEY", "YOUR_OPENROUTER_KEY", "User")
+   ```
+
+   Then fully close and reopen VS Code and relaunch Ultimate TTS Studio. Existing terminals and app
+   processes do not see newly added user environment variables until they restart.
+
+In the UI, the **API key source** line will tell you whether the active key came from the app UI,
+the environment, or is still missing.
 
 ---
 

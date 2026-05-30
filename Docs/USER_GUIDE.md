@@ -294,15 +294,16 @@ AI Script Polish uses a language model (LLM) to understand and rewrite your text
 from local models (no API key, no data leaving your machine) or cloud providers (fast, powerful,
 requires an API key).
 
-| Provider                     | Type     | API Key Required? | Notes                                             |
-| ---------------------------- | -------- | ----------------- | ------------------------------------------------- |
-| **Ollama**                   | Local    | No                | Run locally with any Ollama-compatible model      |
-| **LM Studio**                | Local    | No                | Full support for LM Studio auto-launch            |
-| **vLLM OpenAI Server**       | Local    | No                | GPU inference server for maximum local throughput |
-| **Custom OpenAI-compatible** | Flexible | Depends           | Point at any OpenAI API-compatible endpoint       |
-| **GitHub Models**            | Cloud    | Yes (free tier)   | GITHUB_MODELS_TOKEN                               |
-| **Google Gemini API**        | Cloud    | Yes (free tier)   | GOOGLE_API_KEY                                    |
-| **Microsoft Foundry**        | Cloud    | Yes (enterprise)  | AZURE_AI_API_KEY                                  |
+| Provider                          | Type     | API Key Required? | Notes                                              |
+| --------------------------------- | -------- | ----------------- | -------------------------------------------------- |
+| **Ollama**                        | Local    | No                | Run locally with any Ollama-compatible model       |
+| **LM Studio**                     | Local    | No                | Full support for LM Studio auto-launch             |
+| **vLLM OpenAI Server**            | Local    | No                | GPU inference server for maximum local throughput  |
+| **OpenRouter (OpenAI-compatible)**| Cloud    | Yes               | Use `OPENROUTER_API_KEY`; default URL is prefilled |
+| **Custom OpenAI-compatible**      | Flexible | Depends           | Point at any OpenAI API-compatible endpoint        |
+| **GitHub Models**                 | Cloud    | Yes (free tier)   | GITHUB_MODELS_TOKEN                                |
+| **Google Gemini API**             | Cloud    | Yes (free tier)   | GOOGLE_API_KEY                                     |
+| **Microsoft Foundry**             | Cloud    | Yes (enterprise)  | AZURE_AI_API_KEY                                   |
 
 > ⚠️ **Privacy note:** If you choose a cloud provider (GitHub Models, Google Gemini, Microsoft
 > Foundry), your text is sent to that provider's servers for processing. Your audio files and
@@ -313,6 +314,15 @@ requires an API key).
 
 1. Select your provider from the **Provider** dropdown.
 2. Enter your API key (cloud providers only) and the model name you'd like to use.
+  For **OpenRouter**, you can either paste the key into the UI and click **Save LLM
+  Settings**, or set `OPENROUTER_API_KEY` in Windows PowerShell:
+
+  ```powershell
+  [System.Environment]::SetEnvironmentVariable("OPENROUTER_API_KEY", "YOUR_OPENROUTER_KEY", "User")
+  ```
+
+  Then fully close and reopen VS Code before relaunching Ultimate TTS Studio so the new
+  environment variable is visible.
 3. Click **🔗 Test Connection** to confirm it's working. A green confirmation appears when the
    connection is live.
 
@@ -1259,17 +1269,16 @@ Use **🗑️ Clear Chat** to start a fresh conversation at any time.
 The Assistant requires a language model connection to respond. Open the **⚙️ Assistant LLM
 Settings** accordion inside the **🤖 ASSISTANT** tab to configure it.
 
-| Setting              | What It Does                                                                                                  |
-| -------------------- | ------------------------------------------------------------------------------------------------------------- |
-| **🔌 LLM Provider**  | Which AI backend the Assistant uses — same provider options as AI Script Polish, but independently configured |
-| **🌐 Base URL**      | API endpoint for local providers like LM Studio or Ollama                                                     |
-| **🔑 API Key**       | Required for cloud providers. Session-only — not saved to disk                                                |
-| **🧠 Model**         | The specific model ID to use with your chosen provider                                                        |
-| **📝 System Prompt** | Optional instructions that shape how the Assistant responds                                                   |
+- **🔌 LLM Provider** — Which AI backend the Assistant uses; it is configured independently from AI Script Polish.
+- **🌐 Base URL** — API endpoint for local providers like LM Studio or Ollama.
+- **🔑 API Key** — Required for cloud providers. You can save it in the UI or use a provider environment variable such as `OPENROUTER_API_KEY`.
+- **🧠 Model** — The specific model ID to use with your chosen provider.
+- **📝 System Prompt** — Optional instructions that shape how the Assistant responds.
 
 Click **🔗 Test Connection** to confirm your settings are working before you start a conversation.
-Click **💾 Save Settings** to persist the provider, base URL, and model choices between sessions.
-(API keys are never saved for security — enter them fresh each session.)
+Click **💾 Save Settings** to persist the provider, base URL, model choices, system prompt, and
+Assistant API key between sessions. If you prefer not to store the key in the app settings file,
+set the provider environment variable instead and restart VS Code plus Ultimate TTS Studio.
 
 > 💡 **A practical pairing:** Use a fast, lightweight local model (Ollama with a small model) for
 > the Assistant — good enough for quick questions — and a more powerful model for AI Script Polish,

@@ -161,6 +161,7 @@ from each provider's website.
 
 | Provider          | Environment Variable  | Where to Get It                                                |
 | ----------------- | --------------------- | -------------------------------------------------------------- |
+| OpenRouter        | `OPENROUTER_API_KEY`  | [OpenRouter Keys](https://openrouter.ai/settings/keys)         |
 | Google Gemini     | `GOOGLE_API_KEY`      | [Google AI Studio](https://aistudio.google.com/apikey)         |
 | GitHub Models     | `GITHUB_MODELS_TOKEN` | [GitHub Settings → Tokens](https://github.com/settings/tokens) |
 | Microsoft Foundry | `AZURE_AI_API_KEY`    | Azure Portal → AI Foundry → Project → Keys                     |
@@ -168,6 +169,15 @@ from each provider's website.
 **Persistence:** API keys entered in the UI are now saved to your settings file and persist across
 sessions. You can also set them as environment variables (e.g., in Pinokio's environment config) for
 added security.
+
+**Windows PowerShell example:**
+
+```powershell
+[System.Environment]::SetEnvironmentVariable("OPENROUTER_API_KEY", "YOUR_OPENROUTER_KEY", "User")
+```
+
+After changing a persistent environment variable, fully close and reopen VS Code or any terminal
+that launches Ultimate TTS Studio. Existing processes keep the old environment until restart.
 
 **Security:** The API key field is masked (password-style) in the UI. Keys are never logged or
 displayed in output.
