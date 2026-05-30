@@ -55,7 +55,6 @@ module.exports = {
       params: {
         message: "brew install espeak-ng",
       },
-      next: "end",
     },
     {
       when: "{{which('apt')}}",
@@ -64,7 +63,6 @@ module.exports = {
         sudo: true,
         message: "apt install libaio-dev espeak-ng",
       },
-      next: "end",
     },
     {
       when: "{{which('yum')}}",
@@ -73,7 +71,6 @@ module.exports = {
         sudo: true,
         message: "yum install libaio-devel espeak-ng",
       },
-      next: "end",
     },
     {
       when: "{{which('winget')}}",
@@ -82,14 +79,6 @@ module.exports = {
         sudo: true,
         message:
           "winget install --id=eSpeak-NG.eSpeak-NG -e --silent --accept-source-agreements --accept-package-agreements",
-      },
-    },
-    {
-      id: "end",
-      method: "input",
-      params: {
-        title: "Install Complete!!",
-        description: "Install Complete.",
       },
     },
   ],
