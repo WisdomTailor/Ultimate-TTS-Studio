@@ -276,7 +276,7 @@ audiobook narration, dramatic readings, and performance.
 
 **After:**
 
-> He walked into the room... and EVERYONE looked at him. [thoughtful] It was quiet — too quiet.
+> He walked into the room... and EVERYONE looked at him. \[thoughtful\] It was quiet — too quiet.
 > **Best Practice — Engine-Aware Expressiveness** Expressive cues (`[whispers]`, `[sighs]`, ALL-CAPS
 > emphasis, ellipses) are not universally supported across TTS engines. Some engines read cues
 > literally or degrade cadence. The planned architecture stores **semantic intent** (pause,
@@ -878,7 +878,7 @@ for you.
 The Gemini OpenAI-compatible endpoint uses a specific authentication method. Make sure:
 
 1. Your API key is valid (test it at [Google AI Studio](https://aistudio.google.com))
-2. The key is entered in the API Key field OR set as `GOOGLE_API_KEY` environment variable
+2. The key is entered in the API Key field or available through the correct provider environment variable (for Gemini: `GOOGLE_API_KEY` or `GEMINI_API_KEY`)
 3. Click "Test Connection" to verify
 
 ### What's the difference between Temperature and Top P?
@@ -892,7 +892,8 @@ want more creative (higher) or more predictable (lower) output.
 ### Can I save my custom settings?
 
 Yes — all LLM panel settings (provider, model, URL, API key, system prompt) now persist across
-sessions in your settings file.
+sessions in your settings file. You can also use provider environment variables instead of storing
+the key in the UI settings file.
 
 ---
 
