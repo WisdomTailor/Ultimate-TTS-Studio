@@ -1,219 +1,204 @@
-# Ultimate-TTS-Studio-SUP3R-Edition
+# Ultimate TTS Studio Launcher Workspace
 
-A Pinokio script for <https://github.com/SUP3RMASS1VE/Ultimate-TTS-Studio-SUP3R-Edition>
+This repository is the Pinokio launcher workspace for Ultimate TTS Studio.
+
+- The launcher scripts live in the repository root.
+- The application runtime lives in `app/`.
+- `install.js` clones the upstream app repository into `app/` when needed.
+- `start.js` launches the Gradio web UI from `app/launch.py`.
+- The MCP sidecar is optional and runs in its own environment.
+
+If you want to use the app directly without the launcher, see `app/README.md`.
+
+## What This Workspace Provides
+
+Ultimate TTS Studio combines multiple speech engines, narration tooling, conversation workflows,
+job orchestration, structured output storage, and an optional MCP sidecar for automation.
+
+Current UI modes in `app/launch.py`:
+
+- Text to Synthesize
+- Conversation Mode
+- eBook to Audiobook
+- VibeVoice
+- Assistant
+- History
+- Jobs
+
+Current engine tabs in the main app:
+
+- ChatterboxTTS
+- Chatterbox Multilingual
+- Chatterbox Turbo
+- Kokoro TTS
+- Fish Speech
+- IndexTTS
+- IndexTTS2
+- F5-TTS
+- Higgs Audio
+- VoxCPM
+- KittenTTS
+- Qwen TTS
+
+## Recommended Usage
+
+For normal use, stay in Pinokio:
+
+1. Run `Install`.
+2. Run `Start`.
+3. Open the captured local Gradio URL from the launcher menu.
+
+The launcher starts the main UI with:
+
+```text
+python launch.py
+```
+
+from `app/` inside the `tts_env` conda environment.
+
+## Main Launcher Flow
+
+### Install
+
+`install.js` provisions the main app environment in `app/tts_env` and installs the runtime
+dependencies used by the primary UI. The current install flow includes:
+
+- `pynini`, `portaudio`, `sox`
+- `uv pip install -r requirements.txt`
+- `WeTextProcessing`
+- `onnxruntime-gpu==1.22.0`
+- `voxcpm` and `openai-whisper`
+- the OpenAudio checkpoint download into `app/checkpoints/openaudio-s1-mini`
+- `espeak-ng` installation through the platform-appropriate package manager
+
+### Start
+
+`start.js` launches the Gradio application from `app/launch.py` and captures the local web URL.
+
+It also prompts for an optional `AZURE_AI_API_KEY`, used by the Microsoft Foundry / Azure AI LLM
+provider path. Leaving it blank is valid when you only use local or other hosted providers.
+
+### Update
+
+`update.js` currently:
+
+1. rebases the root launcher repo from `upstream/main`
+2. pushes the current branch to `origin`
+3. rebases the `app/` repo from `upstream/main`
+4. pushes the app branch to `origin`
+5. reruns `install.js`
+
+### Reset
+
+`reset.js` removes `app/`. The next `Install` recreates the app checkout and environment.
 
 ## Optional MCP Sidecar
 
-### What is the MCP Sidecar?
+The MCP sidecar is separate from the main UI and uses its own environment: `app/tts_mcp_env`.
 
-The MCP sidecar (`mcp_sidecar.py`) is a **separate, optional** service that exposes TTS Studio's
-core features (generate speech, list voices/engines, narration transform, etc.) as MCP tools over an
-SSE endpoint. It runs in its own conda environment (`tts_mcp_env`), independent of the main app.
+Use it only if you want external tools or coding agents to call TTS Studio programmatically.
 
-### Who Uses It?
+### MCP Flow
 
-| Consumer                           | How                                                                                        |
-| ---------------------------------- | ------------------------------------------------------------------------------------------ |
-| **VS Code Copilot Chat**           | Connects via `.vscode/mcp.json` so Copilot can call TTS functions directly from the editor |
-| **Other MCP-compatible AI agents** | Any agent that speaks MCP protocol can connect to the SSE endpoint                         |
-| **The MCP Sidecar UI**             | Its own Gradio dashboard for testing MCP tools                                             |
+1. Run `Install MCP`.
+2. Run `Start MCP`.
+3. Use either `Open MCP Sidecar UI` or `MCP SSE Endpoint` from the Pinokio menu.
+4. Use `Verify MCP` to test the sidecar health and authenticated SSE endpoint.
 
-### Do I Need It?
+`mcp_start.js` launches:
 
-- **If you're just using the TTS Studio web UI** (generating audio, using the assistant, narration
-  transform, etc.) → **you don't need MCP at all.** The main `Start` button launches everything you
-  need.
-- **If you want AI coding agents (like Copilot) to trigger TTS generation programmatically** →
-  install and start MCP.
-
-> **TL;DR** — Just click **Start** in Pinokio. Skip the MCP buttons unless you're using Copilot or
-> external AI tools to drive TTS generation.
-
-The default `Install` and `Start` flow now keeps MCP dependencies out of the main `app/tts_env`
-environment.
-
-- `Install` provisions the normal Ultimate TTS Studio UI environment only.
-- `Install MCP` provisions a separate optional `app/tts_mcp_env` environment for the MCP sidecar.
-- `Start` continues to launch the normal UI unchanged.
-- `Start MCP` launches the isolated MCP sidecar (`app/mcp_sidecar.py`), implemented as a standalone
-  FastAPI + FastMCP server. Its SSE endpoint is mounted at `<sidecar-url>/gradio_api/mcp/sse`, and
-  the bearer token is written to `app/.mcp_token`.
-
-### MCP Launcher Flow
-
-1. Run `Install MCP` from the root Pinokio launcher menu. This creates the isolated
-   `app/tts_mcp_env` environment and installs the sidecar-specific MCP runtime.
-2. Run `Start MCP`. The launcher starts `python mcp_sidecar.py --port {{port}}` from `app/` and
-   captures the sidecar URL so Pinokio can show both `Open MCP Sidecar UI` and `MCP SSE Endpoint`.
-3. Open `MCP SSE Endpoint` from the menu, or build it manually as
-   `<captured-sidecar-url>/gradio_api/mcp/sse`.
-4. Read the bearer token from `app/.mcp_token`. The sidecar rewrites this token on startup.
-5. `Start MCP` now also rewrites `.vscode/mcp.json` and `.vscode/mcp.live.json` with the current
-   sidecar URL and bearer token.
-
-### VS Code MCP Startup Behavior
-
-VS Code reads `.vscode/mcp.json` as soon as the workspace opens. If that file contains a fake or
-stale MCP endpoint, VS Code tries to connect immediately and reports a startup failure before
-`Start MCP` has had a chance to write a live config.
-
-To prevent that, the tracked default `.vscode/mcp.json` is intentionally safe and empty:
-
-```json
-{
-  "servers": {}
-}
+```text
+python mcp_sidecar.py --port {{port}}
 ```
 
-Once `Start MCP` is running, it replaces `.vscode/mcp.json` and writes `.vscode/mcp.live.json` with
-the current sidecar URL and bearer token from `app/.mcp_token`.
+from `app/` and then:
 
-If you need a manual template, use `.vscode/mcp.sample.json`. It keeps the preferred config shape,
-but with obvious placeholders for the MCP port and bearer token so it is not mistaken for a live
-config.
+- reads `app/.mcp_token`
+- writes `.vscode/mcp.json`
+- writes `.vscode/mcp.live.json`
 
-### Verifying The MCP Sidecar
+The tracked default `.vscode/mcp.json` should remain safe and empty until a live sidecar session
+rewrites it.
 
-After `Start MCP` is running:
+### Exposed MCP Tools
 
-1. Confirm the token file exists at `app/.mcp_token`.
-2. Confirm the sidecar terminal shows `MCP security initialized. Token file: .mcp_token`.
-3. Verify the SSE endpoint with PowerShell:
+The current sidecar exposes these tools through `app/mcp_sidecar.py`:
 
-```powershell
-$token = Get-Content .\app\.mcp_token -Raw
-$headers = @{
-  Authorization = "Bearer $token"
-  Accept = "text/event-stream"
-}
-Invoke-WebRequest -Uri "http://127.0.0.1:<PORT>/gradio_api/mcp/sse" -Headers $headers
+- `list_engines`
+- `get_engine_info`
+- `list_voices`
+- `list_outputs`
+- `get_app_version`
+- `normalize_text`
+- `list_llm_providers`
+- `transform_text`
+- `structure_conversation`
+- `synthesize`
+- `submit_synthesis_job`
+- `get_job_status`
+- `cancel_job`
+
+Security and operational details:
+
+- bearer-token auth is handled by `app/mcp_security.py`
+- audit logging is written to `logs/mcp/audit.log`
+- job state is persisted under `app_state/jobs/`
+
+## Storage And Persistence
+
+The current app-state layout is centered on `app_state/`, not `app_state_outputs/`.
+
+Important locations used by `app/launch.py`:
+
+- `app_state/settings.json`
+- `app_state/presets.json`
+- `app_state/voices/`
+- `app_state/outputs/`
+- `app_state/job_assets/`
+- `app_state/conversation_checkpoints/`
+- `outputs/`
+
+Key runtime behaviors documented by the code today:
+
+- structured autosave defaults to project-based storage
+- custom output storage paths are supported
+- narration, assistant, and conversation LLM settings persist independently
+- conversation generation can resume from checkpoints when matching inputs exist
+- History indexes structured autosave artifacts and supports reload into the UI
+- Jobs track queued and long-running work separately from immediate single-shot generation
+
+## Repo Layout
+
+```text
+.
+|- install.js
+|- start.js
+|- mcp_install.js
+|- mcp_start.js
+|- mcp_verify.js
+|- update.js
+|- reset.js
+|- pinokio.js
+|- app/
+|  |- launch.py
+|  |- mcp_sidecar.py
+|  |- job_manager.py
+|  |- narration_transform.py
+|  |- conversation_logic.py
+|  `- README.md
+`- Docs/
 ```
 
-Replace `<PORT>` with the port shown in the Pinokio `MCP SSE Endpoint` menu item or sidecar log. If
-authentication is wired correctly, the request should connect without an auth failure and the token
-in `app/.mcp_token` should match the current sidecar session.
+## Documentation Map
 
-### MCP Config Files
+- Root `README.md`: launcher and workspace behavior
+- `app/README.md`: app runtime, modes, engines, and manual operation
+- `Docs/launch-py-index.md`: required navigation map before working in `app/launch.py`
 
-- `.vscode/mcp.json`: tracked safe default until `Start MCP` rewrites it with the active live MCP
-  client config
-- `.vscode/mcp.live.json`: extra live-session copy written by `Start MCP` for inspection and
-  debugging
-- `.vscode/mcp.sample.json`: manual sample/reference config with obvious placeholders, not a live
-  default
+## Notes
 
-### MCP Tools (Phase 4a)
-
-The sidecar exposes these MCP tools via `app/mcp_sidecar.py`:
-
-| Tool                     | Category    | Description                                   |
-| ------------------------ | ----------- | --------------------------------------------- |
-| `list_engines`           | Read-only   | List registered TTS engines and availability  |
-| `get_engine_info`        | Read-only   | Capabilities and status for a specific engine |
-| `list_voices`            | Read-only   | Available voices for an engine                |
-| `list_outputs`           | Read-only   | Enumerate generated output files              |
-| `get_app_version`        | Read-only   | Application version string                    |
-| `normalize_text`         | Stateless   | Deterministic text normalization (no LLM)     |
-| `list_llm_providers`     | Stateless   | Configured LLM providers                      |
-| `transform_text`         | Stateless   | AI Script Polish transform via configured LLM |
-| `structure_conversation` | Stateless   | Format dialogue into NarrationScript JSON     |
-| `synthesize`             | GPU-heavy   | Single-utterance synchronous synthesis        |
-| `submit_synthesis_job`   | Job control | Submit a long-running synthesis job           |
-| `get_job_status`         | Job control | Poll job lifecycle state                      |
-| `cancel_job`             | Job control | Cancel a queued or running job                |
-
-Security (`app/mcp_security.py`): bearer-token auth via `.mcp_token`, per-tool rate limits, and
-audit logging under `logs/mcp/audit.log`.
-
-Job state (`app/job_manager.py`): disk-backed JSON under `app_state/jobs/*.json` with subprocess
-workers.
-
-### Verify MCP Action
-
-If MCP is installed, the Pinokio menu exposes `Verify MCP`.
-
-1. It reads `app/.mcp_token`.
-2. It probes `<sidecar-url>/status`.
-3. It probes the authenticated SSE endpoint at `<sidecar-url>/gradio_api/mcp/sse`.
-4. It prints both responses in the terminal and raises a completion notification.
-
-## Voice Presets + Wrapper Pipeline
-
-The app now includes a unified preset and generation wrapper workflow in `app/launch.py`:
-
-- Persistent preset storage in `app_state/presets.json`
-- Managed preset audio storage in `app_state/voices/`
-- Runtime preset selection for supported engines (`ChatterboxTTS`, `Chatterbox Multilingual`,
-  `Chatterbox Turbo`)
-- Deterministic seed capture with visible `Last Seed` output
-- Optional autosave pipeline for generated artifacts in `app_state/outputs/<project>/` (or custom
-  output base path)
-- Configurable generated-output storage mode in the UI (`Project Folders` or `Custom Path`) while
-  keeping `app_state/voices/` local
-- Conversation and audiobook generations now write sidecar metadata JSON next to saved audio (and
-  conversation script sidecar text)
-- Selecting `Custom Path` now opens a folder picker in front of the app for easier path selection
-- Main generate flow keeps structured autosave storage by default and also keeps legacy outputs by
-  default, with an option to auto-clean legacy copies if desired
-
-Autosave writes:
-
-- audio file (`audio/`)
-- source script text (`scripts/`)
-- metadata JSON (`meta/`) including engine, seed, preset, and text hash
-- model controls in metadata are engine-specific (only fields exposed by the selected engine are
-  included)
-
-Reference design and checklists are in `app/docs/`.
-
-## History Tab: Browse and Reload Past Generations
-
-The app includes a **History** tab (🕘 HISTORY) for browsing, searching, and reloading past TTS
-generations. This feature indexes structured autosave bundles and provides a searchable record of
-all prior jobs.
-
-### How History Works
-
-- **Canonical source:** `app_state_outputs/<project>/` stores structured bundles (audio/, scripts/,
-  meta/, jobs/) that are scanned and indexed
-- **Database:** `outputs.db` stored at the autosave root's parent provides fast search and filtering
-- **Indexing:** Runs automatically after autosave and can be manually triggered via **Reindex**
-- **Reload:** Enter a record ID from the History table and reload its full context (script, engine,
-  preset, seed, speaker) back into the main generation form
-
-### Storage Architecture
-
-When autosave is enabled:
-
-- **`app_state_outputs/<project>/`** — canonical indexed source for History (structured project
-  bundles with metadata)
-- **`outputs/`** — optional flat backup/runtime area; loose WAV files here are **not** indexed and
-  will not appear in History
-- **`outputs.db`** — SQLite index shared across all projects at the autosave root's parent
-
-### History Features
-
-- **Project/preset filters** — organize by generation metadata
-- **Search** — find records by text content or metadata
-- **Audio duration** — duration is displayed when captured in metadata
-- **Quick playback** — inline browser player for generated audio
-- **Metadata inspection** — view engine, seed, speaker, transform flags, and timestamps
-- **Script viewing** — access original, transformed, and final scripts
-- **Reload workflow** — load a prior job with full state restoration (excluding API keys and
-  transient file paths)
-- **Refresh/Reindex** — scan for new bundles and rebuild index
-
-### Known Limitations
-
-- **Loose files:** WAV files in the flat `outputs/` folder are not indexed; only structured
-  `app_state_outputs` bundles are included in History
-- **Custom base path restart:** If you change the custom output base path mid-session, an **app
-  restart** is required for file preview to work; the setting persists but preview links will fail
-  until restart
-- **Preset audio fallback:** When original reference-audio upload paths are unavailable, the reload
-  workflow will use a preset-backed voice if available
-
-## LLM Text-to-Script Crafter Status
-
-- Current implementation status and future roadmap:
-  - [app/tools/llm_narration_transform/docs/llm_text_to_script_crafter_status_and_roadmap.md](app/tools/llm_narration_transform/docs/llm_text_to_script_crafter_status_and_roadmap.md)
+- The MCP sidecar is optional. The normal TTS web UI does not require it.
+- Engine availability is conditional. Missing optional dependencies disable that engine path rather
+  than preventing the UI from starting.
+- The current source of truth for features is `app/launch.py` plus the extracted helper modules
+  referenced by `Docs/launch-py-index.md`.

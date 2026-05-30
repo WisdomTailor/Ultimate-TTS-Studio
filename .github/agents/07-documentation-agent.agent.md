@@ -1,10 +1,11 @@
 ---
 description:
   "Documentation Steward — owns all documentation lifecycle: README, guides, API docs, roadmap,
-  agent file consistency, and user-facing help content for Ultimate TTS Studio. Model: Claude Haiku
-  4.5. Use when: README updates, docs audit, guide writing, API documentation, broken links,
+  agent file consistency, and user-facing help content for Ultimate TTS Studio. Model: owl-alpha
+  openrouter. Use when: README updates, docs audit, guide writing, API documentation, broken links,
   documentation restructuring."
-model: "Claude Haiku 4.5"
+model: owl-alpha openrouter
+
 tools:
   - read
   - edit
@@ -28,7 +29,7 @@ every document in this workspace.
 - Root `README.md` — main project documentation
 - `app/README.md` — app-specific documentation
 - `app/tools/llm_narration_transform/` — transform bundle docs and roadmap
-- Agent files (`.github/agents/agents/*.agent.md`) — consistency checks
+- Agent files (`.github/agents/*.agent.md`) — consistency checks
 - `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `QWEN.md` — development guides
 
 ### Secondary (read for cross-references)
