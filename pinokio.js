@@ -18,7 +18,7 @@ module.exports = {
       link: info.running("link.js"),
     };
 
-    if (running.install) {
+    if (running.install && !installed) {
       return [
         {
           default: true,
@@ -29,7 +29,7 @@ module.exports = {
       ];
     }
 
-    if (running.mcpInstall) {
+    if (running.mcpInstall && !mcpInstalled) {
       return [
         {
           default: true,
