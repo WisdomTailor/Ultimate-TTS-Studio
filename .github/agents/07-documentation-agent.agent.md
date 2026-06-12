@@ -6,9 +6,9 @@ description:
   documentation restructuring."
 model:
   - "owl-alpha openrouter"
-  - "GPT-5.4 mini" WHICHEVER THE USER SELECTS
+  - "GPT-5.4 mini"
 
-tools
+tools:
   - read
   - edit
   - search
