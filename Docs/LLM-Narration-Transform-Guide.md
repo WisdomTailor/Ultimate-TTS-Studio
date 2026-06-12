@@ -878,7 +878,8 @@ for you.
 The Gemini OpenAI-compatible endpoint uses a specific authentication method. Make sure:
 
 1. Your API key is valid (test it at [Google AI Studio](https://aistudio.google.com))
-2. The key is entered in the API Key field or available through the correct provider environment variable (for Gemini: `GOOGLE_API_KEY` or `GEMINI_API_KEY`)
+2. The key is entered in the API Key field or available through the correct provider environment
+   variable (for Gemini: `GOOGLE_API_KEY` or `GEMINI_API_KEY`)
 3. Click "Test Connection" to verify
 
 ### What's the difference between Temperature and Top P?

@@ -4,7 +4,7 @@ description:
   settings persistence, and visual bug fixes in launch.py. Model: GPT-5.4. Use when: UI layout bugs,
   Gradio component issues, new UI sections, theme/CSS changes, settings persistence, UX
   improvements, accordion design, tab layout."
-model: GPT-5.3-Codex (copilot)
+model: "GPT-5.4"
 tools:
   - read
   - edit
@@ -15,7 +15,6 @@ tools:
   - todo
   - web
 ---
-
 # Gradio UI Specialist
 
 ## Identity

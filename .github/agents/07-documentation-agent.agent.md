@@ -4,9 +4,11 @@ description:
   agent file consistency, and user-facing help content for Ultimate TTS Studio. Model: owl-alpha
   openrouter. Use when: README updates, docs audit, guide writing, API documentation, broken links,
   documentation restructuring."
-model: owl-alpha openrouter
+model:
+  - "owl-alpha openrouter"
+  - "GPT-5.4 mini" WHICHEVER THE USER SELECTS
 
-tools:
+tools
   - read
   - edit
   - search

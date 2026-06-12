@@ -12,8 +12,8 @@ If you want to use the app directly without the launcher, see `app/README.md`.
 
 ## What This Workspace Provides
 
-Ultimate TTS Studio combines multiple speech engines, narration tooling, conversation workflows,
-job orchestration, structured output storage, and an optional MCP sidecar for automation.
+Ultimate TTS Studio combines multiple speech engines, narration tooling, conversation workflows, job
+orchestration, structured output storage, and an optional MCP sidecar for automation.
 
 Current UI modes in `app/launch.py`:
 
@@ -24,6 +24,9 @@ Current UI modes in `app/launch.py`:
 - Assistant
 - History
 - Jobs
+
+Queued jobs persist progress checkpoints in `app_state/jobs/`, including the latest progress
+percent and message so restart recovery keeps useful context.
 
 Current engine tabs in the main app:
 

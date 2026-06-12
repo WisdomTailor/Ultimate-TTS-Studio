@@ -13,7 +13,7 @@
 | **Core UI**       | `app/launch.py`                                         | Gradio monolith (~21K lines)         |
 | **Engine Layer**  | `app/engine_registry.py`, `app/*_handler.py`            | TTS engine abstractions              |
 | **Service Layer** | `app/tts_service.py`, `app/mcp_sidecar.py`              | Headless services                    |
-| **Data Layer**    | `app/output_history_store.py`, `app/job_manager.py`     | Persistence                          |
+| **Data Layer**    | `app/output_history_store.py`, `app/job_manager.py`     | Persistence and job recovery         |
 | **Narration**     | `app/narration_script.py`, `app/narration_transform.py` | Script processing                    |
 
 ---
@@ -116,7 +116,7 @@ class TTSEngineHandler:
 | ----------------- | ------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
 | `mcp_sidecar.py`  | FastAPI + FastMCP server | `list_engines`, `synthesize`, `submit_synthesis_job`, `get_job_status`, `list_voices`, `get_engine_info`, `ping` (13 total) |
 | `mcp_security.py` | Auth + rate limits       | `BearerTokenAuth`, `RateLimiter`, `audit_log()`                                                                             |
-| `job_manager.py`  | Disk-backed jobs         | `submit_job()`, `get_job()`, `cleanup_old_jobs()`                                                                           |
+| `job_manager.py`  | Disk-backed jobs         | `submit_job()`, `get_job()`, `cleanup_old_jobs()`, progress checkpoint recovery                                             |
 
 **MCP Server Endpoints**:
 
