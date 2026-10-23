@@ -1,4 +1,9 @@
 {
+  "venvPath": "app",
+  "venv": "tts_env",
+  "extraPaths": [
+    "app/tts_env/Lib/site-packages"
+  ],
   "ignore": [
     ".venv/**",
     "app/tts_env/**",
