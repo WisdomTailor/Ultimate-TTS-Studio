@@ -21,6 +21,7 @@
 9. [Tools, MCPs, and Skills](#9--tools-mcps-and-skills)
 10. [Implementation Priority Roadmap](#10--implementation-priority-roadmap)
 11. [Frequently Asked Questions](#11--frequently-asked-questions)
+12. [Recent Technical Changes & Troubleshooting](#12--recent-technical-changes--troubleshooting)
 
 ---
 
@@ -898,6 +899,98 @@ the key in the UI settings file.
 
 ---
 
+## 12. 🔧 Recent Technical Changes & Troubleshooting
+
+> Added 2026-10-23. Documents recent fixes and lessons learned for the LLM narration transform
+> and Theatre Cast Characters features.
+
+### 12.1 Reasoning-model token truncation (root cause of "empty" results)
+
+Reasoning models such as `tencent/hy4-preview` spend part of their output budget on
+chain-of-thought **before** writing the answer. On complex tasks they can reason longer than
+necessary and over-verify, exhausting the budget and returning `finish_reason="length"` with
+empty or partial content.
+
+`tencent/hy4-preview` limits (OpenRouter): 1M context, **64k max output**, reasoning enabled by
+default at "high" effort.
+
+**Fixes applied:**
+
+- `generate_voice_casting` now scales `max_tokens` by cast size: `max(2048, 512 × speakers)`,
+  doubled for reasoning models.
+- `call_openai_compatible_chat` gained a `disable_reasoning` option that sends
+  `"reasoning": {"enabled": false}` on OpenRouter. Casting (a deterministic formatting task)
+  disables reasoning for reasoning models, which removes the chain-of-thought token burn.
+- `call_openai_compatible_chat` now logs a warning when `finish_reason == "length"` with
+  non-empty content (previously truncation was silent).
+- `generate_voice_casting` logs the raw model output (`Voice casting raw output (N chars): …`)
+  for diagnosis.
+
+### 12.2 Larger LLM context chunks for story transforms
+
+The narration transform and AI-format (prose → multi-speaker) paths previously capped input at
+3000 characters (and were further clamped to each TTS engine's 100–500-char per-synthesis
+limit). Chunking is now decoupled from the TTS engine limit and uses:
+
+- `LLM_TRANSFORM_MAX_CHUNK_CHARS = 64000` (input context per chunk)
+- `LLM_TRANSFORM_MAX_OUTPUT_TOKENS = 65536` (output budget ceiling)
+
+Output `max_tokens` is scaled to the largest chunk (`_resolve_transform_max_tokens`) so the
+reply is not truncated. Both constants live in `narration_transform.py` and can be raised in one
+place for models with larger context/output windows.
+
+### 12.3 Theatre Cast Characters — prompt & parser hardening
+
+The casting prompt (`VOICE_CASTING_SYSTEM_PROMPT`) now enforces: exact character-name
+reproduction, a strict no-markdown output schema, an explicit age + gender + text-to-image
+physical description, distinct voice profiles, script-context-first inference with
+de-stereotyping, and no chain-of-thought/preamble.
+
+The field parser (`_normalize_voice_casting_block`) now tolerates `-`/`*`/`1.` list markers and
+`**bold**` around field labels (the name-header regex already did, but the field regexes did not).
+
+### 12.4 Authentication — "401 Unauthorized: Missing Authentication header"
+
+This means the request reached the provider with **no `Authorization` header at all** (not a
+rejected key). Causes:
+
+- Empty API key for a provider/gateway whose `requires_api_key` flag or host check does not
+  trigger the pre-flight "API key required" guard.
+- `auth_style` mismatch (`api-key` header vs `Authorization: Bearer`).
+
+### 12.5 Restart requirements
+
+- **TTS Studio restart** is required for: (a) Python source changes in `app/` (modules load at
+  process start), and (b) API keys supplied via environment variables (`os.environ` is snapshotted
+  at process start).
+- **VS Code restart is not required** for the running server.
+- API keys typed into the UI field are read per-call (no restart), but must be saved to persist.
+
+### 12.6 Speaker limits
+
+**Casting (theatre cast characters) has no maximum.** `generate_voice_casting`
+(`narration_transform.py`) accepts any number of speakers; `_normalize_voice_casting_speaker_names`
+only deduplicates, it never truncates. The token budget scales with cast size
+(`max(2048, 512 × speakers)`, doubled for reasoning models), so 18 speakers (~9k tokens) sits
+comfortably inside `tencent/hy4-preview`'s 64k output cap and 1M context — 18 is **not** over the
+max for casting.
+
+**Where limits do exist:**
+
+- **Conversation voice-assignment UI = 10 slots.** The roster panel builds exactly 10 voice slots
+  (`for slot_index in range(10)`, `launch.py`), and saved-voice hydration only touches the first 10
+  (`speakers[:10]`; `ref_texts = [None] * 10`). Speaker detection and synthesis still process ALL
+  speakers (`for i, speaker in enumerate(speakers)`), but speakers 11+ have no UI slot, so they fall
+  back to the engine's default voice rather than a custom-assigned one.
+- **VibeVoice = 4 speakers max** (its separate podcast feature). VibeVoice rejects
+  `num_speakers > 4` and only exposes `speaker_1..speaker_4`. The general conversation/theatre
+  pipeline (Kokoro, F5-TTS, Chatterbox, Qwen, Fish Speech, etc.) has no such cap.
+
+**Bottom line:** keep up to 18 speakers for casting profiles, but cap the narration itself at
+**10 distinct speakers** if every speaker needs a custom-assigned voice (or **4** with VibeVoice).
+
+---
+
 ## 📝 Document Revision History
 
 | Date       | Version | Changes                                                                                                                                                                                  |
@@ -906,6 +999,7 @@ the key in the UI settings file.
 | 2026-04-01 | 1.1     | Architecture review findings integrated: engine-aware cues, deterministic normalization, schema-first conversation, outcome presets, non-destructive UX, revised roadmap, security notes |
 | 2026-04-04 | 1.2     | Roadmap updated to v2.0 phase structure (Phase 2.5 added, Phase 4 split into 4a/4b, Phase 5 gated). Full roadmap details moved to REVISED_ROADMAP_v2.md.                                 |
 | 2026-04-02 | 1.3     | Phase statuses updated: Phase 2.5 ✅ Done, Phase 3 ✅ Done, Phase 4a 🔍 Awaiting sign-off (FastAPI + FastMCP, 13 tools), Phase 4b 🔜 Next.                                               |
+| 2026-10-23 | 1.4     | Documented reasoning-model truncation fix (disable reasoning + scaled max_tokens), larger LLM transform chunks (64k), casting prompt/parser hardening, and auth/restart/speaker-limit troubleshooting. |
 
 ---
 
