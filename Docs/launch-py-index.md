@@ -64,7 +64,7 @@ Use these anchors when the change starts from a visible UI element.
 | Assistant status bar          |    ~9098–9104 | Compact top-row connection indicator above the main workspace            |
 | Text to Synthesize tab        |    ~9490–9700 | Main single-speaker input path                                           |
 | Narration Transform accordion |    ~9510–9680 | Provider settings, connection test, transform apply flow                 |
-| Conversation Mode tab         |  ~11800–13200 | Character roster, script Dataframe, line editor, conversation generation |
+| Conversation Mode tab         |  ~11800–13200 | Character roster, script Dataframe, line editor, generation, and Markdown summary with clickable links for long audio |
 | eBook to Audiobook tab        |  ~10600–10900 | File analysis, chapter selection, batch audiobook generation             |
 | VibeVoice tab                 |  ~10900–11300 | Podcast workflow, model management, speaker voice assignment             |
 | Assistant tab                 |  ~11300–11450 | Chatbot UI, assistant LLM settings, connection test, provider changes    |
