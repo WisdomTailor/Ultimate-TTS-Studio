@@ -162,6 +162,20 @@ intent, and ask the user to confirm. For example a URL may point to
 
 C:\pinokio\api\Ultimate-TTS-Studio.git\CODEBASE_SEMANTIC_INDEX.md contains a semantic index of the codebase to help you quickly find relevant files and sections when working on the project. Always refer to this index when trying to find where to make changes or where to find relevant code.
 
+## Agent Skills And Prompt Files
+
+- Reusable agent capabilities live in `.github/skills/<name>/SKILL.md`. Copilot loads a skill
+  automatically when a request matches its `description`.
+
+- `SKILL.md` frontmatter has no input-variable mechanism. When a skill needs user input, add a
+  matching prompt file in `.github/prompts/` and use `${input:name:placeholder}` variables. VS Code
+  turns each variable into an input box when the prompt is run as a slash command.
+
+- Keep the skill as the canonical instruction set. The prompt file should resolve inputs, then tell
+  the agent to read and follow the skill. Do not duplicate the skill body into the prompt file.
+
+- When adding a skill, also add a row to the skills table in `README.md` so it is discoverable.
+
 ## Project Structure
 
 Pinokio projects normally follow a standardized structure with app logic separated from launcher

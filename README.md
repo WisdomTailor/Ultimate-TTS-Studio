@@ -198,6 +198,28 @@ Key runtime behaviors documented by the code today:
 - `app/README.md`: app runtime, modes, engines, and manual operation
 - `Docs/launch-py-index.md`: required navigation map before working in `app/launch.py`
 
+## Agent Skills And Prompts
+
+Reusable agent capabilities live in `.github/skills/<name>/SKILL.md`. Copilot loads them
+automatically when a request matches the skill description.
+
+| Skill                                         | Purpose                                          |
+| --------------------------------------------- | ------------------------------------------------ |
+| `story-to-tts-script`                         | Prose to Chatterbox-safe multi-speaker script    |
+| `conversation-mode-maintenance`               | Diagnose and fix multi-speaker Conversation Mode |
+| `cloud-inference-supplier-evaluation-insider` | Compare hosted LLM inference suppliers           |
+
+Skills that need user input also have a matching prompt file in `.github/prompts/`. Prompt files
+declare `${input:...}` variables, which VS Code turns into input boxes. Run them as a slash command:
+
+```text
+/story-to-tts-script
+```
+
+That command asks for the story source (file path or pasted text) and whether to include the visual
+package, then runs the skill. Asking in plain language also works, but the slash command is the only
+path that guarantees both inputs are collected before work starts.
+
 ## Notes
 
 - The MCP sidecar is optional. The normal TTS web UI does not require it.

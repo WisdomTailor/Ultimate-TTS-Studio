@@ -7,7 +7,7 @@ description:
   convert, format, or script a story, chapter, or prose for multi-voice narration."
 argument-hint:
   "Paste the story, or give a file path to it. Optionally add include_visual_package=no for a
-  TTS-only run."
+  TTS-only run. In VS Code, /story-to-tts-script prompts for both inputs."
 user-invocable: true
 disable-model-invocation: false
 ---
@@ -32,6 +32,31 @@ disable-model-invocation: false
 
 3. If the user still supplies nothing, reply only with `ERROR: no source text supplied.`
 4. If the user's message contains no `include_visual_package` setting, use `yes`. Do not ask.
+
+### How the user supplies the inputs in VS Code
+
+There are three supported entry points. All of them end up running this skill.
+
+1. **Slash command (recommended, prompts for both inputs).** Type `/story-to-tts-script` in Copilot
+   Chat. VS Code reads `.github/prompts/story-to-tts-script.prompt.md`, which declares two input
+   variables and shows a box for each:
+
+   - `story_source` — a path to a `.txt` or `.md` file, or the story pasted inline
+   - `include_visual_package` — `yes` or `no` (default `yes`)
+
+   This is the only path that guarantees the user is asked for input before work starts.
+
+2. **Skill auto-invocation.** Ask in natural language ("convert this story to a TTS script"). Copilot
+   loads this skill from its `description`. The agent then follows "Collecting the inputs" above and
+   asks once if the story is missing.
+
+3. **Explicit skill reference.** Say "use the story-to-tts-script skill on `path/to/story.txt`". Same
+   behaviour as 2, but the skill is pinned.
+
+If the user wants a different prompt shape, edit
+`.github/prompts/story-to-tts-script.prompt.md` — the `${input:...}` placeholders are what produce
+the input boxes. `SKILL.md` frontmatter has no input-variable mechanism, so the prompt file is the
+place to change how input is requested.
 
 ## Role
 
